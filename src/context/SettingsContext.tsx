@@ -111,7 +111,32 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         .select('*')
         .order('display_order', { ascending: true });
       if (itemData && itemData.length > 0) {
-        setMenuItems(itemData);
+        // Overlay local custom prices and images so changes are immediately persistent across refreshes
+        let parsedPrices: Record<string, number | null> = {};
+        let parsedImages: Record<string, string | null> = {};
+        let parsedAvail: Record<string, boolean> = {};
+        let parsedBestseller: Record<string, boolean> = {};
+        try {
+          const sp = localStorage.getItem('urmila_custom_prices');
+          const si = localStorage.getItem('urmila_custom_images');
+          const sa = localStorage.getItem('urmila_custom_avail');
+          const sb = localStorage.getItem('urmila_custom_bestseller');
+          if (sp) parsedPrices = JSON.parse(sp);
+          if (si) parsedImages = JSON.parse(si);
+          if (sa) parsedAvail = JSON.parse(sa);
+          if (sb) parsedBestseller = JSON.parse(sb);
+        } catch {}
+
+        setMenuItems(
+          itemData.map(it => {
+            let updated = { ...it };
+            if (parsedPrices[it.id] !== undefined) updated.price = parsedPrices[it.id];
+            if (parsedImages[it.id] !== undefined) updated.image_url = parsedImages[it.id];
+            if (parsedAvail[it.id] !== undefined) updated.is_available = parsedAvail[it.id];
+            if (parsedBestseller[it.id] !== undefined) updated.is_bestseller = parsedBestseller[it.id];
+            return updated;
+          })
+        );
       }
 
       // 3. Fetch delivery slots
@@ -247,6 +272,12 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       prev.map(it => (it.id === itemId ? { ...it, is_available: isAvailable } : it))
     );
 
+    try {
+      const saved = JSON.parse(localStorage.getItem('urmila_custom_avail') || '{}');
+      saved[itemId] = isAvailable;
+      localStorage.setItem('urmila_custom_avail', JSON.stringify(saved));
+    } catch {}
+
     if (!isUsingFallback) {
       const { error } = await supabase
         .from('menu_items')
@@ -264,6 +295,12 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setMenuItems(prev =>
       prev.map(it => (it.id === itemId ? { ...it, is_bestseller: isBestseller } : it))
     );
+
+    try {
+      const saved = JSON.parse(localStorage.getItem('urmila_custom_bestseller') || '{}');
+      saved[itemId] = isBestseller;
+      localStorage.setItem('urmila_custom_bestseller', JSON.stringify(saved));
+    } catch {}
 
     if (!isUsingFallback) {
       const { error } = await supabase
