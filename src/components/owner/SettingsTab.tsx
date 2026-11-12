@@ -12,13 +12,25 @@ export const SettingsTab: React.FC = () => {
   const [address, setAddress] = useState(settings.address);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
+  // Sync state when settings load from DB or cache
+  React.useEffect(() => {
+    setWhatsappNumber(settings.whatsapp_number);
+    setContactPhone(settings.contact_phone);
+    setCutoffTime(settings.default_cutoff_time.slice(0, 5));
+    setDeliveryCharge(String(settings.delivery_charge));
+    setAddress(settings.address);
+  }, [settings]);
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    const parsedCharge = deliveryCharge.trim() === '' ? 0 : Number(deliveryCharge);
+    const finalDeliveryCharge = isNaN(parsedCharge) ? 0 : parsedCharge;
+
     await updateSettings({
       whatsapp_number: whatsappNumber,
       contact_phone: contactPhone,
       default_cutoff_time: `${cutoffTime}:00`,
-      delivery_charge: Number(deliveryCharge) || 50,
+      delivery_charge: finalDeliveryCharge,
       address,
     });
 

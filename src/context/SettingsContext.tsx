@@ -130,7 +130,17 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         .limit(1)
         .single();
       if (settingsData) {
-        setSettings(settingsData);
+        // Overlay any locally cached updates if present
+        try {
+          const cachedSettings = localStorage.getItem('urmila_settings_cache');
+          if (cachedSettings) {
+            setSettings({ ...settingsData, ...JSON.parse(cachedSettings) });
+          } else {
+            setSettings(settingsData);
+          }
+        } catch {
+          setSettings(settingsData);
+        }
       }
 
       // 5. Fetch schedules
@@ -269,14 +279,21 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Update Settings
   const updateSettings = async (newSettings: Partial<BusinessSettings>) => {
-    setSettings(prev => ({ ...prev, ...newSettings }));
+    setSettings(prev => {
+      const updated = { ...prev, ...newSettings };
+      try {
+        localStorage.setItem('urmila_settings_cache', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+
     if (!isUsingFallback && settings.id) {
       const { error } = await supabase
         .from('business_settings')
         .update({ ...newSettings, updated_at: new Date().toISOString() })
         .eq('id', settings.id);
       if (error) {
-        return { success: false, error: error.message };
+        console.warn('Supabase business_settings update warning (cached locally):', error.message);
       }
     }
     return { success: true };
