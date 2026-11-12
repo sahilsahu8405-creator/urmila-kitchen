@@ -108,3 +108,4 @@ export const CategoryPills: React.FC<CategoryPillsProps> = ({
     </div>
   );
 };
+

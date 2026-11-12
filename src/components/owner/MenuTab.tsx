@@ -257,3 +257,4 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
     </div>
   );
 };
+

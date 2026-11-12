@@ -126,3 +126,4 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({ order, onC
     </div>
   );
 };
+

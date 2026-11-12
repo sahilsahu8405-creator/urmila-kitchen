@@ -1,9 +1,7 @@
 import { Order, PartyEnquiry } from '../types/database.types';
 
 export function getCleanWhatsAppNumber(rawNumber: string): string {
-  // Remove non-digit characters
   const cleaned = rawNumber.replace(/\D/g, '');
-  // If 10 digits (India standard), prepend 91
   if (cleaned.length === 10) {
     return `91${cleaned}`;
   }
@@ -15,8 +13,8 @@ export function generateWhatsAppOrderUrl(order: Order, whatsappNumber: string = 
   
   const itemsText = (order.items_snapshot || [])
     .map((item: any, idx: number) => {
-      const notes = item.instructions ? ` _(Note: ${item.instructions})_` : '';
-      return `${idx + 1}. *${item.name}* x ${item.quantity} — ₹${item.subtotal || item.price * item.quantity}${notes}`;
+      const notes = item.instructions ? `\n   ↳ _Instruction: ${item.instructions}_` : '';
+      return `${idx + 1}. *${item.name}* x ${item.quantity} (@ ₹${item.price}) = ₹${item.subtotal || item.price * item.quantity}${notes}`;
     })
     .join('\n');
 
@@ -25,26 +23,26 @@ export function generateWhatsAppOrderUrl(order: Order, whatsappNumber: string = 
     `━━━━━━━━━━━━━━━━━━━━━━━`,
     `📋 *Order Ref:* ${order.order_reference}`,
     `👤 *Customer Name:* ${order.customer_name}`,
-    `📞 *Contact:* ${order.customer_phone}`,
+    `📞 *Contact Number:* ${order.customer_phone}`,
+    order.customer_email ? `✉️ *Email:* ${order.customer_email}` : '',
     ``,
     `📅 *Delivery Date:* ${order.delivery_date}`,
     `⏰ *Delivery Slot:* ${order.delivery_slot?.name || 'Selected Slot'}`,
     `📍 *Delivery Address:*`,
     `${order.delivery_address}`,
     order.locality ? `Locality: ${order.locality}` : '',
-    order.pin_code ? `PIN: ${order.pin_code}` : '',
+    order.pin_code ? `PIN Code: ${order.pin_code}` : '',
     order.landmark ? `Landmark: ${order.landmark}` : '',
-    order.delivery_instructions ? `Instructions: ${order.delivery_instructions}` : '',
     ``,
     `🍽️ *ORDERED DISHES:*`,
     itemsText,
     `━━━━━━━━━━━━━━━━━━━━━━━`,
+    order.order_notes ? `📝 *Overall Order Instructions:* ${order.order_notes}\n━━━━━━━━━━━━━━━━━━━━━━━` : '',
     `Subtotal: ₹${order.subtotal}`,
     `Delivery Charges: ₹${order.delivery_fee}`,
     `*GRAND TOTAL: ₹${order.total_amount}*`,
     `━━━━━━━━━━━━━━━━━━━━━━━`,
-    order.order_notes ? `📝 *Customer Note:* ${order.order_notes}\n` : '',
-    `_Please confirm this order and share payment details._ 🙏`
+    `_Please review and confirm this order._ 🙏`
   ].filter(line => line !== null && line !== undefined && line !== '').join('\n');
 
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
@@ -80,4 +78,3 @@ export function generateWhatsAppPartyEnquiryUrl(enquiry: PartyEnquiry, whatsappN
 
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 }
-

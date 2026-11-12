@@ -16,18 +16,20 @@ import { OrderSuccessModal } from '../components/customer/OrderSuccessModal';
 import { PartyBookingModal } from '../components/customer/PartyBookingModal';
 import { MenuItem, Order } from '../types/database.types';
 import { useSettings } from '../context/SettingsContext';
+import { useCart } from '../context/CartContext';
+import { ShoppingBag, ArrowRight } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
   const { categories } = useSettings();
+  const { itemCount, total, setIsCartOpen } = useCart();
+
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [selectedDishForModal, setSelectedDishForModal] = useState<MenuItem | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isPartyModalOpen, setIsPartyModalOpen] = useState(false);
-  const [partyDishPreselect, setPartyDishPreselect] = useState<string | undefined>(undefined);
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
 
-  const handleOpenPartyModal = (dishName?: string) => {
-    setPartyDishPreselect(dishName);
+  const handleOpenPartyModal = () => {
     setIsPartyModalOpen(true);
   };
 
@@ -38,19 +40,18 @@ export const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-cream flex flex-col selection:bg-sage/30">
       {/* Navigation Header */}
-      <Header onOpenPartyModal={() => handleOpenPartyModal()} />
+      <Header onOpenPartyModal={handleOpenPartyModal} />
 
       {/* Hero Section */}
       <main className="flex-1">
-        <Hero onOpenPartyModal={() => handleOpenPartyModal()} />
+        <Hero onOpenPartyModal={handleOpenPartyModal} />
 
         {/* Live Next-Day Cutoff Countdown Banner */}
         <CutoffBanner />
 
-        {/* Bestsellers Section (Matching Reference 1) */}
+        {/* Bestsellers Section (Proper Food Cards) */}
         <Bestsellers
           onSelectDish={(dish) => setSelectedDishForModal(dish)}
-          onOpenPartyModal={() => handleOpenPartyModal()}
         />
 
         {/* Explore Menu Circular Icons */}
@@ -62,16 +63,15 @@ export const HomePage: React.FC = () => {
           />
         </div>
 
-        {/* Digital Menu Catalog (68 Items from PDF) */}
+        {/* Digital Menu Catalog (68 Items from PDF with individual ordering) */}
         <MenuCatalog
           selectedCategoryId={selectedCategoryId}
           onSelectCategory={(id) => setSelectedCategoryId(id)}
           onSelectDish={(dish) => setSelectedDishForModal(dish)}
-          onOpenPartyModal={() => handleOpenPartyModal()}
         />
 
-        {/* Party and Bulk Orders Banner */}
-        <PartyBanner onOpenPartyModal={() => handleOpenPartyModal()} />
+        {/* Party and Bulk Orders Banner (Completely Separate Workflow) */}
+        <PartyBanner onOpenPartyModal={handleOpenPartyModal} />
 
         {/* Food Photography Gallery */}
         <PhotoGallery />
@@ -83,13 +83,39 @@ export const HomePage: React.FC = () => {
       {/* Global Footer */}
       <Footer />
 
+      {/* Convenient Floating Mobile Cart Bar */}
+      {itemCount > 0 && (
+        <div className="fixed bottom-4 inset-x-4 z-40 sm:hidden">
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="w-full bg-forest text-cream p-4 rounded-2xl shadow-elevated flex items-center justify-between border-2 border-sage/30 active:scale-98 transition-all"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-cream/15 flex items-center justify-center text-cream">
+                <ShoppingBag className="w-5 h-5" />
+              </div>
+              <div className="text-left">
+                <span className="font-bold text-sm block leading-none">
+                  {itemCount} {itemCount === 1 ? 'dish' : 'dishes'} • ₹{total}
+                </span>
+                <span className="text-[10px] text-sage-light">Tap to view your selection</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1 font-bold text-xs bg-cream text-forest px-3 py-1.5 rounded-full">
+              <span>View Cart</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </div>
+          </button>
+        </div>
+      )}
+
       {/* Drawers & Modals */}
       <CartDrawer onProceedToCheckout={() => setIsCheckoutOpen(true)} />
 
       <ProductDetailModal
         item={selectedDishForModal}
         onClose={() => setSelectedDishForModal(null)}
-        onOpenPartyModal={handleOpenPartyModal}
       />
 
       <CheckoutModal
@@ -105,11 +131,7 @@ export const HomePage: React.FC = () => {
 
       <PartyBookingModal
         isOpen={isPartyModalOpen}
-        onClose={() => {
-          setIsPartyModalOpen(false);
-          setPartyDishPreselect(undefined);
-        }}
-        preSelectedDish={partyDishPreselect}
+        onClose={() => setIsPartyModalOpen(false)}
       />
     </div>
   );

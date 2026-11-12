@@ -200,14 +200,28 @@ export const OrdersTab: React.FC<OrdersTabProps> = ({ orders, onUpdateOrderStatu
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 pt-1">
                   {(order.items_snapshot || []).map((it: any, i: number) => (
-                    <div key={i} className="flex items-center justify-between bg-cream p-2 rounded-lg border border-borderLight/80">
-                      <span className="font-medium text-forest truncate mr-2">
-                        {it.name} <strong className="text-charcoal">x {it.quantity}</strong>
-                      </span>
-                      <span className="font-serif font-bold text-charcoal">₹{it.subtotal || it.price * it.quantity}</span>
+                    <div key={i} className="bg-cream p-2.5 rounded-lg border border-borderLight/80 flex flex-col justify-between">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium text-forest truncate mr-2">
+                          {it.name} <strong className="text-charcoal">x {it.quantity}</strong>
+                        </span>
+                        <span className="font-serif font-bold text-charcoal">₹{it.subtotal || it.price * it.quantity}</span>
+                      </div>
+                      {it.instructions && (
+                        <p className="text-[11px] text-olive font-semibold italic mt-1">
+                          ↳ Note: {it.instructions}
+                        </p>
+                      )}
                     </div>
                   ))}
                 </div>
+
+                {order.order_notes && (
+                  <div className="mt-2 pt-2 border-t border-borderLight/60 text-xs">
+                    <span className="font-bold text-forest">Overall Order Instruction: </span>
+                    <span className="text-charcoal/80 italic">{order.order_notes}</span>
+                  </div>
+                )}
               </div>
 
               {/* Action Buttons (Large, Non-technical owner friendly) */}
@@ -299,3 +313,4 @@ export const OrdersTab: React.FC<OrdersTabProps> = ({ orders, onUpdateOrderStatu
     </div>
   );
 };
+

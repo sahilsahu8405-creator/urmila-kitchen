@@ -11,8 +11,11 @@ interface CartContextType {
   items: CartItem[];
   addToCart: (item: MenuItem, quantity?: number, specialInstructions?: string) => { success: boolean; message?: string };
   updateQuantity: (itemId: string, quantity: number) => void;
+  updateItemInstructions: (itemId: string, instructions: string) => void;
   removeFromCart: (itemId: string) => void;
   clearCart: () => void;
+  orderInstructions: string;
+  setOrderInstructions: (instructions: string) => void;
   subtotal: number;
   deliveryFee: number;
   total: number;
@@ -23,7 +26,8 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-const CART_STORAGE_KEY = 'urmila_kitchen_cart_v1';
+const CART_STORAGE_KEY = 'urmila_kitchen_cart_v2';
+const CART_NOTES_STORAGE_KEY = 'urmila_kitchen_cart_notes_v2';
 
 export const CartProvider: React.FC<{ children: React.ReactNode; deliveryCharge?: number }> = ({
   children,
@@ -41,6 +45,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode; deliveryCharge?
     return [];
   });
 
+  const [orderInstructions, setOrderInstructions] = useState<string>(() => {
+    try {
+      return localStorage.getItem(CART_NOTES_STORAGE_KEY) || '';
+    } catch (e) {
+      return '';
+    }
+  });
+
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
@@ -51,12 +63,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode; deliveryCharge?
     }
   }, [items]);
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(CART_NOTES_STORAGE_KEY, orderInstructions);
+    } catch (e) {}
+  }, [orderInstructions]);
+
   const addToCart = (item: MenuItem, quantity: number = 1, specialInstructions?: string) => {
-    // STRICT UNPRICED & AVAILABILITY GUARD
+    // Check if dish has a valid price
     if (item.price === null || item.price <= 0) {
       return {
         success: false,
-        message: `"${item.name}" is currently available for Party & Bulk Booking only. Please request a quote via Party Orders or WhatsApp.`,
+        message: `Price coming soon for "${item.name}". This item cannot be added to cart yet.`,
       };
     }
 
@@ -72,12 +90,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode; deliveryCharge?
       if (existingIndex > -1) {
         const updated = [...prev];
         updated[existingIndex].quantity = Math.min(50, updated[existingIndex].quantity + quantity);
-        if (specialInstructions) {
+        if (specialInstructions !== undefined) {
           updated[existingIndex].special_instructions = specialInstructions;
         }
         return updated;
       }
-      return [...prev, { item, quantity, special_instructions: specialInstructions }];
+      return [...prev, { item, quantity, special_instructions: specialInstructions || '' }];
     });
 
     setIsCartOpen(true);
@@ -94,14 +112,22 @@ export const CartProvider: React.FC<{ children: React.ReactNode; deliveryCharge?
     );
   };
 
+  const updateItemInstructions = (itemId: string, instructions: string) => {
+    setItems(prev =>
+      prev.map(ci => (ci.item.id === itemId ? { ...ci, special_instructions: instructions } : ci))
+    );
+  };
+
   const removeFromCart = (itemId: string) => {
     setItems(prev => prev.filter(ci => ci.item.id !== itemId));
   };
 
   const clearCart = () => {
     setItems([]);
+    setOrderInstructions('');
     try {
       localStorage.removeItem(CART_STORAGE_KEY);
+      localStorage.removeItem(CART_NOTES_STORAGE_KEY);
     } catch (e) {}
   };
 
@@ -116,8 +142,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode; deliveryCharge?
         items,
         addToCart,
         updateQuantity,
+        updateItemInstructions,
         removeFromCart,
         clearCart,
+        orderInstructions,
+        setOrderInstructions,
         subtotal,
         deliveryFee,
         total,
@@ -138,4 +167,3 @@ export const useCart = () => {
   }
   return context;
 };
-

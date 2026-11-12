@@ -109,3 +109,4 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPartyModal }) => {
     </section>
   );
 };
+

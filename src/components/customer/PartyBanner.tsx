@@ -85,3 +85,4 @@ export const PartyBanner: React.FC<PartyBannerProps> = ({ onOpenPartyModal }) =>
     </section>
   );
 };
+

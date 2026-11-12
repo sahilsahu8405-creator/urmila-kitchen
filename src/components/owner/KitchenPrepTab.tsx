@@ -13,6 +13,7 @@ interface DishPrepCount {
   pendingQuantity: number;
   ordersCount: number;
   slots: Record<string, number>;
+  notes: string[];
 }
 
 export const KitchenPrepTab: React.FC<KitchenPrepTabProps> = ({ orders }) => {
@@ -43,11 +44,15 @@ export const KitchenPrepTab: React.FC<KitchenPrepTabProps> = ({ orders }) => {
               pendingQuantity: 0,
               ordersCount: 0,
               slots: {},
+              notes: [],
             };
           }
 
           dishMap[item.name].ordersCount += 1;
           dishMap[item.name].slots[slotName] = (dishMap[item.name].slots[slotName] || 0) + item.quantity;
+          if (item.instructions && item.instructions.trim()) {
+            dishMap[item.name].notes.push(`${item.instructions} (${item.quantity} portions)`);
+          }
 
           if (isConfirmed) {
             dishMap[item.name].confirmedQuantity += item.quantity;
@@ -166,6 +171,7 @@ export const KitchenPrepTab: React.FC<KitchenPrepTabProps> = ({ orders }) => {
                   <th className="py-4 px-5 text-center">Confirmed Qty to Cook</th>
                   <th className="py-4 px-5 text-center">Pending WhatsApp / Unconfirmed</th>
                   <th className="py-4 px-5">Delivery Slot Breakdown</th>
+                  <th className="py-4 px-5">Special Cooking Notes</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-borderLight/70">
@@ -201,6 +207,17 @@ export const KitchenPrepTab: React.FC<KitchenPrepTabProps> = ({ orders }) => {
                         ))}
                       </div>
                     </td>
+                    <td className="py-4 px-5 text-xs">
+                      {dish.notes && dish.notes.length > 0 ? (
+                        <ul className="list-disc list-inside text-olive font-medium space-y-0.5">
+                          {dish.notes.map((n, ni) => (
+                            <li key={ni}>{n}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <span className="text-charcoal/40 text-[11px]">Standard prep</span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -211,3 +228,4 @@ export const KitchenPrepTab: React.FC<KitchenPrepTabProps> = ({ orders }) => {
     </div>
   );
 };
+

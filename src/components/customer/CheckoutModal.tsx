@@ -2,9 +2,9 @@ import React, { useState, useMemo } from 'react';
 import { useCart } from '../../context/CartContext';
 import { useSettings } from '../../context/SettingsContext';
 import { supabase } from '../../lib/supabase';
-import { Order, OrderStatus } from '../../types/database.types';
+import { Order } from '../../types/database.types';
 import { calculateCutoffCountdown, isDateOpenForDelivery, formatDateToYYYYMMDD, getNowInIST } from '../../lib/cutoff';
-import { X, Calendar, Clock, MapPin, Phone, User, Check, AlertCircle, ArrowRight, Loader2 } from 'lucide-react';
+import { X, Calendar, MapPin, User, Check, AlertCircle, ArrowRight, Loader2, MessageSquare, Utensils } from 'lucide-react';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -17,7 +17,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   onClose,
   onOrderSuccess,
 }) => {
-  const { items, subtotal, deliveryFee, total, clearCart } = useCart();
+  const { items, subtotal, deliveryFee, total, clearCart, orderInstructions } = useCart();
   const { settings, deliverySlots, schedules, closures, isUsingFallback } = useSettings();
 
   // Compute eligible delivery dates (next 7 days starting from next eligible open day)
@@ -50,8 +50,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [locality, setLocality] = useState('');
   const [pinCode, setPinCode] = useState('');
   const [landmark, setLandmark] = useState('');
-  const [deliveryInstructions, setDeliveryInstructions] = useState('');
-  const [orderNotes, setOrderNotes] = useState('');
+  const [overallNotes, setOverallNotes] = useState(orderInstructions);
   const [deliveryDate, setDeliveryDate] = useState(() => eligibleDates[0]?.dateStr || '');
   const [selectedSlotId, setSelectedSlotId] = useState(() => deliverySlots[0]?.id || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -90,6 +89,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       return;
     }
 
+    if (items.length === 0) {
+      setErrorMessage('Your cart is empty.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -103,21 +107,21 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       let orderRef = `UK-${formatDateToYYYYMMDD(new Date()).replace(/-/g, '')}-${Math.floor(1000 + Math.random() * 9000)}`;
       let orderId = `order-${Date.now()}`;
 
-      // Call Supabase RPC create_customer_order if tables exist
+      // Call Supabase RPC create_customer_order if live
       if (!isUsingFallback) {
         const { data, error } = await supabase.rpc('create_customer_order', {
-          p_customer_name: customerName,
+          p_customer_name: customerName.trim(),
           p_customer_phone: cleanPhone,
-          p_customer_email: customerEmail || null,
-          p_delivery_address: deliveryAddress,
-          p_locality: locality || null,
-          p_pin_code: pinCode || null,
-          p_landmark: landmark || null,
-          p_delivery_instructions: deliveryInstructions || null,
+          p_customer_email: customerEmail.trim() || null,
+          p_delivery_address: deliveryAddress.trim(),
+          p_locality: locality.trim() || null,
+          p_pin_code: pinCode.trim() || null,
+          p_landmark: landmark.trim() || null,
+          p_delivery_instructions: overallNotes.trim() || null,
           p_delivery_date: deliveryDate,
           p_delivery_slot_id: selectedSlotId,
           p_delivery_type: 'delivery',
-          p_order_notes: orderNotes || null,
+          p_order_notes: overallNotes.trim() || null,
           p_items: itemsPayload,
         });
 
@@ -136,18 +140,18 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         id: orderId,
         order_reference: orderRef,
         lookup_token: `token-${Date.now()}`,
-        customer_name: customerName,
+        customer_name: customerName.trim(),
         customer_phone: cleanPhone,
-        customer_email: customerEmail || null,
-        delivery_address: deliveryAddress,
-        locality: locality || null,
-        pin_code: pinCode || null,
-        landmark: landmark || null,
-        delivery_instructions: deliveryInstructions || null,
+        customer_email: customerEmail.trim() || null,
+        delivery_address: deliveryAddress.trim(),
+        locality: locality.trim() || null,
+        pin_code: pinCode.trim() || null,
+        landmark: landmark.trim() || null,
+        delivery_instructions: overallNotes.trim() || null,
         delivery_date: deliveryDate,
         delivery_slot_id: selectedSlotId,
         delivery_type: 'delivery',
-        order_notes: orderNotes || null,
+        order_notes: overallNotes.trim() || null,
         subtotal,
         delivery_fee: deliveryFee,
         total_amount: total,
@@ -158,7 +162,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
           quantity: ci.quantity,
           price: ci.item.price,
           subtotal: (ci.item.price || 0) * ci.quantity,
-          instructions: ci.special_instructions,
+          instructions: ci.special_instructions || '',
         })),
         cancellation_reason: null,
         created_at: new Date().toISOString(),
@@ -193,8 +197,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         {/* Header */}
         <div className="p-5 sm:p-6 border-b border-borderLight bg-cream-light flex items-center justify-between shrink-0">
           <div>
-            <span className="text-xs font-semibold text-olive uppercase tracking-wider">Guest Checkout</span>
-            <h2 className="font-serif text-2xl font-bold text-forest mt-0.5">Delivery & Pre-Order Details</h2>
+            <span className="text-xs font-semibold text-olive uppercase tracking-wider">Regular Food Order</span>
+            <h2 className="font-serif text-2xl font-bold text-forest mt-0.5">Checkout & Delivery Details</h2>
           </div>
           <button
             onClick={onClose}
@@ -213,11 +217,39 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             </div>
           )}
 
-          {/* Section 1: Delivery Date & Slot Selection */}
-          <div className="space-y-4">
+          {/* Section 1: Order Summary Breakdown */}
+          <div className="space-y-3">
+            <h3 className="font-serif text-base font-bold text-forest flex items-center gap-2">
+              <Utensils className="w-4 h-4 text-terracotta" />
+              <span>1. Review Your Dishes ({items.length})</span>
+            </h3>
+
+            <div className="divide-y divide-borderLight/60 bg-cream-light rounded-2xl border border-borderLight p-4">
+              {items.map((ci) => (
+                <div key={ci.item.id} className="py-2.5 first:pt-0 last:pb-0 flex items-start justify-between gap-3 text-xs">
+                  <div>
+                    <span className="font-bold text-forest">{ci.item.name}</span>
+                    <span className="text-charcoal/60 ml-1.5 font-medium">x {ci.quantity}</span>
+                    <span className="text-charcoal/50 ml-1">(@ ₹{ci.item.price})</span>
+                    {ci.special_instructions && (
+                      <p className="text-olive italic mt-0.5 text-[11px]">
+                        Dish instruction: "{ci.special_instructions}"
+                      </p>
+                    )}
+                  </div>
+                  <span className="font-serif font-bold text-forest shrink-0">
+                    ₹{(ci.item.price || 0) * ci.quantity}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Section 2: Delivery Date & Slot Selection */}
+          <div className="space-y-4 pt-4 border-t border-borderLight">
             <h3 className="font-serif text-base font-bold text-forest flex items-center gap-2">
               <Calendar className="w-4 h-4 text-terracotta" />
-              <span>1. Choose Delivery Date & Slot</span>
+              <span>2. Delivery Date & Slot</span>
             </h3>
 
             {/* Date Picker Pills */}
@@ -276,11 +308,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             </div>
           </div>
 
-          {/* Section 2: Contact Information */}
+          {/* Section 3: Contact Information */}
           <div className="space-y-4 pt-4 border-t border-borderLight">
             <h3 className="font-serif text-base font-bold text-forest flex items-center gap-2">
               <User className="w-4 h-4 text-terracotta" />
-              <span>2. Contact Details</span>
+              <span>3. Contact Information</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -300,7 +332,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-charcoal/80 mb-1">
-                  WhatsApp Number <span className="text-terracotta">*</span>
+                  WhatsApp Mobile Number <span className="text-terracotta">*</span>
                 </label>
                 <input
                   type="tel"
@@ -311,29 +343,29 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   className="w-full px-3.5 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                 />
                 <span className="text-[10px] text-charcoal/50 mt-1 block">
-                  Used to deliver order confirmation & tracking via WhatsApp
+                  Used for order confirmation & dispatch updates on WhatsApp
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Section 3: Delivery Address */}
+          {/* Section 4: Delivery Address */}
           <div className="space-y-4 pt-4 border-t border-borderLight">
             <h3 className="font-serif text-base font-bold text-forest flex items-center gap-2">
               <MapPin className="w-4 h-4 text-terracotta" />
-              <span>3. Delivery Address</span>
+              <span>4. Delivery Address & Instructions</span>
             </h3>
 
             <div>
               <label className="block text-xs font-semibold text-charcoal/80 mb-1">
-                Street Address / Building / Flat No. <span className="text-terracotta">*</span>
+                Full Street Address / Flat / Building No. <span className="text-terracotta">*</span>
               </label>
               <textarea
                 required
                 rows={2}
                 value={deliveryAddress}
                 onChange={(e) => setDeliveryAddress(e.target.value)}
-                placeholder="Flat / Floor / Wing, Building Name, Street..."
+                placeholder="Flat No, Floor, Wing, Building Name, Road..."
                 className="w-full px-3.5 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30 resize-none"
               />
             </div>
@@ -367,30 +399,32 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   type="text"
                   value={landmark}
                   onChange={(e) => setLandmark(e.target.value)}
-                  placeholder="Near temple, park..."
+                  placeholder="Near temple, bank..."
                   className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                 />
               </div>
             </div>
 
+            {/* Overall Order Instructions */}
             <div>
-              <label className="block text-xs font-semibold text-charcoal/80 mb-1">
-                Order Note / Instructions (Optional)
+              <label className="block text-xs font-semibold text-charcoal/80 mb-1 flex items-center gap-1.5">
+                <MessageSquare className="w-3.5 h-3.5 text-olive" />
+                <span>Overall Order Instructions</span>
               </label>
               <input
                 type="text"
-                value={orderNotes}
-                onChange={(e) => setOrderNotes(e.target.value)}
-                placeholder="Leave with security, ring bell twice..."
+                value={overallNotes}
+                onChange={(e) => setOverallNotes(e.target.value)}
+                placeholder="e.g. Please call before delivery, leave with security..."
                 className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
               />
             </div>
           </div>
 
-          {/* Section 4: Order Summary Snapshot */}
+          {/* Section 5: Order Total Calculation */}
           <div className="p-4 rounded-2xl bg-cream-light border border-borderLight space-y-2">
             <div className="flex justify-between text-xs text-charcoal/70">
-              <span>Items Total ({items.length} items)</span>
+              <span>Dishes Subtotal ({items.length} items)</span>
               <span>₹{subtotal}</span>
             </div>
             <div className="flex justify-between text-xs text-charcoal/70">
@@ -398,12 +432,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <span>₹{deliveryFee}</span>
             </div>
             <div className="border-t border-borderLight/80 pt-2 flex justify-between text-base font-bold text-forest font-serif">
-              <span>Total Payable</span>
+              <span>Grand Total</span>
               <span>₹{total}</span>
             </div>
           </div>
 
-          {/* Modal Action Buttons */}
+          {/* Submit Action */}
           <div className="pt-2">
             <button
               type="submit"
@@ -413,17 +447,17 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Securing Order...</span>
+                  <span>Submitting Order...</span>
                 </>
               ) : (
                 <>
-                  <span>Place Next-Day Pre-Order</span>
+                  <span>Submit Order & Open WhatsApp</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
             <p className="text-[11px] text-center text-charcoal/60 mt-2">
-              Next step: Automatically generates your WhatsApp order summary to send to Urmila's Kitchen.
+              Next step: Automatically generates your complete WhatsApp order message to send directly to Urmila's Kitchen.
             </p>
           </div>
         </form>

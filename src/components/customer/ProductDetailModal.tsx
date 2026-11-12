@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { MenuItem } from '../../types/database.types';
 import { useCart } from '../../context/CartContext';
-import { X, Plus, Minus, Check, Sparkles, AlertCircle, MessageCircle } from 'lucide-react';
+import { X, Plus, Minus, Check, Clock } from 'lucide-react';
 
 interface ProductDetailModalProps {
   item: MenuItem | null;
   onClose: () => void;
-  onOpenPartyModal?: (dishName?: string) => void;
 }
 
 export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   item,
   onClose,
-  onOpenPartyModal,
 }) => {
   if (!item) return null;
 
@@ -87,51 +85,39 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           {/* Pricing Box */}
           <div className="p-4 rounded-2xl bg-cream-light border border-borderLight flex items-center justify-between">
             <div>
-              <span className="text-xs text-charcoal/60 uppercase tracking-wider font-medium">Ordering Mode</span>
+              <span className="text-xs text-charcoal/60 uppercase tracking-wider font-semibold">Pricing</span>
               {isPriced ? (
                 <div className="flex items-baseline gap-2 mt-0.5">
                   <span className="font-serif text-2xl font-bold text-forest">₹{item.price}</span>
                   <span className="text-xs text-charcoal/60">per portion</span>
                 </div>
               ) : (
-                <p className="text-sm font-semibold text-terracotta mt-0.5">
-                  Available for Party & Bulk Booking
-                </p>
+                <div className="flex items-center gap-1.5 mt-1 text-sm font-semibold text-charcoal/70 italic">
+                  <Clock className="w-4 h-4 text-olive" />
+                  <span>Price coming soon</span>
+                </div>
               )}
             </div>
-
-            {item.min_party_qty && (
-              <div className="text-right">
-                <span className="text-[11px] text-olive font-semibold uppercase tracking-wider block">Bulk Serving</span>
-                <span className="text-xs font-medium text-charcoal/80">{item.min_party_qty}</span>
-              </div>
-            )}
           </div>
 
-          {/* If unpriced: Party Booking helper */}
+          {/* If unpriced note */}
           {!isPriced && (
-            <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-xs text-amber-900 space-y-2">
-              <div className="flex items-center gap-2 font-bold text-amber-950">
-                <AlertCircle className="w-4 h-4 text-amber-800 shrink-0" />
-                <span>Specialty Batch Dish</span>
-              </div>
-              <p>
-                To maintain the highest quality, this item is prepared as a custom batch for family gatherings, house parties, and corporate catering.
-              </p>
+            <div className="p-4 rounded-2xl bg-cream-dark/20 border border-borderLight text-xs text-charcoal/70">
+              This dish is currently being priced by the kitchen owner. Once published, regular online pre-ordering will be immediately enabled.
             </div>
           )}
 
-          {/* Optional Special Instructions */}
+          {/* Individual Dish Instructions Input */}
           {isPriced && (
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal/80 mb-1.5">
-                Special Instructions (Optional)
+                Special Instructions for this dish (Optional)
               </label>
               <input
                 type="text"
                 value={instructions}
                 onChange={(e) => setInstructions(e.target.value)}
-                placeholder="e.g., Less spicy, Jain preparation..."
+                placeholder="e.g. Less spicy, please / No onions / Extra crispy"
                 className="w-full px-4 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal placeholder-charcoal/40 focus:outline-none focus:ring-2 focus:ring-forest/30"
               />
             </div>
@@ -161,12 +147,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 </button>
               </div>
 
-              {/* Add Button */}
+              {/* Add to Cart Button */}
               <button
                 type="button"
                 onClick={handleAddToCart}
                 disabled={isAdded}
-                className="flex-1 py-3.5 px-6 rounded-full bg-forest text-cream font-semibold text-sm hover:bg-forest-light transition-all shadow-sm flex items-center justify-center gap-2 active:scale-[0.98]"
+                className="flex-1 py-3.5 px-6 rounded-full bg-forest text-cream font-bold text-sm hover:bg-forest-light transition-all shadow-sm flex items-center justify-center gap-2 active:scale-[0.98]"
               >
                 {isAdded ? (
                   <>
@@ -179,18 +165,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                  if (onOpenPartyModal) onOpenPartyModal(item.name);
-                }}
-                className="flex-1 py-3.5 px-6 rounded-full bg-terracotta text-cream font-semibold text-sm hover:bg-terracotta-dark transition-all shadow-sm text-center"
-              >
-                Plan Party Order with this Dish →
-              </button>
-            </div>
+            <button
+              type="button"
+              disabled
+              className="w-full py-3.5 px-6 rounded-full bg-cream-dark/50 text-charcoal/50 font-bold text-sm cursor-not-allowed border border-borderLight text-center"
+            >
+              Price Coming Soon
+            </button>
           )}
         </div>
       </div>

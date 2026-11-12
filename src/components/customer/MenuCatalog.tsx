@@ -2,20 +2,18 @@ import React, { useState, useMemo } from 'react';
 import { useSettings } from '../../context/SettingsContext';
 import { useCart } from '../../context/CartContext';
 import { MenuItem } from '../../types/database.types';
-import { Search, Plus, Check, Info, Sparkles, Filter } from 'lucide-react';
+import { Search, Plus, Check, Clock } from 'lucide-react';
 
 interface MenuCatalogProps {
   selectedCategoryId: string | null;
   onSelectCategory: (catId: string | null) => void;
   onSelectDish: (item: MenuItem) => void;
-  onOpenPartyModal?: () => void;
 }
 
 export const MenuCatalog: React.FC<MenuCatalogProps> = ({
   selectedCategoryId,
   onSelectCategory,
   onSelectDish,
-  onOpenPartyModal,
 }) => {
   const { categories, menuItems } = useSettings();
   const { addToCart } = useCart();
@@ -37,9 +35,6 @@ export const MenuCatalog: React.FC<MenuCatalogProps> = ({
   const handleAdd = (e: React.MouseEvent, item: MenuItem) => {
     e.stopPropagation();
     if (item.price === null || item.price <= 0) {
-      if (onOpenPartyModal) {
-        onOpenPartyModal();
-      }
       return;
     }
     const res = addToCart(item);
@@ -49,17 +44,15 @@ export const MenuCatalog: React.FC<MenuCatalogProps> = ({
     }
   };
 
-  const activeCategoryName = categories.find((c) => c.id === selectedCategoryId)?.name || 'All Dishes';
-
   return (
     <section id="menu" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20 scroll-mt-24">
       {/* Menu Header with Search */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-borderLight pb-6">
         <div>
           <span className="text-xs uppercase tracking-widest font-semibold text-olive">Digital Menu</span>
-          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-forest mt-1">Menu</h2>
+          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-forest mt-1">Our Menu</h2>
           <p className="text-sm text-charcoal/70 mt-1">
-            A wide range of delicious vegetarian favourites, prepared with pure ingredients.
+            Browse our complete selection of 68 delicious vegetarian dishes, crafted fresh for next-day delivery.
           </p>
         </div>
 
@@ -88,13 +81,13 @@ export const MenuCatalog: React.FC<MenuCatalogProps> = ({
       <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar scrollbar-none">
         <button
           onClick={() => onSelectCategory(null)}
-          className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+          className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
             selectedCategoryId === null
               ? 'bg-forest text-cream shadow-sm'
               : 'bg-cream-light text-charcoal hover:bg-cream-dark/50 border border-borderLight'
           }`}
         >
-          All ({menuItems.length})
+          All Dishes ({menuItems.length})
         </button>
         {categories.map((cat) => {
           const count = menuItems.filter((i) => i.category_id === cat.id).length;
@@ -103,7 +96,7 @@ export const MenuCatalog: React.FC<MenuCatalogProps> = ({
             <button
               key={cat.id}
               onClick={() => onSelectCategory(cat.id)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+              className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
                 isSelected
                   ? 'bg-forest text-cream shadow-sm'
                   : 'bg-cream-light text-charcoal hover:bg-cream-dark/50 border border-borderLight'
@@ -113,15 +106,6 @@ export const MenuCatalog: React.FC<MenuCatalogProps> = ({
             </button>
           );
         })}
-      </div>
-
-      {/* Notice regarding unpriced dishes for Party Booking */}
-      <div className="bg-cream-light border border-sage/30 rounded-xl p-3.5 mb-8 flex items-start sm:items-center gap-3 text-xs text-charcoal/80">
-        <Info className="w-4 h-4 text-forest shrink-0 mt-0.5 sm:mt-0" />
-        <p>
-          <strong className="text-forest">Pre-Order & Party Notice:</strong> Regular online ordering is enabled for priced menu items. Dishes marked with{' '}
-          <span className="text-terracotta font-semibold">"Price on Request"</span> can be booked in custom quantities for parties and gatherings via our Party Enquiry portal or WhatsApp.
-        </p>
       </div>
 
       {/* Dishes Grid */}
@@ -173,24 +157,18 @@ export const MenuCatalog: React.FC<MenuCatalogProps> = ({
                       </div>
                     </div>
 
-                    {/* Bestseller or Party badge */}
-                    {dish.is_bestseller ? (
+                    {/* Bestseller Badge */}
+                    {dish.is_bestseller && (
                       <div className="absolute bottom-2.5 left-2.5 bg-forest/90 text-cream text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full backdrop-blur-sm">
                         Bestseller
                       </div>
-                    ) : dish.is_party_special ? (
-                      <div className="absolute bottom-2.5 left-2.5 bg-olive/90 text-cream text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full backdrop-blur-sm">
-                        Party Special
-                      </div>
-                    ) : null}
+                    )}
                   </div>
 
-                  {/* Title and Category Tag */}
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-serif text-base sm:text-lg font-bold text-forest leading-snug group-hover:text-forest-light transition-colors">
-                      {dish.name}
-                    </h3>
-                  </div>
+                  {/* Title and Description */}
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-forest leading-snug group-hover:text-forest-light transition-colors">
+                    {dish.name}
+                  </h3>
 
                   <p className="text-xs text-charcoal/70 line-clamp-2 mt-1 min-h-8">
                     {dish.description || 'Authentic recipe prepared fresh to order with pure desi ingredients.'}
@@ -202,15 +180,15 @@ export const MenuCatalog: React.FC<MenuCatalogProps> = ({
                   <div>
                     {isPriced ? (
                       <div>
-                        <span className="text-[11px] text-charcoal/60">Price</span>
-                        <p className="font-serif text-lg font-bold text-forest">₹{dish.price}</p>
+                        <span className="text-[10px] text-charcoal/60 uppercase font-semibold">Price</span>
+                        <p className="font-serif text-lg font-bold text-forest leading-none">₹{dish.price}</p>
                       </div>
                     ) : (
                       <div>
-                        <span className="text-[10px] text-terracotta font-semibold uppercase tracking-wider block">
-                          Party Booking
+                        <span className="text-xs font-semibold text-charcoal/60 italic flex items-center gap-1">
+                          <Clock className="w-3 h-3 text-olive" />
+                          <span>Price coming soon</span>
                         </span>
-                        <span className="text-xs font-medium text-charcoal/70">Price on Request</span>
                       </div>
                     )}
                   </div>
@@ -219,10 +197,10 @@ export const MenuCatalog: React.FC<MenuCatalogProps> = ({
                     <button
                       type="button"
                       onClick={(e) => handleAdd(e, dish)}
-                      className={`inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 ${
+                      className={`inline-flex items-center gap-1 px-4 py-2 rounded-full text-xs font-bold transition-all active:scale-95 ${
                         isAdded
                           ? 'bg-emerald-700 text-cream'
-                          : 'bg-cream border border-forest/30 text-forest hover:bg-forest hover:text-cream shadow-sm'
+                          : 'bg-forest text-cream hover:bg-forest-light shadow-sm'
                       }`}
                     >
                       {isAdded ? (
@@ -232,7 +210,7 @@ export const MenuCatalog: React.FC<MenuCatalogProps> = ({
                         </>
                       ) : (
                         <>
-                          <span>Add</span>
+                          <span>Add to Cart</span>
                           <Plus className="w-3.5 h-3.5" />
                         </>
                       )}
@@ -240,10 +218,10 @@ export const MenuCatalog: React.FC<MenuCatalogProps> = ({
                   ) : (
                     <button
                       type="button"
-                      onClick={(e) => handleAdd(e, dish)}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-semibold bg-terracotta/10 text-terracotta hover:bg-terracotta hover:text-cream transition-all"
+                      disabled
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-semibold bg-cream-dark/40 text-charcoal/50 cursor-not-allowed border border-borderLight"
                     >
-                      <span>Enquire</span>
+                      <span>Coming Soon</span>
                     </button>
                   )}
                 </div>

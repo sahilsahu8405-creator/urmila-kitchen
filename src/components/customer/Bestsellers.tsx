@@ -1,25 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSettings } from '../../context/SettingsContext';
 import { useCart } from '../../context/CartContext';
 import { MenuItem } from '../../types/database.types';
-import { Plus, Check, Sparkles, AlertCircle } from 'lucide-react';
+import { Plus, Check, Clock } from 'lucide-react';
 
 interface BestsellersProps {
   onSelectDish: (item: MenuItem) => void;
-  onOpenPartyModal?: () => void;
 }
 
-export const Bestsellers: React.FC<BestsellersProps> = ({ onSelectDish, onOpenPartyModal }) => {
+export const Bestsellers: React.FC<BestsellersProps> = ({ onSelectDish }) => {
   const { menuItems } = useSettings();
   const { addToCart } = useCart();
-  const [addedId, setAddedId] = React.useState<string | null>(null);
+  const [addedId, setAddedId] = useState<string | null>(null);
 
-  // Filter bestsellers from menuItems, fallback to top 4 featured items
+  // Filter bestsellers from menuItems, fallback to top 4 items
   const bestsellers = menuItems
     .filter((item) => item.is_bestseller && item.is_available)
     .slice(0, 4);
 
-  // If fewer than 4 marked, take available items from Starters and Mains
   const displayItems = bestsellers.length >= 4
     ? bestsellers
     : menuItems.filter(item => item.is_available).slice(0, 4);
@@ -27,9 +25,6 @@ export const Bestsellers: React.FC<BestsellersProps> = ({ onSelectDish, onOpenPa
   const handleAdd = (e: React.MouseEvent, item: MenuItem) => {
     e.stopPropagation();
     if (item.price === null || item.price <= 0) {
-      if (onOpenPartyModal) {
-        onOpenPartyModal();
-      }
       return;
     }
     const res = addToCart(item);
@@ -43,14 +38,14 @@ export const Bestsellers: React.FC<BestsellersProps> = ({ onSelectDish, onOpenPa
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <span className="text-xs uppercase tracking-widest font-semibold text-olive">Chef's Signature</span>
+          <span className="text-xs uppercase tracking-widest font-semibold text-olive">Customer Favourites</span>
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-forest mt-1">Bestsellers</h2>
         </div>
         <a
           href="#menu"
           className="text-sm font-semibold text-forest hover:text-forest-light flex items-center gap-1 group"
         >
-          <span>View full menu</span>
+          <span>Explore full menu</span>
           <span className="transition-transform group-hover:translate-x-1">→</span>
         </a>
       </div>
@@ -106,15 +101,15 @@ export const Bestsellers: React.FC<BestsellersProps> = ({ onSelectDish, onOpenPa
                 <div>
                   {isPriced ? (
                     <div>
-                      <span className="text-xs text-charcoal/60">Price</span>
-                      <p className="font-serif text-lg font-bold text-forest">₹{dish.price}</p>
+                      <span className="text-[10px] text-charcoal/60 uppercase font-semibold">Price</span>
+                      <p className="font-serif text-lg font-bold text-forest leading-none">₹{dish.price}</p>
                     </div>
                   ) : (
                     <div>
-                      <span className="text-[10px] text-terracotta font-semibold uppercase tracking-wider block">
-                        Party Booking
+                      <span className="text-xs font-semibold text-charcoal/60 italic flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-olive" />
+                        <span>Price coming soon</span>
                       </span>
-                      <span className="text-xs font-medium text-charcoal/70">Price on Request</span>
                     </div>
                   )}
                 </div>
@@ -123,10 +118,10 @@ export const Bestsellers: React.FC<BestsellersProps> = ({ onSelectDish, onOpenPa
                   <button
                     type="button"
                     onClick={(e) => handleAdd(e, dish)}
-                    className={`inline-flex items-center gap-1 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 ${
+                    className={`inline-flex items-center gap-1 px-4 py-2 rounded-full text-xs font-bold transition-all active:scale-95 ${
                       isAdded
                         ? 'bg-emerald-700 text-cream'
-                        : 'bg-cream border border-forest/30 text-forest hover:bg-forest hover:text-cream shadow-sm'
+                        : 'bg-forest text-cream hover:bg-forest-light shadow-sm'
                     }`}
                   >
                     {isAdded ? (
@@ -144,10 +139,10 @@ export const Bestsellers: React.FC<BestsellersProps> = ({ onSelectDish, onOpenPa
                 ) : (
                   <button
                     type="button"
-                    onClick={(e) => handleAdd(e, dish)}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-semibold bg-terracotta/10 text-terracotta hover:bg-terracotta hover:text-cream transition-all"
+                    disabled
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-semibold bg-cream-dark/40 text-charcoal/50 cursor-not-allowed border border-borderLight"
                   >
-                    <span>Enquire</span>
+                    <span>Coming Soon</span>
                   </button>
                 )}
               </div>
