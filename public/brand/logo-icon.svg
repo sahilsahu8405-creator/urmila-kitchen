@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- House Roof & Outline -->
+  <path d="M50 8 L90 32 L82 32 L82 90 L18 90 L18 32 L10 32 Z" stroke="#244638" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round" fill="#F8F5EC"/>
+  <!-- Chimney / Decorative attic window -->
+  <rect x="42" y="24" width="16" height="18" rx="2" stroke="#244638" stroke-width="3.5" fill="#244638" fill-opacity="0.1"/>
+  <line x1="50" y1="24" x2="50" y2="42" stroke="#244638" stroke-width="2.5"/>
+  <line x1="42" y1="33" x2="58" y2="33" stroke="#244638" stroke-width="2.5"/>
+  <!-- Fork on left -->
+  <path d="M28 52 V64 M25 52 V58 H31 V52 M28 64 V80" stroke="#244638" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Spoon on right -->
+  <path d="M72 52 C68 52 68 62 72 62 C76 62 76 52 72 52 Z M72 62 V80" stroke="#244638" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Center plate with food slice -->
+  <circle cx="50" cy="66" r="12" stroke="#244638" stroke-width="3" fill="#FFFFFF"/>
+  <circle cx="50" cy="66" r="8" stroke="#777F52" stroke-width="1.8" stroke-dasharray="2 2"/>
+  <path d="M50 66 L56 60 M50 66 L44 60" stroke="#BD8061" stroke-width="2" stroke-linecap="round"/>
+</svg>
+
