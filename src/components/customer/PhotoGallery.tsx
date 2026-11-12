@@ -1,39 +1,57 @@
 import React from 'react';
 import { Camera } from 'lucide-react';
+import { useSettings } from '../../context/SettingsContext';
 
 export const PhotoGallery: React.FC = () => {
-  const galleryItems = [
+  const { galleryImages } = useSettings();
+
+  // Curated showcase fallback if the owner has not yet uploaded custom photos
+  const defaultGalleryItems: Array<{ id: string; title: string; category: string; image_url: string; caption?: string | null }> = [
     {
+      id: 'default-1',
       title: 'Artisanal Starters',
       category: 'Starters',
-      url: 'https://images.unsplash.com/photo-1541529086526-db283c563270?w=600&auto=format&fit=crop&q=80',
+      image_url: 'https://images.unsplash.com/photo-1541529086526-db283c563270?w=600&auto=format&fit=crop&q=80',
+      caption: null,
     },
     {
+      id: 'default-2',
       title: 'Signature Paneer Tikka',
       category: 'Mains',
-      url: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&auto=format&fit=crop&q=80',
+      image_url: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&auto=format&fit=crop&q=80',
+      caption: null,
     },
     {
+      id: 'default-3',
       title: 'Pav Bhaji Delicacy',
       category: 'Classics',
-      url: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=600&auto=format&fit=crop&q=80',
+      image_url: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=600&auto=format&fit=crop&q=80',
+      caption: null,
     },
     {
+      id: 'default-4',
       title: 'Oven Baked Specialties',
       category: 'Baked Dishes',
-      url: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=600&auto=format&fit=crop&q=80',
+      image_url: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=600&auto=format&fit=crop&q=80',
+      caption: null,
     },
     {
+      id: 'default-5',
       title: 'Chaat Specialities',
       category: 'Chaats',
-      url: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop&q=80',
+      image_url: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop&q=80',
+      caption: null,
     },
     {
+      id: 'default-6',
       title: 'Handcrafted Desserts',
       category: 'Desserts',
-      url: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&auto=format&fit=crop&q=80',
+      image_url: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&auto=format&fit=crop&q=80',
+      caption: null,
     },
   ];
+
+  const displayList = galleryImages && galleryImages.length > 0 ? galleryImages : defaultGalleryItems;
 
   return (
     <section id="gallery" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20 scroll-mt-24">
@@ -48,24 +66,27 @@ export const PhotoGallery: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-        {galleryItems.map((item, idx) => (
+        {displayList.map((item) => (
           <div
-            key={idx}
+            key={item.id}
             className="group relative rounded-2xl overflow-hidden aspect-square bg-cream-dark/20 border border-borderLight shadow-subtle hover:shadow-card transition-all"
           >
             <img
-              src={item.url}
+              src={item.image_url}
               alt={item.title}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-forest-900/80 via-forest-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+            <div className="absolute inset-0 bg-gradient-to-t from-forest/80 via-forest/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
               <span className="text-[10px] uppercase tracking-wider font-semibold text-sage-light">
                 {item.category}
               </span>
               <p className="font-serif text-base font-bold text-cream leading-tight">
                 {item.title}
               </p>
+              {Boolean('caption' in item && item.caption) && (
+                <p className="text-xs text-cream/80 line-clamp-1 mt-0.5">{String(item.caption)}</p>
+              )}
             </div>
           </div>
         ))}

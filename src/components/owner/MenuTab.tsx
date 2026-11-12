@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useSettings } from '../../context/SettingsContext';
 import { MenuItem } from '../../types/database.types';
-import { Search, Plus, Edit2, Check, X, Sparkles, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { DishImage } from '../common/DishImage';
+import { uploadImageFile } from '../../lib/storage';
+import { Search, Plus, Edit2, Check, X, Sparkles, AlertCircle, Eye, EyeOff, Camera, Upload, Trash2 } from 'lucide-react';
 
 interface MenuTabProps {
   onOpenAddDishModal: () => void;
@@ -12,6 +14,7 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
     categories,
     menuItems,
     updateMenuItemPrice,
+    updateMenuItemImage,
     toggleMenuItemAvailability,
     toggleMenuItemBestseller,
   } = useSettings();
@@ -20,6 +23,8 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [editingPriceId, setEditingPriceId] = useState<string | null>(null);
   const [priceInput, setPriceInput] = useState('');
+  const [uploadingItemId, setUploadingItemId] = useState<string | null>(null);
+  const fileInputMap = useRef<{ [key: string]: HTMLInputElement | null }>({});
 
   const filteredItems = menuItems.filter((item) => {
     const matchesCat = selectedCatId === 'all' ? true : item.category_id === selectedCatId;
@@ -126,17 +131,48 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
                 !item.is_available ? 'opacity-60 bg-cream/30' : 'hover:bg-cream/40'
               }`}
             >
-              {/* Left Column: Details */}
+              {/* Left Column: Details & Photo Uploader */}
               <div className="flex items-start gap-4">
-                {/* Thumbnail */}
-                <div className="w-16 h-16 rounded-xl overflow-hidden bg-cream-dark/30 shrink-0 aspect-square">
-                  <img
-                    src={
-                      item.image_url ||
-                      'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&auto=format&fit=crop&q=80'
-                    }
+                {/* Thumbnail with direct camera/file upload button */}
+                <div className="relative group/thumb w-16 h-16 rounded-xl overflow-hidden bg-cream-dark/30 shrink-0 aspect-square border border-borderLight">
+                  <DishImage
+                    src={item.image_url}
                     alt={item.name}
+                    categorySlug={categories.find(c => c.id === item.category_id)?.slug}
                     className="w-full h-full object-cover"
+                  />
+
+                  {/* Hover / Tap overlay to upload photo */}
+                  <button
+                    type="button"
+                    onClick={() => fileInputMap.current[item.id]?.click()}
+                    disabled={uploadingItemId === item.id}
+                    className="absolute inset-0 bg-charcoal/60 backdrop-blur-xs opacity-0 group-hover/thumb:opacity-100 flex flex-col items-center justify-center text-cream text-[9px] font-bold transition-opacity"
+                    title="Change / Upload Photograph"
+                  >
+                    <Camera className="w-4 h-4 mb-0.5" />
+                    <span>{uploadingItemId === item.id ? 'Saving...' : 'Photo'}</span>
+                  </button>
+
+                  <input
+                    ref={(el) => {
+                      fileInputMap.current[item.id] = el;
+                    }}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      setUploadingItemId(item.id);
+                      const res = await uploadImageFile(file, 'product-images');
+                      if (res.success) {
+                        await updateMenuItemImage(item.id, res.url);
+                      } else {
+                        alert(res.error || 'Failed to upload photo.');
+                      }
+                      setUploadingItemId(null);
+                    }}
                   />
                 </div>
 
@@ -154,9 +190,29 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
                   <h3 className="font-serif text-base sm:text-lg font-bold text-forest mt-1">
                     {item.name}
                   </h3>
-                  <p className="text-xs text-charcoal/65 line-clamp-1 max-w-lg mt-0.5">
-                    {item.description || 'Authentic dish imported from original menu.'}
-                  </p>
+                  <div className="flex items-center gap-3 mt-1">
+                    <button
+                      type="button"
+                      onClick={() => fileInputMap.current[item.id]?.click()}
+                      className="text-[11px] font-semibold text-olive hover:text-forest flex items-center gap-1"
+                    >
+                      <Camera className="w-3 h-3" />
+                      <span>{item.image_url ? 'Change Photo' : 'Upload Photo'}</span>
+                    </button>
+                    {item.image_url && (
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          if (confirm(`Remove custom photo from "${item.name}"?`)) {
+                            await updateMenuItemImage(item.id, null);
+                          }
+                        }}
+                        className="text-[11px] font-semibold text-charcoal/40 hover:text-terracotta"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
 

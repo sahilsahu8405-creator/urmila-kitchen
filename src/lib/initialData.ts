@@ -134,40 +134,6 @@ export const INITIAL_SCHEDULES: BusinessSchedule[] = [
   { id: 'sch-6', day_of_week: 6, is_open: true, open_time: '10:00:00', close_time: '22:00:00' }, // Sat
 ];
 
-// Authentic reviews matching the design reference
-export const INITIAL_REVIEWS: CustomerReview[] = [
-  {
-    id: 'rev-1',
-    customer_name: 'Priya S.',
-    rating: 5,
-    review_text: 'The food is always fresh, flavourful and perfectly packed! The pav bhaji fondue and cheese corn balls were a massive hit with my family.',
-    dish_highlight: 'Pav bhaji fondue',
-    event_type: 'Family Gathering',
-    image_url: null,
-    is_approved: true,
-    is_featured: true,
-  },
-  {
-    id: 'rev-2',
-    customer_name: 'Rohan M.',
-    rating: 5,
-    review_text: 'Ordered for a small event and it was a big hit. Highly recommend! The pre-order cutoff makes planning so effortless.',
-    dish_highlight: 'Party Booking',
-    event_type: 'Birthday Celebration',
-    image_url: null,
-    is_approved: true,
-    is_featured: true,
-  },
-  {
-    id: 'rev-3',
-    customer_name: 'Neha K.',
-    rating: 5,
-    review_text: 'Consistent quality and great taste. Our go-to for home events. You can taste the genuine warmth and fresh ingredients in every dish.',
-    dish_highlight: 'Paneer Begum Bahar',
-    event_type: 'House Party',
-    image_url: null,
-    is_approved: true,
-    is_featured: true,
-  },
-];
+// Zero fabricated reviews. Real reviews will be populated via customer submissions or owner entry.
+export const INITIAL_REVIEWS: CustomerReview[] = [];
 

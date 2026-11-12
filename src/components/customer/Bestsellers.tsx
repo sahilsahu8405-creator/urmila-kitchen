@@ -3,6 +3,7 @@ import { useSettings } from '../../context/SettingsContext';
 import { useCart } from '../../context/CartContext';
 import { MenuItem } from '../../types/database.types';
 import { Plus, Check, Clock } from 'lucide-react';
+import { DishImage } from '../common/DishImage';
 
 interface BestsellersProps {
   onSelectDish: (item: MenuItem) => void;
@@ -64,14 +65,10 @@ export const Bestsellers: React.FC<BestsellersProps> = ({ onSelectDish }) => {
               <div>
                 {/* Food Image with Veg Badge */}
                 <div className="relative rounded-xl overflow-hidden aspect-4/3 bg-cream-dark/20 mb-3.5">
-                  <img
-                    src={
-                      dish.image_url ||
-                      'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop&q=80'
-                    }
+                  <DishImage
+                    src={dish.image_url}
                     alt={dish.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
                   />
 
                   {/* Pure Veg Indicator Symbol */}

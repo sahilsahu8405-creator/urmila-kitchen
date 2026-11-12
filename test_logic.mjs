@@ -84,3 +84,4 @@ console.log('WhatsApp message contains Overall Order Instructions:', decodedMsg.
 console.log('WhatsApp message contains GRAND TOTAL: ₹630:', decodedMsg.includes('GRAND TOTAL: ₹630'));
 
 console.log('\nAll business logic tests passed successfully!');
+

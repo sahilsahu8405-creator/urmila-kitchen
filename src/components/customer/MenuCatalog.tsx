@@ -3,6 +3,7 @@ import { useSettings } from '../../context/SettingsContext';
 import { useCart } from '../../context/CartContext';
 import { MenuItem } from '../../types/database.types';
 import { Search, Plus, Check, Clock } from 'lucide-react';
+import { DishImage } from '../common/DishImage';
 
 interface MenuCatalogProps {
   selectedCategoryId: string | null;
@@ -140,14 +141,11 @@ export const MenuCatalog: React.FC<MenuCatalogProps> = ({
                 <div>
                   {/* Food Image */}
                   <div className="relative rounded-xl overflow-hidden aspect-4/3 bg-cream-dark/30 mb-3.5">
-                    <img
-                      src={
-                        dish.image_url ||
-                        'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop&q=80'
-                      }
+                    <DishImage
+                      src={dish.image_url}
                       alt={dish.name}
+                      categorySlug={categories.find(c => c.id === dish.category_id)?.slug}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
                     />
 
                     {/* Pure Veg Badge */}

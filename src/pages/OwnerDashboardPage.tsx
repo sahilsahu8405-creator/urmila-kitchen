@@ -7,9 +7,12 @@ import { MenuTab } from '../components/owner/MenuTab';
 import { PartyEnquiriesTab } from '../components/owner/PartyEnquiriesTab';
 import { CalendarTab } from '../components/owner/CalendarTab';
 import { SettingsTab } from '../components/owner/SettingsTab';
+import { GalleryTab } from '../components/owner/GalleryTab';
+import { ReviewsTab } from '../components/owner/ReviewsTab';
 import { useOwnerAuth } from '../context/OwnerAuthContext';
 import { useSettings } from '../context/SettingsContext';
 import { Order, OrderStatus, PartyEnquiry, MenuItem } from '../types/database.types';
+import { uploadImageFile } from '../lib/storage';
 import { supabase } from '../lib/supabase';
 import {
   LayoutDashboard,
@@ -24,6 +27,9 @@ import {
   Plus,
   X,
   Menu,
+  Image as ImageIcon,
+  MessageSquare,
+  Camera,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -44,6 +50,9 @@ export const OwnerDashboardPage: React.FC = () => {
   const [newDishPrice, setNewDishPrice] = useState('');
   const [newDishDesc, setNewDishDesc] = useState('');
   const [newDishImage, setNewDishImage] = useState('');
+  const [dishFile, setDishFile] = useState<File | null>(null);
+  const [dishImagePreview, setDishImagePreview] = useState<string | null>(null);
+  const [isUploadingDishImg, setIsUploadingDishImg] = useState(false);
 
   // Protect route
   useEffect(() => {
@@ -139,12 +148,22 @@ export const OwnerDashboardPage: React.FC = () => {
     const catId = newDishCatId || categories[0]?.id;
     const price = newDishPrice.trim() ? Number(newDishPrice) : null;
 
+    let finalImageUrl = newDishImage.trim() || null;
+    if (dishFile) {
+      setIsUploadingDishImg(true);
+      const uploadRes = await uploadImageFile(dishFile, 'product-images');
+      setIsUploadingDishImg(false);
+      if (uploadRes.success) {
+        finalImageUrl = uploadRes.url;
+      }
+    }
+
     const newItem: Partial<MenuItem> = {
       name: newDishName,
       category_id: catId,
       price,
       description: newDishDesc || null,
-      image_url: newDishImage || null,
+      image_url: finalImageUrl,
       is_available: true,
       is_bestseller: false,
       is_party_special: false,
@@ -172,6 +191,8 @@ export const OwnerDashboardPage: React.FC = () => {
     setNewDishPrice('');
     setNewDishDesc('');
     setNewDishImage('');
+    setDishFile(null);
+    setDishImagePreview(null);
     setActiveTab('menu');
   };
 
@@ -181,6 +202,8 @@ export const OwnerDashboardPage: React.FC = () => {
     { id: 'prep', label: 'Kitchen Prep Sheet', icon: ChefHat },
     { id: 'menu', label: 'Menu & Prices', icon: UtensilsCrossed },
     { id: 'party', label: 'Party Enquiries', icon: Sparkles, badge: enquiries.filter(e => e.status === 'new_enquiry').length },
+    { id: 'gallery', label: 'Kitchen Gallery', icon: ImageIcon },
+    { id: 'reviews', label: 'Customer Reviews', icon: MessageSquare },
     { id: 'calendar', label: 'Calendar & Schedules', icon: Calendar },
     { id: 'settings', label: 'Business Settings', icon: Settings },
   ];
@@ -315,6 +338,10 @@ export const OwnerDashboardPage: React.FC = () => {
           />
         )}
 
+        {activeTab === 'gallery' && <GalleryTab />}
+
+        {activeTab === 'reviews' && <ReviewsTab />}
+
         {activeTab === 'calendar' && <CalendarTab />}
 
         {activeTab === 'settings' && <SettingsTab />}
@@ -388,13 +415,39 @@ export const OwnerDashboardPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-bold text-charcoal/80 mb-1">Photograph Image URL (Optional)</label>
+                <label className="block font-bold text-charcoal/80 mb-1">
+                  Dish Photograph (Mobile Camera or Gallery)
+                </label>
+                <div className="flex items-center gap-3">
+                  <label className="cursor-pointer px-4 py-2 rounded-xl bg-forest/10 hover:bg-forest/20 text-forest font-bold text-xs flex items-center gap-1.5 transition-colors">
+                    <Camera className="w-4 h-4" />
+                    <span>Choose Photo / Take Picture</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setDishFile(file);
+                          setDishImagePreview(URL.createObjectURL(file));
+                        }
+                      }}
+                      className="hidden"
+                    />
+                  </label>
+                  {dishImagePreview && (
+                    <div className="w-10 h-10 rounded-lg overflow-hidden border border-borderLight shrink-0">
+                      <img src={dishImagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                </div>
+                <p className="text-[10px] text-charcoal/50 mt-1">Or paste an existing photo URL below:</p>
                 <input
                   type="url"
                   value={newDishImage}
                   onChange={(e) => setNewDishImage(e.target.value)}
                   placeholder="https://..."
-                  className="w-full px-3 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal"
+                  className="w-full px-3 py-1.5 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal mt-1"
                 />
               </div>
 

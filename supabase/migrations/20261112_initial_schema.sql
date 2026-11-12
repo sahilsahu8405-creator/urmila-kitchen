@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS public.owner_profiles (
 -- 2. BUSINESS SETTINGS
 -- ------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.business_settings (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     business_name TEXT NOT NULL DEFAULT 'Urmila''s Kitchen',
     whatsapp_number TEXT NOT NULL DEFAULT '9204417026',
     contact_phone TEXT NOT NULL DEFAULT '9204417026',
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS public.business_settings (
 -- 3. BUSINESS SCHEDULES (Weekly Operating Days)
 -- ------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.business_schedules (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     day_of_week INT NOT NULL CHECK (day_of_week BETWEEN 0 AND 6), -- 0=Sun, 1=Mon, ..., 6=Sat
     is_open BOOLEAN NOT NULL DEFAULT TRUE,
     open_time TIME NOT NULL DEFAULT '10:00:00',
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS public.business_schedules (
 -- 4. BUSINESS CLOSURES & SPECIAL OPENINGS
 -- ------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.business_closures (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     closure_type TEXT NOT NULL CHECK (closure_type IN ('single_closure', 'holiday_range', 'special_opening')),
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS public.business_closures (
 -- 5. MENU CATEGORIES
 -- ------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.categories (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL UNIQUE,
     slug TEXT NOT NULL UNIQUE,
     description TEXT,
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS public.categories (
 -- 6. MENU ITEMS (Authentic PDF Import, All Prices NULL Initially)
 -- ------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.menu_items (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     category_id UUID NOT NULL REFERENCES public.categories(id) ON DELETE CASCADE,
     name TEXT NOT NULL,
     description TEXT,
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS public.menu_items (
 -- 7. DELIVERY SLOTS
 -- ------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.delivery_slots (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL, -- e.g. 'Lunch (12:30 PM - 2:00 PM)'
     slot_type TEXT NOT NULL CHECK (slot_type IN ('lunch', 'dinner', 'all_day')),
     start_time TIME NOT NULL,
@@ -119,9 +119,9 @@ CREATE TABLE IF NOT EXISTS public.delivery_slots (
 -- 8. ORDERS & ORDER ITEMS
 -- ------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.orders (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_reference TEXT UNIQUE NOT NULL, -- e.g. 'UK-20261113-0001'
-    lookup_token UUID NOT NULL DEFAULT uuid_generate_v4(), -- Secure token for customer confirmation
+    lookup_token UUID NOT NULL DEFAULT gen_random_uuid(), -- Secure token for customer confirmation
     customer_name TEXT NOT NULL,
     customer_phone TEXT NOT NULL,
     customer_email TEXT,
@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS public.orders (
 );
 
 CREATE TABLE IF NOT EXISTS public.order_items (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_id UUID NOT NULL REFERENCES public.orders(id) ON DELETE CASCADE,
     menu_item_id UUID NOT NULL REFERENCES public.menu_items(id),
     item_name TEXT NOT NULL,
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS public.order_items (
 );
 
 CREATE TABLE IF NOT EXISTS public.order_status_history (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_id UUID NOT NULL REFERENCES public.orders(id) ON DELETE CASCADE,
     previous_status TEXT,
     new_status TEXT NOT NULL,
@@ -182,9 +182,9 @@ CREATE TABLE IF NOT EXISTS public.order_status_history (
 -- 9. PARTY & BULK ORDER ENQUIRIES
 -- ------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.party_enquiries (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     enquiry_reference TEXT UNIQUE NOT NULL, -- e.g. 'PE-20261113-0001'
-    lookup_token UUID NOT NULL DEFAULT uuid_generate_v4(),
+    lookup_token UUID NOT NULL DEFAULT gen_random_uuid(),
     customer_name TEXT NOT NULL,
     customer_phone TEXT NOT NULL,
     customer_email TEXT,
@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS public.party_enquiries (
 -- 10. GALLERY IMAGES & CUSTOMER REVIEWS
 -- ------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.gallery_images (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title TEXT NOT NULL,
     category TEXT NOT NULL DEFAULT 'Dishes',
     image_url TEXT NOT NULL,
@@ -233,7 +233,7 @@ CREATE TABLE IF NOT EXISTS public.gallery_images (
 );
 
 CREATE TABLE IF NOT EXISTS public.customer_reviews (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     customer_name TEXT NOT NULL,
     rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
     review_text TEXT NOT NULL,
@@ -415,7 +415,7 @@ BEGIN
 
     -- Create Order record container
     v_order_ref := public.generate_order_reference();
-    v_lookup_token := uuid_generate_v4();
+    v_lookup_token := gen_random_uuid();
 
     INSERT INTO public.orders (
         order_reference,
@@ -593,7 +593,7 @@ BEGIN
     END IF;
 
     v_enquiry_ref := public.generate_enquiry_reference();
-    v_lookup_token := uuid_generate_v4();
+    v_lookup_token := gen_random_uuid();
 
     INSERT INTO public.party_enquiries (
         enquiry_reference,

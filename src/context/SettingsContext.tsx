@@ -8,6 +8,7 @@ import {
   BusinessSchedule,
   BusinessClosure,
   CustomerReview,
+  GalleryImage,
 } from '../types/database.types';
 import {
   INITIAL_CATEGORIES,
@@ -26,16 +27,24 @@ interface SettingsContextType {
   schedules: BusinessSchedule[];
   closures: BusinessClosure[];
   reviews: CustomerReview[];
+  galleryImages: GalleryImage[];
   isLoading: boolean;
   isUsingFallback: boolean;
   refreshData: () => Promise<void>;
   updateMenuItemPrice: (itemId: string, newPrice: number | null) => Promise<{ success: boolean; error?: string }>;
+  updateMenuItemImage: (itemId: string, imageUrl: string | null) => Promise<{ success: boolean; error?: string }>;
   toggleMenuItemAvailability: (itemId: string, isAvailable: boolean) => Promise<{ success: boolean; error?: string }>;
   toggleMenuItemBestseller: (itemId: string, isBestseller: boolean) => Promise<{ success: boolean; error?: string }>;
   updateSettings: (newSettings: Partial<BusinessSettings>) => Promise<{ success: boolean; error?: string }>;
   addClosure: (closure: Omit<BusinessClosure, 'id' | 'created_at'>) => Promise<{ success: boolean; error?: string }>;
   deleteClosure: (closureId: string) => Promise<{ success: boolean; error?: string }>;
   toggleScheduleDay: (dayOfWeek: number, isOpen: boolean) => Promise<{ success: boolean; error?: string }>;
+  addGalleryImage: (image: Omit<GalleryImage, 'id' | 'created_at'>) => Promise<{ success: boolean; error?: string }>;
+  deleteGalleryImage: (imageId: string) => Promise<{ success: boolean; error?: string }>;
+  updateGalleryImage: (imageId: string, updates: Partial<GalleryImage>) => Promise<{ success: boolean; error?: string }>;
+  submitReview: (review: Omit<CustomerReview, 'id' | 'created_at' | 'is_approved' | 'is_featured'>) => Promise<{ success: boolean; error?: string }>;
+  approveReview: (reviewId: string, isApproved: boolean) => Promise<{ success: boolean; error?: string }>;
+  deleteReview: (reviewId: string) => Promise<{ success: boolean; error?: string }>;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -48,6 +57,14 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [schedules, setSchedules] = useState<BusinessSchedule[]>(INITIAL_SCHEDULES);
   const [closures, setClosures] = useState<BusinessClosure[]>([]);
   const [reviews, setReviews] = useState<CustomerReview[]>(INITIAL_REVIEWS);
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>(() => {
+    try {
+      const saved = localStorage.getItem('urmila_gallery_cache');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [isUsingFallback, setIsUsingFallback] = useState(false);
 
@@ -65,14 +82,22 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setIsUsingFallback(true);
         // Load locally saved custom prices if any
         const savedCustomPrices = localStorage.getItem('urmila_custom_prices');
-        if (savedCustomPrices) {
-          try {
-            const parsed = JSON.parse(savedCustomPrices);
-            setMenuItems(prev =>
-              prev.map(it => (parsed[it.id] !== undefined ? { ...it, price: parsed[it.id] } : it))
-            );
-          } catch (e) {}
-        }
+        const savedCustomImages = localStorage.getItem('urmila_custom_images');
+        let parsedPrices: Record<string, number | null> = {};
+        let parsedImages: Record<string, string | null> = {};
+        try {
+          if (savedCustomPrices) parsedPrices = JSON.parse(savedCustomPrices);
+          if (savedCustomImages) parsedImages = JSON.parse(savedCustomImages);
+        } catch {}
+
+        setMenuItems(prev =>
+          prev.map(it => {
+            let updated = { ...it };
+            if (parsedPrices[it.id] !== undefined) updated.price = parsedPrices[it.id];
+            if (parsedImages[it.id] !== undefined) updated.image_url = parsedImages[it.id];
+            return updated;
+          })
+        );
         setIsLoading(false);
         return;
       }
@@ -126,14 +151,22 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setClosures(closureData);
       }
 
-      // 7. Fetch approved reviews
+      // 7. Fetch reviews (fetch all for context)
       const { data: revData } = await supabase
         .from('customer_reviews')
         .select('*')
-        .eq('is_approved', true)
         .order('created_at', { ascending: false });
       if (revData && revData.length > 0) {
         setReviews(revData);
+      }
+
+      // 8. Fetch gallery images
+      const { data: galleryData } = await supabase
+        .from('gallery_images')
+        .select('*')
+        .order('display_order', { ascending: true });
+      if (galleryData && galleryData.length > 0) {
+        setGalleryImages(galleryData);
       }
     } catch (err) {
       console.warn('Using local fallback configuration:', err);
@@ -165,6 +198,31 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const { error } = await supabase
         .from('menu_items')
         .update({ price: newPrice, updated_at: new Date().toISOString() })
+        .eq('id', itemId);
+      if (error) {
+        return { success: false, error: error.message };
+      }
+    }
+    return { success: true };
+  };
+
+  // Update Menu Item Image
+  const updateMenuItemImage = async (itemId: string, imageUrl: string | null) => {
+    setMenuItems(prev =>
+      prev.map(it => (it.id === itemId ? { ...it, image_url: imageUrl } : it))
+    );
+
+    // Save in local cache for offline/fallback
+    try {
+      const saved = JSON.parse(localStorage.getItem('urmila_custom_images') || '{}');
+      saved[itemId] = imageUrl;
+      localStorage.setItem('urmila_custom_images', JSON.stringify(saved));
+    } catch {}
+
+    if (!isUsingFallback) {
+      const { error } = await supabase
+        .from('menu_items')
+        .update({ image_url: imageUrl, updated_at: new Date().toISOString() })
         .eq('id', itemId);
       if (error) {
         return { success: false, error: error.message };
@@ -275,6 +333,154 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return { success: true };
   };
 
+  // Add Gallery Image
+  const addGalleryImage = async (image: Omit<GalleryImage, 'id' | 'created_at'>) => {
+    const tempId = `gallery-${Date.now()}`;
+    const newEntry: GalleryImage = {
+      ...image,
+      id: tempId,
+      created_at: new Date().toISOString(),
+    };
+    setGalleryImages(prev => {
+      const updated = [newEntry, ...prev];
+      try {
+        localStorage.setItem('urmila_gallery_cache', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+
+    if (!isUsingFallback) {
+      const { data, error } = await supabase
+        .from('gallery_images')
+        .insert([image])
+        .select()
+        .single();
+      if (error) {
+        return { success: false, error: error.message };
+      }
+      if (data) {
+        setGalleryImages(prev => {
+          const updated = prev.map(img => (img.id === tempId ? data : img));
+          try {
+            localStorage.setItem('urmila_gallery_cache', JSON.stringify(updated));
+          } catch {}
+          return updated;
+        });
+      }
+    }
+    return { success: true };
+  };
+
+  // Delete Gallery Image
+  const deleteGalleryImage = async (imageId: string) => {
+    setGalleryImages(prev => {
+      const updated = prev.filter(img => img.id !== imageId);
+      try {
+        localStorage.setItem('urmila_gallery_cache', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+
+    if (!isUsingFallback) {
+      const { error } = await supabase.from('gallery_images').delete().eq('id', imageId);
+      if (error) {
+        return { success: false, error: error.message };
+      }
+    }
+    return { success: true };
+  };
+
+  // Update Gallery Image
+  const updateGalleryImage = async (imageId: string, updates: Partial<GalleryImage>) => {
+    setGalleryImages(prev => {
+      const updated = prev.map(img => (img.id === imageId ? { ...img, ...updates } : img));
+      try {
+        localStorage.setItem('urmila_gallery_cache', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+
+    if (!isUsingFallback) {
+      const { error } = await supabase
+        .from('gallery_images')
+        .update(updates)
+        .eq('id', imageId);
+      if (error) {
+        return { success: false, error: error.message };
+      }
+    }
+    return { success: true };
+  };
+
+  // Submit Review (Customer facing)
+  const submitReview = async (review: Omit<CustomerReview, 'id' | 'created_at' | 'is_approved' | 'is_featured'>) => {
+    const tempId = `rev-${Date.now()}`;
+    const newEntry: CustomerReview = {
+      ...review,
+      id: tempId,
+      is_approved: false, // requires owner approval
+      is_featured: false,
+      created_at: new Date().toISOString(),
+    };
+
+    setReviews(prev => [newEntry, ...prev]);
+
+    if (!isUsingFallback) {
+      const { data, error } = await supabase
+        .from('customer_reviews')
+        .insert([{
+          customer_name: review.customer_name,
+          rating: review.rating,
+          review_text: review.review_text,
+          dish_highlight: review.dish_highlight,
+          event_type: review.event_type,
+          image_url: review.image_url,
+          is_approved: false,
+          is_featured: false,
+        }])
+        .select()
+        .single();
+      if (error) {
+        return { success: false, error: error.message };
+      }
+      if (data) {
+        setReviews(prev => prev.map(r => (r.id === tempId ? data : r)));
+      }
+    }
+    return { success: true };
+  };
+
+  // Approve / Unapprove Review (Owner facing)
+  const approveReview = async (reviewId: string, isApproved: boolean) => {
+    setReviews(prev =>
+      prev.map(r => (r.id === reviewId ? { ...r, is_approved: isApproved } : r))
+    );
+
+    if (!isUsingFallback) {
+      const { error } = await supabase
+        .from('customer_reviews')
+        .update({ is_approved: isApproved })
+        .eq('id', reviewId);
+      if (error) {
+        return { success: false, error: error.message };
+      }
+    }
+    return { success: true };
+  };
+
+  // Delete Review
+  const deleteReview = async (reviewId: string) => {
+    setReviews(prev => prev.filter(r => r.id !== reviewId));
+
+    if (!isUsingFallback) {
+      const { error } = await supabase.from('customer_reviews').delete().eq('id', reviewId);
+      if (error) {
+        return { success: false, error: error.message };
+      }
+    }
+    return { success: true };
+  };
+
   return (
     <SettingsContext.Provider
       value={{
@@ -285,16 +491,24 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         schedules,
         closures,
         reviews,
+        galleryImages,
         isLoading,
         isUsingFallback,
         refreshData: fetchData,
         updateMenuItemPrice,
+        updateMenuItemImage,
         toggleMenuItemAvailability,
         toggleMenuItemBestseller,
         updateSettings,
         addClosure,
         deleteClosure,
         toggleScheduleDay,
+        addGalleryImage,
+        deleteGalleryImage,
+        updateGalleryImage,
+        submitReview,
+        approveReview,
+        deleteReview,
       }}
     >
       {children}

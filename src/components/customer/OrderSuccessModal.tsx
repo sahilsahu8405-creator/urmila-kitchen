@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Order } from '../../types/database.types';
 import { generateWhatsAppOrderUrl } from '../../lib/whatsapp';
 import { useSettings } from '../../context/SettingsContext';
 import confetti from 'canvas-confetti';
-import { CheckCircle2, MessageSquare, Copy, Check, Calendar, MapPin, ExternalLink, ArrowRight } from 'lucide-react';
+import { CheckCircle2, MessageSquare, Copy, Check, ExternalLink, RefreshCw, ArrowLeft } from 'lucide-react';
 
 interface OrderSuccessModalProps {
   order: Order | null;
@@ -12,55 +12,76 @@ interface OrderSuccessModalProps {
 
 export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({ order, onClose }) => {
   const { settings } = useSettings();
-  const [copied, setCopied] = React.useState(false);
+  const [copiedText, setCopiedText] = useState(false);
+  const [copiedRef, setCopiedRef] = useState(false);
+  const [hasAttemptedAutoOpen, setHasAttemptedAutoOpen] = useState(false);
 
   useEffect(() => {
-    if (order) {
+    if (order && !hasAttemptedAutoOpen) {
+      setHasAttemptedAutoOpen(true);
       // Fire celebration confetti
       try {
         confetti({
-          particleCount: 80,
-          spread: 70,
+          particleCount: 90,
+          spread: 75,
           origin: { y: 0.6 },
           colors: ['#244638', '#A8B69B', '#BD8061', '#777F52'],
         });
       } catch (e) {}
+
+      // Attempt popup redirect to WhatsApp
+      const url = generateWhatsAppOrderUrl(order, settings.whatsapp_number);
+      try {
+        const opened = window.open(url, '_blank');
+        if (!opened || opened.closed || typeof opened.closed === 'undefined') {
+          console.warn('Popup blocked by browser; user will click manual button');
+        }
+      } catch (e) {
+        console.warn('Auto open caught error:', e);
+      }
     }
-  }, [order]);
+  }, [order, settings.whatsapp_number, hasAttemptedAutoOpen]);
 
   if (!order) return null;
 
   const whatsappUrl = generateWhatsAppOrderUrl(order, settings.whatsapp_number);
+  // Extract decoded message for manual copying
+  const messageText = decodeURIComponent(whatsappUrl.split('text=')[1] || '');
 
-  const handleCopy = () => {
-    const text = `Order Ref: ${order.order_reference}\nDate: ${order.delivery_date}\nTotal: ₹${order.total_amount}`;
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopyMessage = () => {
+    navigator.clipboard.writeText(messageText);
+    setCopiedText(true);
+    setTimeout(() => setCopiedText(false), 2500);
   };
 
-  const handleWhatsAppClick = () => {
-    window.open(whatsappUrl, '_blank');
+  const handleCopyRef = () => {
+    navigator.clipboard.writeText(order.order_reference);
+    setCopiedRef(true);
+    setTimeout(() => setCopiedRef(false), 2000);
+  };
+
+  const handleManualOpenWhatsApp = () => {
+    window.location.href = whatsappUrl;
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal/70 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal/75 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto">
       <div
-        className="relative w-full max-w-lg bg-cream rounded-3xl border border-borderLight shadow-elevated p-6 sm:p-8 animate-in zoom-in-95 duration-200 max-h-[92vh] overflow-y-auto"
+        className="relative w-full max-w-lg bg-cream rounded-3xl border border-borderLight shadow-elevated p-6 sm:p-8 animate-in zoom-in-95 duration-200 my-8 max-h-[92vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Success Icon */}
-        <div className="w-16 h-16 rounded-full bg-forest-50 border border-forest/20 text-forest flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 rounded-full bg-forest-50 border-2 border-forest/20 text-forest flex items-center justify-center mx-auto mb-4">
           <CheckCircle2 className="w-9 h-9 text-forest" />
         </div>
 
         <div className="text-center mb-6">
-          <span className="text-xs uppercase tracking-widest font-semibold text-olive">Order Logged Successfully</span>
+          <span className="text-xs uppercase tracking-widest font-semibold text-olive">Order Saved Successfully</span>
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest mt-1">
-            Almost Done!
+            Send Order via WhatsApp
           </h2>
-          <p className="text-sm text-charcoal/80 mt-1 max-w-sm mx-auto">
-            Please tap below to send your pre-formatted order summary on WhatsApp to complete confirmation with the kitchen.
+          <p className="text-xs sm:text-sm text-charcoal/80 mt-1.5 max-w-md mx-auto">
+            Your order has been recorded in our system. Click the green button below to open WhatsApp and tap <strong>"Send"</strong> to finalize your booking with Urmila's Kitchen.
           </p>
         </div>
 
@@ -68,15 +89,15 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({ order, onC
         <div className="bg-cream-light rounded-2xl border border-borderLight p-4 mb-6 space-y-3">
           <div className="flex items-center justify-between pb-3 border-b border-borderLight">
             <div>
-              <span className="text-[11px] uppercase tracking-wider text-charcoal/60 font-semibold">Order Reference</span>
+              <span className="text-[10px] uppercase tracking-wider text-charcoal/60 font-bold">Order Reference</span>
               <p className="font-mono text-lg font-bold text-forest">{order.order_reference}</p>
             </div>
             <button
-              onClick={handleCopy}
+              onClick={handleCopyRef}
               className="p-2 rounded-xl bg-cream border border-borderLight text-charcoal hover:text-forest text-xs font-semibold flex items-center gap-1.5 transition-colors"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copied ? 'Copied' : 'Copy'}</span>
+              {copiedRef ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copiedRef ? 'Copied' : 'Copy Ref'}</span>
             </button>
           </div>
 
@@ -91,39 +112,62 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({ order, onC
             </div>
             <div>
               <span className="text-charcoal/60">Customer Name</span>
-              <p className="font-medium text-charcoal truncate">{order.customer_name}</p>
+              <p className="font-semibold text-charcoal truncate">{order.customer_name}</p>
             </div>
             <div>
-              <span className="text-charcoal/60">Total Amount</span>
+              <span className="text-charcoal/60">Grand Total</span>
               <p className="font-serif font-bold text-base text-forest">₹{order.total_amount}</p>
             </div>
           </div>
         </div>
 
-        {/* WhatsApp Action Button */}
+        {/* Primary Action: Direct WhatsApp Link */}
         <div className="space-y-3">
-          <button
-            onClick={handleWhatsAppClick}
-            className="w-full py-4 px-6 rounded-full bg-emerald-700 text-cream font-bold text-base hover:bg-emerald-600 transition-all shadow-card flex items-center justify-center gap-2.5 active:scale-[0.98]"
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-4 px-6 rounded-full bg-emerald-700 text-cream font-bold text-base hover:bg-emerald-600 transition-all shadow-card flex items-center justify-center gap-2.5 active:scale-[0.98] text-center"
           >
-            <MessageSquare className="w-5 h-5" />
-            <span>Send Order on WhatsApp</span>
-            <ExternalLink className="w-4 h-4 ml-1 opacity-80" />
-          </button>
+            <MessageSquare className="w-5 h-5 shrink-0" />
+            <span>Open WhatsApp to Confirm</span>
+            <ExternalLink className="w-4 h-4 ml-1 opacity-80 shrink-0" />
+          </a>
 
-          <p className="text-[11px] text-center text-charcoal/70 leading-relaxed px-2">
-            <strong>Important:</strong> Opening WhatsApp loads your pre-filled order text. Please click <strong>"Send"</strong> in WhatsApp so Urmila's Kitchen receives your order.
-          </p>
+          {/* Fallback buttons if popup didn't trigger */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+            <button
+              type="button"
+              onClick={handleManualOpenWhatsApp}
+              className="py-2.5 px-3 rounded-xl border border-emerald-700/40 bg-emerald-50 text-emerald-900 text-xs font-semibold hover:bg-emerald-100 flex items-center justify-center gap-1.5"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Retry Opening App</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleCopyMessage}
+              className="py-2.5 px-3 rounded-xl border border-borderLight bg-cream-light text-charcoal text-xs font-semibold hover:bg-cream-dark/40 flex items-center justify-center gap-1.5"
+            >
+              {copiedText ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copiedText ? 'Message Copied!' : 'Copy Full Message'}</span>
+            </button>
+          </div>
+
+          <div className="p-3 bg-amber-50/80 rounded-xl border border-amber-200/80 text-[11px] text-amber-900 leading-relaxed text-center">
+            <strong>Next step:</strong> After WhatsApp opens with your pre-filled order summary, tap <strong>Send</strong> in WhatsApp. Urmila's Kitchen will confirm your order and provide payment instructions.
+          </div>
 
           <button
+            type="button"
             onClick={onClose}
             className="w-full py-3 px-6 rounded-full border border-forest/30 text-forest font-semibold text-xs hover:bg-cream-dark/50 transition-colors mt-2"
           >
-            Back to Kitchen Menu
+            Return to Kitchen Menu
           </button>
         </div>
       </div>
     </div>
   );
 };
-

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { MenuItem } from '../types/database.types';
+import { useSettings } from './SettingsContext';
 
 export interface CartItem {
   item: MenuItem;
@@ -29,10 +30,9 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 const CART_STORAGE_KEY = 'urmila_kitchen_cart_v2';
 const CART_NOTES_STORAGE_KEY = 'urmila_kitchen_cart_notes_v2';
 
-export const CartProvider: React.FC<{ children: React.ReactNode; deliveryCharge?: number }> = ({
-  children,
-  deliveryCharge = 50,
-}) => {
+export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { settings } = useSettings();
+
   const [items, setItems] = useState<CartItem[]>(() => {
     try {
       const saved = localStorage.getItem(CART_STORAGE_KEY);
@@ -132,7 +132,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode; deliveryCharge?
   };
 
   const subtotal = items.reduce((sum, ci) => sum + (ci.item.price || 0) * ci.quantity, 0);
-  const deliveryFee = items.length > 0 ? deliveryCharge : 0;
+  // Dynamically uses settings.delivery_charge from database/owner settings
+  const configuredDeliveryCharge = typeof settings.delivery_charge === 'number' ? settings.delivery_charge : 50;
+  const deliveryFee = items.length > 0 ? configuredDeliveryCharge : 0;
   const total = subtotal + deliveryFee;
   const itemCount = items.reduce((sum, ci) => sum + ci.quantity, 0);
 

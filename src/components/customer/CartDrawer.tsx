@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 import { X, Plus, Minus, Trash2, ArrowRight, ShoppingBag, Edit3, MessageSquare } from 'lucide-react';
+import { DishImage } from '../common/DishImage';
 
 interface CartDrawerProps {
   onProceedToCheckout: () => void;
@@ -114,11 +115,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onProceedToCheckout }) =
                       <div className="flex items-center gap-3.5">
                         {/* Thumbnail */}
                         <div className="w-16 h-16 rounded-xl overflow-hidden bg-cream-dark/30 shrink-0 aspect-square">
-                          <img
-                            src={
-                              item.image_url ||
-                              'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&auto=format&fit=crop&q=80'
-                            }
+                          <DishImage
+                            src={item.image_url}
                             alt={item.name}
                             className="w-full h-full object-cover"
                           />

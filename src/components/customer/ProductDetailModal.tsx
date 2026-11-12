@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MenuItem } from '../../types/database.types';
 import { useCart } from '../../context/CartContext';
 import { X, Plus, Minus, Check, Clock } from 'lucide-react';
+import { DishImage } from '../common/DishImage';
 
 interface ProductDetailModalProps {
   item: MenuItem | null;
@@ -49,11 +50,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
         {/* Dish Photograph */}
         <div className="relative aspect-16/9 bg-cream-dark/30 shrink-0">
-          <img
-            src={
-              item.image_url ||
-              'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop&q=80'
-            }
+          <DishImage
+            src={item.image_url}
             alt={item.name}
             className="w-full h-full object-cover"
           />
