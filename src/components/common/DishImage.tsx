@@ -79,3 +79,4 @@ export const DishImage: React.FC<DishImageProps> = ({
     </div>
   );
 };
+

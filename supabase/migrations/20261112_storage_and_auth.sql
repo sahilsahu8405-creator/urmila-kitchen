@@ -52,3 +52,4 @@ CREATE POLICY "Auth/Owner Delete Gallery Images"
 CREATE POLICY "Public Insert Review Images"
   ON storage.objects FOR INSERT
   WITH CHECK (bucket_id = 'review-images');
+

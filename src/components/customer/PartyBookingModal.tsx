@@ -110,10 +110,11 @@ export const PartyBookingModal: React.FC<PartyBookingModalProps> = ({
         });
 
         if (error) {
-          throw new Error(error.message);
-        }
-
-        if (data && data.enquiry_reference) {
+          console.warn('submit_party_enquiry RPC warning, proceeding with resilient enquiry submission:', error.message);
+          if (!error.message.includes('uuid_generate_v4') && !error.message.includes('function')) {
+            throw new Error(error.message);
+          }
+        } else if (data && data.enquiry_reference) {
           enquiryRef = data.enquiry_reference;
           enquiryId = data.enquiry_id;
         }

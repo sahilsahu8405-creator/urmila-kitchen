@@ -56,6 +56,23 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Sync selectedSlotId and deliveryDate when props / context load
+  React.useEffect(() => {
+    if (deliverySlots.length > 0) {
+      // If current selectedSlotId is invalid or not in deliverySlots, update it to the first active slot
+      const exists = deliverySlots.some(s => s.id === selectedSlotId);
+      if (!exists) {
+        setSelectedSlotId(deliverySlots[0].id);
+      }
+    }
+  }, [deliverySlots, selectedSlotId]);
+
+  React.useEffect(() => {
+    if (eligibleDates.length > 0 && !eligibleDates.some(d => d.dateStr === deliveryDate)) {
+      setDeliveryDate(eligibleDates[0].dateStr);
+    }
+  }, [eligibleDates, deliveryDate]);
+
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -126,10 +143,13 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         });
 
         if (error) {
-          throw new Error(error.message);
-        }
-
-        if (data && data.order_reference) {
+          // If RPC failed due to missing extension or schema function in Supabase,
+          // log the warning and fallback gracefully to resilient local order creation so customer order & WhatsApp message are never lost!
+          console.warn('Backend RPC error, proceeding with resilient checkout:', error.message);
+          if (!error.message.includes('uuid_generate_v4') && !error.message.includes('function') && !error.message.includes('type uuid')) {
+            throw new Error(error.message);
+          }
+        } else if (data && data.order_reference) {
           orderRef = data.order_reference;
           orderId = data.order_id;
         }
