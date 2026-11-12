@@ -518,3 +518,4 @@ GRANT EXECUTE ON FUNCTION public.owner_toggle_item_availability TO anon, authent
 GRANT EXECUTE ON FUNCTION public.owner_toggle_item_bestseller TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.owner_update_menu_item_image TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.owner_update_business_settings TO anon, authenticated;
+

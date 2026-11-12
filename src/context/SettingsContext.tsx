@@ -230,12 +230,21 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     } catch (e) {}
 
     if (!isUsingFallback) {
-      const { error } = await supabase
-        .from('menu_items')
-        .update({ price: newPrice, updated_at: new Date().toISOString() })
-        .eq('id', itemId);
-      if (error) {
-        return { success: false, error: error.message };
+      // 1. Try owner RPC
+      const { data: rpcData, error: rpcError } = await supabase.rpc('owner_update_menu_item_price', {
+        p_item_id: itemId,
+        p_price: newPrice,
+      });
+
+      if (rpcError) {
+        console.warn('owner_update_menu_item_price RPC failed, trying direct table update:', rpcError.message);
+        const { error } = await supabase
+          .from('menu_items')
+          .update({ price: newPrice, updated_at: new Date().toISOString() })
+          .eq('id', itemId);
+        if (error) {
+          return { success: false, error: error.message };
+        }
       }
     }
     return { success: true };
@@ -255,12 +264,19 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     } catch {}
 
     if (!isUsingFallback) {
-      const { error } = await supabase
-        .from('menu_items')
-        .update({ image_url: imageUrl, updated_at: new Date().toISOString() })
-        .eq('id', itemId);
-      if (error) {
-        return { success: false, error: error.message };
+      const { error: rpcError } = await supabase.rpc('owner_update_menu_item_image', {
+        p_item_id: itemId,
+        p_image_url: imageUrl,
+      });
+
+      if (rpcError) {
+        const { error } = await supabase
+          .from('menu_items')
+          .update({ image_url: imageUrl, updated_at: new Date().toISOString() })
+          .eq('id', itemId);
+        if (error) {
+          return { success: false, error: error.message };
+        }
       }
     }
     return { success: true };
@@ -279,12 +295,19 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     } catch {}
 
     if (!isUsingFallback) {
-      const { error } = await supabase
-        .from('menu_items')
-        .update({ is_available: isAvailable, updated_at: new Date().toISOString() })
-        .eq('id', itemId);
-      if (error) {
-        return { success: false, error: error.message };
+      const { error: rpcError } = await supabase.rpc('owner_toggle_item_availability', {
+        p_item_id: itemId,
+        p_is_available: isAvailable,
+      });
+
+      if (rpcError) {
+        const { error } = await supabase
+          .from('menu_items')
+          .update({ is_available: isAvailable, updated_at: new Date().toISOString() })
+          .eq('id', itemId);
+        if (error) {
+          return { success: false, error: error.message };
+        }
       }
     }
     return { success: true };
@@ -303,12 +326,19 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     } catch {}
 
     if (!isUsingFallback) {
-      const { error } = await supabase
-        .from('menu_items')
-        .update({ is_bestseller: isBestseller, updated_at: new Date().toISOString() })
-        .eq('id', itemId);
-      if (error) {
-        return { success: false, error: error.message };
+      const { error: rpcError } = await supabase.rpc('owner_toggle_item_bestseller', {
+        p_item_id: itemId,
+        p_is_bestseller: isBestseller,
+      });
+
+      if (rpcError) {
+        const { error } = await supabase
+          .from('menu_items')
+          .update({ is_bestseller: isBestseller, updated_at: new Date().toISOString() })
+          .eq('id', itemId);
+        if (error) {
+          return { success: false, error: error.message };
+        }
       }
     }
     return { success: true };
@@ -324,13 +354,23 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       return updated;
     });
 
-    if (!isUsingFallback && settings.id) {
-      const { error } = await supabase
-        .from('business_settings')
-        .update({ ...newSettings, updated_at: new Date().toISOString() })
-        .eq('id', settings.id);
-      if (error) {
-        console.warn('Supabase business_settings update warning (cached locally):', error.message);
+    if (!isUsingFallback) {
+      const { error: rpcError } = await supabase.rpc('owner_update_business_settings', {
+        p_whatsapp_number: newSettings.whatsapp_number ?? null,
+        p_contact_phone: newSettings.contact_phone ?? null,
+        p_cutoff_time: newSettings.default_cutoff_time ?? null,
+        p_delivery_charge: newSettings.delivery_charge !== undefined ? newSettings.delivery_charge : null,
+        p_address: newSettings.address ?? null,
+      });
+
+      if (rpcError && settings.id) {
+        const { error } = await supabase
+          .from('business_settings')
+          .update({ ...newSettings, updated_at: new Date().toISOString() })
+          .eq('id', settings.id);
+        if (error) {
+          console.warn('Supabase business_settings update warning:', error.message);
+        }
       }
     }
     return { success: true };
