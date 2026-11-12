@@ -63,6 +63,17 @@
 
 ---
 
+## 📌 Priority Tasks Scheduled for Tomorrow
+1. **Online Payment Gateway Setup & Configuration:**
+   - Integrate payment preferences and options (UPI QR / Cash on Delivery / Razorpay / Stripe gateway setup according to owner preference).
+   - Display selected payment preference cleanly in checkout summary and WhatsApp order message.
+2. **Refine Cart Drawer Auto-Open Trigger:**
+   - Currently, adding any dish opens the Cart Drawer automatically.
+   - Adjust behavior so clicking "Add +" adds the item smoothly with an inline confirmation checkmark / floating badge notification without forcibly sliding open the entire cart drawer each time.
+   - User can open the cart at their own convenience via the header or bottom bar.
+
+---
+
 ## Key Files Created
 - `supabase/migrations/20261112_initial_schema.sql` — PostgreSQL schema, RLS policies, sequences, and transactional RPC functions.
 - `supabase/seed.sql` — 9 categories, 68 authentic dishes from PDF (prices NULL), default settings and delivery slots.
