@@ -91,14 +91,19 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     setItems(prev => {
-      const existingIndex = prev.findIndex(ci => ci.item.id === item.id);
-      if (existingIndex > -1) {
-        const updated = [...prev];
-        updated[existingIndex].quantity = Math.min(50, updated[existingIndex].quantity + quantity);
-        if (specialInstructions !== undefined) {
-          updated[existingIndex].special_instructions = specialInstructions;
-        }
-        return updated;
+      const existing = prev.find(ci => ci.item.id === item.id);
+      if (existing) {
+        return prev.map(ci => {
+          if (ci.item.id === item.id) {
+            return {
+              ...ci,
+              quantity: Math.min(50, ci.quantity + quantity),
+              special_instructions:
+                specialInstructions !== undefined ? specialInstructions : ci.special_instructions,
+            };
+          }
+          return ci;
+        });
       }
       return [...prev, { item, quantity, special_instructions: specialInstructions || '' }];
     });

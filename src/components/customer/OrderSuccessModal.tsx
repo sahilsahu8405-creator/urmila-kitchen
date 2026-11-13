@@ -27,7 +27,7 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({ order, onC
           origin: { y: 0.6 },
           colors: ['#244638', '#A8B69B', '#BD8061', '#777F52'],
         });
-      } catch (e) {}
+      } catch (e) { }
 
       // Attempt popup redirect to WhatsApp
       const url = generateWhatsAppOrderUrl(order, settings.whatsapp_number, order.payment_preference || undefined);
