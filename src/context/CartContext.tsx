@@ -10,7 +10,7 @@ export interface CartItem {
 
 interface CartContextType {
   items: CartItem[];
-  addToCart: (item: MenuItem, quantity?: number, specialInstructions?: string) => { success: boolean; message?: string };
+  addToCart: (item: MenuItem, quantity?: number, specialInstructions?: string, openDrawer?: boolean) => { success: boolean; message?: string };
   updateQuantity: (itemId: string, quantity: number) => void;
   updateItemInstructions: (itemId: string, instructions: string) => void;
   removeFromCart: (itemId: string) => void;
@@ -69,7 +69,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (e) {}
   }, [orderInstructions]);
 
-  const addToCart = (item: MenuItem, quantity: number = 1, specialInstructions?: string) => {
+  const addToCart = (
+    item: MenuItem,
+    quantity: number = 1,
+    specialInstructions?: string,
+    openDrawer: boolean = false
+  ) => {
     // Check if dish has a valid price
     if (item.price === null || item.price <= 0) {
       return {
@@ -98,7 +103,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return [...prev, { item, quantity, special_instructions: specialInstructions || '' }];
     });
 
-    setIsCartOpen(true);
+    if (openDrawer) {
+      setIsCartOpen(true);
+    }
     return { success: true };
   };
 

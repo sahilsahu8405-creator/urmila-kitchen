@@ -4,7 +4,7 @@ import { useSettings } from '../../context/SettingsContext';
 import { supabase } from '../../lib/supabase';
 import { Order } from '../../types/database.types';
 import { calculateCutoffCountdown, isDateOpenForDelivery, formatDateToYYYYMMDD, getNowInIST } from '../../lib/cutoff';
-import { X, Calendar, MapPin, User, Check, AlertCircle, ArrowRight, Loader2, MessageSquare, Utensils } from 'lucide-react';
+import { X, Calendar, MapPin, User, Check, AlertCircle, ArrowRight, Loader2, MessageSquare, Utensils, CreditCard, Banknote, QrCode } from 'lucide-react';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -50,6 +50,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [locality, setLocality] = useState('');
   const [pinCode, setPinCode] = useState('');
   const [landmark, setLandmark] = useState('');
+  const [paymentPreference, setPaymentPreference] = useState<'UPI' | 'Cash on Delivery'>('UPI');
   const [overallNotes, setOverallNotes] = useState(orderInstructions);
   const [deliveryDate, setDeliveryDate] = useState(() => eligibleDates[0]?.dateStr || '');
   const [selectedSlotId, setSelectedSlotId] = useState(() => deliverySlots[0]?.id || '');
@@ -171,6 +172,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         delivery_date: deliveryDate,
         delivery_slot_id: selectedSlotId,
         delivery_type: 'delivery',
+        payment_preference: paymentPreference,
         order_notes: overallNotes.trim() || null,
         subtotal,
         delivery_fee: deliveryFee,
@@ -438,6 +440,65 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 placeholder="e.g. Please call before delivery, leave with security..."
                 className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
               />
+            </div>
+          </div>
+
+          {/* Section 4: Payment Preference */}
+          <div className="space-y-3 pt-4 border-t border-borderLight">
+            <h3 className="font-serif text-base font-bold text-forest flex items-center gap-2">
+              <CreditCard className="w-4 h-4 text-terracotta" />
+              <span>4. Payment Preference</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setPaymentPreference('UPI')}
+                className={`p-3.5 rounded-2xl border text-left flex items-start gap-3 transition-all ${
+                  paymentPreference === 'UPI'
+                    ? 'bg-forest/10 border-forest text-forest shadow-xs'
+                    : 'bg-cream-light border-borderLight text-charcoal hover:bg-cream-dark/30'
+                }`}
+              >
+                <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+                  paymentPreference === 'UPI' ? 'bg-forest text-cream' : 'bg-cream-dark/50 text-charcoal/60'
+                }`}>
+                  <QrCode className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-xs">UPI / Online Transfer</span>
+                    {paymentPreference === 'UPI' && (
+                      <span className="text-[10px] bg-forest text-cream px-1.5 py-0.2 rounded-full font-bold">Recommended</span>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-charcoal/60 mt-0.5">
+                    GPay, PhonePe, Paytm QR code shared upon WhatsApp confirmation.
+                  </p>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setPaymentPreference('Cash on Delivery')}
+                className={`p-3.5 rounded-2xl border text-left flex items-start gap-3 transition-all ${
+                  paymentPreference === 'Cash on Delivery'
+                    ? 'bg-forest/10 border-forest text-forest shadow-xs'
+                    : 'bg-cream-light border-borderLight text-charcoal hover:bg-cream-dark/30'
+                }`}
+              >
+                <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+                  paymentPreference === 'Cash on Delivery' ? 'bg-forest text-cream' : 'bg-cream-dark/50 text-charcoal/60'
+                }`}>
+                  <Banknote className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="font-bold text-xs">Cash on Delivery</span>
+                  <p className="text-[11px] text-charcoal/60 mt-0.5">
+                    Pay in cash directly to our delivery executive when your meal arrives.
+                  </p>
+                </div>
+              </button>
             </div>
           </div>
 

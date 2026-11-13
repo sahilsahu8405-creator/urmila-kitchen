@@ -30,7 +30,7 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({ order, onC
       } catch (e) {}
 
       // Attempt popup redirect to WhatsApp
-      const url = generateWhatsAppOrderUrl(order, settings.whatsapp_number);
+      const url = generateWhatsAppOrderUrl(order, settings.whatsapp_number, order.payment_preference || undefined);
       try {
         const opened = window.open(url, '_blank');
         if (!opened || opened.closed || typeof opened.closed === 'undefined') {
@@ -44,7 +44,7 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({ order, onC
 
   if (!order) return null;
 
-  const whatsappUrl = generateWhatsAppOrderUrl(order, settings.whatsapp_number);
+  const whatsappUrl = generateWhatsAppOrderUrl(order, settings.whatsapp_number, order.payment_preference || undefined);
   // Extract decoded message for manual copying
   const messageText = decodeURIComponent(whatsappUrl.split('text=')[1] || '');
 
@@ -118,6 +118,14 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({ order, onC
               <span className="text-charcoal/60">Grand Total</span>
               <p className="font-serif font-bold text-base text-forest">₹{order.total_amount}</p>
             </div>
+            {order.payment_preference && (
+              <div className="col-span-2 pt-2 border-t border-borderLight/60 flex items-center justify-between text-xs">
+                <span className="text-charcoal/60">Payment Mode:</span>
+                <span className="font-bold text-forest bg-forest/10 px-2.5 py-0.5 rounded-full">
+                  {order.payment_preference}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 

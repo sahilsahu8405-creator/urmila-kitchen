@@ -116,6 +116,7 @@ export interface Order {
   delivery_date: string; // YYYY-MM-DD
   delivery_slot_id: string;
   delivery_type: 'delivery' | 'pickup';
+  payment_preference?: 'UPI' | 'Cash on Delivery' | 'Card / Online' | string | null;
   order_notes: string | null;
   subtotal: number;
   delivery_fee: number;
