@@ -74,7 +74,7 @@ export const ReviewsTab: React.FC = () => {
                 required
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
-                placeholder="e.g. S. Sen"
+                placeholder="Customer name"
                 className="w-full px-3.5 py-2 rounded-xl bg-cream border border-borderLight text-charcoal text-sm"
               />
             </div>
@@ -100,7 +100,7 @@ export const ReviewsTab: React.FC = () => {
               type="text"
               value={dishHighlight}
               onChange={(e) => setDishHighlight(e.target.value)}
-              placeholder="e.g. Cheese Corn Balls"
+              placeholder="Dish ordered (optional)"
               className="w-full px-3.5 py-2 rounded-xl bg-cream border border-borderLight text-charcoal text-sm"
             />
           </div>
@@ -112,7 +112,7 @@ export const ReviewsTab: React.FC = () => {
               required
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
-              placeholder="Customer's authentic words..."
+              placeholder="Enter customer review..."
               className="w-full px-3.5 py-2 rounded-xl bg-cream border border-borderLight text-charcoal text-sm"
             />
           </div>

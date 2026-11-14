@@ -17,6 +17,7 @@ import {
   INITIAL_SETTINGS,
   INITIAL_SCHEDULES,
   INITIAL_REVIEWS,
+  INITIAL_GALLERY_IMAGES,
 } from '../lib/initialData';
 
 interface SettingsContextType {
@@ -60,9 +61,13 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>(() => {
     try {
       const saved = localStorage.getItem('urmila_gallery_cache');
-      return saved ? JSON.parse(saved) : [];
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+      return INITIAL_GALLERY_IMAGES;
     } catch {
-      return [];
+      return INITIAL_GALLERY_IMAGES;
     }
   });
   const [isLoading, setIsLoading] = useState(true);
@@ -127,9 +132,26 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           if (sb) parsedBestseller = JSON.parse(sb);
         } catch {}
 
+        const initialMap = new Map(
+          INITIAL_MENU_ITEMS.map(m => [m.name.trim().toLowerCase(), m])
+        );
+
         setMenuItems(
           itemData.map(it => {
             let updated = { ...it };
+            const cleanName = (it.name || '').trim().toLowerCase();
+            const matchedInit = initialMap.get(cleanName);
+
+            // Restore unique culinary description if database value is null/empty
+            if (!updated.description && matchedInit?.description) {
+              updated.description = matchedInit.description;
+            }
+
+            // Restore curated image if database value is null
+            if (!updated.image_url && matchedInit?.image_url) {
+              updated.image_url = matchedInit.image_url;
+            }
+
             if (parsedPrices[it.id] !== undefined) updated.price = parsedPrices[it.id];
             if (parsedImages[it.id] !== undefined) updated.image_url = parsedImages[it.id];
             if (parsedAvail[it.id] !== undefined) updated.is_available = parsedAvail[it.id];
@@ -202,6 +224,20 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         .order('display_order', { ascending: true });
       if (galleryData && galleryData.length > 0) {
         setGalleryImages(galleryData);
+      } else {
+        try {
+          const saved = localStorage.getItem('urmila_gallery_cache');
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setGalleryImages(parsed);
+              return;
+            }
+          }
+          setGalleryImages(INITIAL_GALLERY_IMAGES);
+        } catch {
+          setGalleryImages(INITIAL_GALLERY_IMAGES);
+        }
       }
     } catch (err) {
       console.warn('Using local fallback configuration:', err);

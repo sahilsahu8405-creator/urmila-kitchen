@@ -47,6 +47,18 @@ export const CutoffBanner: React.FC = () => {
 
   const padZero = (n: number) => String(n).padStart(2, '0');
 
+  // Convert "20:00:00" to readable 12-hour format like "8:00 PM"
+  const formattedCutoff12h = (() => {
+    const parts = (settings.default_cutoff_time || '20:00:00').split(':');
+    let h = parseInt(parts[0], 10);
+    const m = parts[1] || '00';
+    if (isNaN(h)) h = 20;
+    const period = h >= 12 ? 'PM' : 'AM';
+    h = h % 12;
+    if (h === 0) h = 12;
+    return `${h}:${m} ${period}`;
+  })();
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 mb-14 z-20 relative">
       <div className="bg-cream-light border border-borderLight rounded-2xl p-4 sm:p-5 shadow-card transition-all">
@@ -59,7 +71,7 @@ export const CutoffBanner: React.FC = () => {
             </div>
             <div>
               <p className="text-xs font-semibold text-olive uppercase tracking-wider">
-                {countdown.isPastCutoff ? 'Next Booking Window' : 'Pre-order Window'}
+                {countdown.isPastCutoff ? 'Next Booking Window' : `Daily ${formattedCutoff12h} Cutoff`}
               </p>
               <h3 className="text-base sm:text-lg font-bold text-forest font-serif leading-tight">
                 {countdown.isPastCutoff ? 'Order for Next Available Date' : "Pre-order for Tomorrow's Delivery"}
@@ -71,7 +83,9 @@ export const CutoffBanner: React.FC = () => {
           <div className="md:col-span-4 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-borderLight/70 pb-3 md:pb-0 px-2">
             <span className="text-xs font-medium text-charcoal/70 mb-1 flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-terracotta" />
-              <span>{countdown.isPastCutoff ? 'Next cutoff countdown' : 'Order within'}</span>
+              <span>
+                {countdown.isPastCutoff ? 'Next cutoff countdown' : `Order before ${formattedCutoff12h}`}
+              </span>
             </span>
 
             {/* Countdown Blocks */}

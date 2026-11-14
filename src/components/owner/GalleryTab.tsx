@@ -168,7 +168,7 @@ export const GalleryTab: React.FC = () => {
                     required
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="e.g. Fresh Handcrafted Paneer Tikka"
+                    placeholder="Photo title"
                     className="w-full px-3.5 py-2 rounded-xl bg-cream border border-borderLight text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-forest/30"
                   />
                 </div>
@@ -181,7 +181,7 @@ export const GalleryTab: React.FC = () => {
                     type="text"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    placeholder="e.g. Starters, Kitchen, Plating, Preparation"
+                    placeholder="Category tag (Starters, Kitchen, Plating...)"
                     className="w-full px-3.5 py-2 rounded-xl bg-cream border border-borderLight text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-forest/30"
                   />
                 </div>

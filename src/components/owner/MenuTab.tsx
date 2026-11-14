@@ -24,6 +24,12 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
   const [editingPriceId, setEditingPriceId] = useState<string | null>(null);
   const [priceInput, setPriceInput] = useState('');
   const [uploadingItemId, setUploadingItemId] = useState<string | null>(null);
+  const [previewModal, setPreviewModal] = useState<{
+    item: MenuItem;
+    file: File;
+    previewUrl: string;
+  } | null>(null);
+  const [isSavingImage, setIsSavingImage] = useState(false);
   const fileInputMap = useRef<{ [key: string]: HTMLInputElement | null }>({});
 
   const filteredItems = menuItems.filter((item) => {
@@ -47,6 +53,34 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
     }
     await updateMenuItemPrice(itemId, parsed);
     setEditingPriceId(null);
+  };
+
+  const handleConfirmUpload = async () => {
+    if (!previewModal) return;
+    setIsSavingImage(true);
+    setUploadingItemId(previewModal.item.id);
+    try {
+      const res = await uploadImageFile(previewModal.file, 'product-images');
+      if (res.success && res.url) {
+        await updateMenuItemImage(previewModal.item.id, res.url);
+        URL.revokeObjectURL(previewModal.previewUrl);
+        setPreviewModal(null);
+      } else {
+        alert(res.error || 'Failed to upload photo.');
+      }
+    } catch (err: any) {
+      alert(err?.message || 'Error uploading photo.');
+    } finally {
+      setIsSavingImage(false);
+      setUploadingItemId(null);
+    }
+  };
+
+  const handleCancelPreview = () => {
+    if (previewModal) {
+      URL.revokeObjectURL(previewModal.previewUrl);
+      setPreviewModal(null);
+    }
   };
 
   return (
@@ -161,17 +195,12 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={async (e) => {
+                    onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (!file) return;
-                      setUploadingItemId(item.id);
-                      const res = await uploadImageFile(file, 'product-images');
-                      if (res.success) {
-                        await updateMenuItemImage(item.id, res.url);
-                      } else {
-                        alert(res.error || 'Failed to upload photo.');
-                      }
-                      setUploadingItemId(null);
+                      const objectUrl = URL.createObjectURL(file);
+                      setPreviewModal({ item, file, previewUrl: objectUrl });
+                      e.target.value = '';
                     }}
                   />
                 </div>
@@ -310,6 +339,83 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
           );
         })}
       </div>
+
+      {/* Image Preview & Confirmation Modal before saving */}
+      {previewModal && (
+        <div className="fixed inset-0 z-50 bg-charcoal/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-cream rounded-3xl border border-borderLight shadow-modal max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-6 border-b border-borderLight flex items-center justify-between">
+              <div>
+                <h3 className="font-serif text-xl font-bold text-forest">Preview Dish Photograph</h3>
+                <p className="text-xs text-charcoal/70 mt-0.5">
+                  Confirm photo for <strong>{previewModal.item.name}</strong>
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleCancelPreview}
+                disabled={isSavingImage}
+                className="p-1 rounded-full hover:bg-cream-dark/50 text-charcoal/50 hover:text-charcoal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              {/* Square Preview Container */}
+              <div className="relative aspect-square w-full rounded-2xl overflow-hidden border border-borderLight bg-cream-dark/30 shadow-subtle">
+                <img
+                  src={previewModal.previewUrl}
+                  alt={previewModal.item.name}
+                  className="w-full h-full object-cover"
+                />
+                {/* Pure Veg Indicator */}
+                <div className="absolute top-3 right-3 bg-cream/95 backdrop-blur-sm p-1 rounded border border-borderLight shadow-sm">
+                  <div className="w-3.5 h-3.5 border border-emerald-700 flex items-center justify-center">
+                    <span className="w-2 h-2 rounded-full bg-emerald-700" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-forest/5 border border-forest/10 flex items-start gap-2.5 text-xs text-forest">
+                <Sparkles className="w-4 h-4 shrink-0 mt-0.5" />
+                <p>
+                  This photo will be displayed across menu cards, search results, customer modals, and cart summaries.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-4 bg-cream-light border-t border-borderLight flex items-center justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={handleCancelPreview}
+                disabled={isSavingImage}
+                className="px-4 py-2.5 rounded-full text-xs font-semibold text-charcoal/70 hover:bg-cream-dark/40"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmUpload}
+                disabled={isSavingImage}
+                className="px-6 py-2.5 rounded-full bg-forest text-cream text-xs font-bold hover:bg-forest-light transition-all flex items-center gap-2 shadow-sm disabled:opacity-50"
+              >
+                {isSavingImage ? (
+                  <>
+                    <span className="w-3.5 h-3.5 border-2 border-cream/30 border-t-cream rounded-full animate-spin" />
+                    <span>Uploading & Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Save Photo to Dish</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -347,7 +347,6 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   required
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  placeholder="e.g. Radhika Sharma"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                 />
               </div>
@@ -361,7 +360,6 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   required
                   value={customerPhone}
                   onChange={(e) => setCustomerPhone(e.target.value)}
-                  placeholder="10-digit mobile number"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                 />
                 <span className="text-[10px] text-charcoal/50 mt-1 block">
@@ -387,7 +385,6 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 rows={2}
                 value={deliveryAddress}
                 onChange={(e) => setDeliveryAddress(e.target.value)}
-                placeholder="Flat No, Floor, Wing, Building Name, Road..."
                 className="w-full px-3.5 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30 resize-none"
               />
             </div>
@@ -399,7 +396,6 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   type="text"
                   value={locality}
                   onChange={(e) => setLocality(e.target.value)}
-                  placeholder="e.g. Bandra West"
                   className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                 />
               </div>
@@ -410,18 +406,16 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   type="text"
                   value={pinCode}
                   onChange={(e) => setPinCode(e.target.value)}
-                  placeholder="e.g. 400050"
                   className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-charcoal/80 mb-1">Landmark</label>
+                <label className="block text-xs font-semibold text-charcoal/80 mb-1">Landmark (Optional)</label>
                 <input
                   type="text"
                   value={landmark}
                   onChange={(e) => setLandmark(e.target.value)}
-                  placeholder="Near temple, bank..."
                   className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                 />
               </div>
@@ -431,23 +425,22 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             <div>
               <label className="block text-xs font-semibold text-charcoal/80 mb-1 flex items-center gap-1.5">
                 <MessageSquare className="w-3.5 h-3.5 text-olive" />
-                <span>Overall Order Instructions</span>
+                <span>Overall Order Instructions (Optional)</span>
               </label>
               <input
                 type="text"
                 value={overallNotes}
                 onChange={(e) => setOverallNotes(e.target.value)}
-                placeholder="e.g. Please call before delivery, leave with security..."
                 className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
               />
             </div>
           </div>
 
-          {/* Section 4: Payment Preference */}
+          {/* Section 5: Payment Preference */}
           <div className="space-y-3 pt-4 border-t border-borderLight">
             <h3 className="font-serif text-base font-bold text-forest flex items-center gap-2">
               <CreditCard className="w-4 h-4 text-terracotta" />
-              <span>4. Payment Preference</span>
+              <span>5. Payment Preference</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

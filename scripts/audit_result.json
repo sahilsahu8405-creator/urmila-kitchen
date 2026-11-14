@@ -1,0 +1,13 @@
+{
+  "total_menu_items": 68,
+  "images_successfully_uploaded": 68,
+  "missing_images": 0,
+  "duplicate_image_urls": 0,
+  "failed_uploads": 0,
+  "local_webp_files": 68,
+  "details": {
+    "missing": [],
+    "duplicates": [],
+    "failed": []
+  }
+}

@@ -1,57 +1,12 @@
 import React from 'react';
 import { Camera } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext';
+import { INITIAL_GALLERY_IMAGES } from '../../lib/initialData';
 
 export const PhotoGallery: React.FC = () => {
   const { galleryImages } = useSettings();
 
-  // Curated showcase fallback if the owner has not yet uploaded custom photos
-  const defaultGalleryItems: Array<{ id: string; title: string; category: string; image_url: string; caption?: string | null }> = [
-    {
-      id: 'default-1',
-      title: 'Artisanal Starters',
-      category: 'Starters',
-      image_url: 'https://images.unsplash.com/photo-1541529086526-db283c563270?w=600&auto=format&fit=crop&q=80',
-      caption: null,
-    },
-    {
-      id: 'default-2',
-      title: 'Signature Paneer Tikka',
-      category: 'Mains',
-      image_url: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&auto=format&fit=crop&q=80',
-      caption: null,
-    },
-    {
-      id: 'default-3',
-      title: 'Pav Bhaji Delicacy',
-      category: 'Classics',
-      image_url: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=600&auto=format&fit=crop&q=80',
-      caption: null,
-    },
-    {
-      id: 'default-4',
-      title: 'Oven Baked Specialties',
-      category: 'Baked Dishes',
-      image_url: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=600&auto=format&fit=crop&q=80',
-      caption: null,
-    },
-    {
-      id: 'default-5',
-      title: 'Chaat Specialities',
-      category: 'Chaats',
-      image_url: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop&q=80',
-      caption: null,
-    },
-    {
-      id: 'default-6',
-      title: 'Handcrafted Desserts',
-      category: 'Desserts',
-      image_url: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&auto=format&fit=crop&q=80',
-      caption: null,
-    },
-  ];
-
-  const displayList = galleryImages && galleryImages.length > 0 ? galleryImages : defaultGalleryItems;
+  const displayList = galleryImages && galleryImages.length > 0 ? galleryImages : INITIAL_GALLERY_IMAGES;
 
   return (
     <section id="gallery" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20 scroll-mt-24">

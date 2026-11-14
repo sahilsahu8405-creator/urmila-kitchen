@@ -349,7 +349,6 @@ export const PartyBookingModal: React.FC<PartyBookingModalProps> = ({
                   type="text"
                   value={customDishes}
                   onChange={(e) => setCustomDishes(e.target.value)}
-                  placeholder="e.g. Jain food only, extra chutneys, specific fondue pot..."
                   className="w-full px-3.5 py-2.5 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                 />
               </div>
@@ -372,7 +371,6 @@ export const PartyBookingModal: React.FC<PartyBookingModalProps> = ({
                     required
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
-                    placeholder="e.g. Vikram Mehra"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                   />
                 </div>
@@ -386,7 +384,6 @@ export const PartyBookingModal: React.FC<PartyBookingModalProps> = ({
                     required
                     value={customerPhone}
                     onChange={(e) => setCustomerPhone(e.target.value)}
-                    placeholder="10-digit mobile number"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                   />
                 </div>
@@ -401,7 +398,6 @@ export const PartyBookingModal: React.FC<PartyBookingModalProps> = ({
                   required
                   value={deliveryLocation}
                   onChange={(e) => setDeliveryLocation(e.target.value)}
-                  placeholder="Building, street, area, PIN code..."
                   className="w-full px-3.5 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                 />
               </div>
@@ -414,7 +410,6 @@ export const PartyBookingModal: React.FC<PartyBookingModalProps> = ({
                   type="number"
                   value={approximateBudget}
                   onChange={(e) => setApproximateBudget(e.target.value)}
-                  placeholder="e.g. 5000"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                 />
               </div>

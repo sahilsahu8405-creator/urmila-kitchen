@@ -296,7 +296,10 @@ export const OwnerDashboardPage: React.FC = () => {
           </Link>
 
           <button
-            onClick={() => signOut()}
+            onClick={async () => {
+              await signOut();
+              navigate('/owner/login');
+            }}
             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-rose-300 hover:text-rose-100 hover:bg-forest-light transition-colors"
           >
             <LogOut className="w-3.5 h-3.5" />
@@ -369,7 +372,7 @@ export const OwnerDashboardPage: React.FC = () => {
                   required
                   value={newDishName}
                   onChange={(e) => setNewDishName(e.target.value)}
-                  placeholder="e.g. Stuffed Paneer Tikka"
+                  placeholder="Dish name"
                   className="w-full px-3 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal"
                 />
               </div>
@@ -398,7 +401,7 @@ export const OwnerDashboardPage: React.FC = () => {
                   min="1"
                   value={newDishPrice}
                   onChange={(e) => setNewDishPrice(e.target.value)}
-                  placeholder="e.g. 250 (Optional)"
+                  placeholder="Price in ₹ (leave blank for party special)"
                   className="w-full px-3 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal"
                 />
               </div>
@@ -409,7 +412,7 @@ export const OwnerDashboardPage: React.FC = () => {
                   rows={2}
                   value={newDishDesc}
                   onChange={(e) => setNewDishDesc(e.target.value)}
-                  placeholder="Crispy, flavourful, made with desi ingredients..."
+                  placeholder="Enter dish description..."
                   className="w-full px-3 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal resize-none"
                 />
               </div>

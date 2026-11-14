@@ -269,7 +269,7 @@ export const PartyEnquiriesTab: React.FC<PartyEnquiriesTabProps> = ({
                   type="number"
                   value={quoteInput}
                   onChange={(e) => setQuoteInput(e.target.value)}
-                  placeholder="e.g. 12000"
+                  placeholder="Enter quoted amount"
                   className="w-full px-3 py-2 rounded-xl bg-cream-light border border-borderLight text-sm font-bold text-forest"
                 />
               </div>
@@ -280,7 +280,7 @@ export const PartyEnquiriesTab: React.FC<PartyEnquiriesTabProps> = ({
                   type="number"
                   value={advanceInput}
                   onChange={(e) => setAdvanceInput(e.target.value)}
-                  placeholder="e.g. 3000"
+                  placeholder="Enter advance received"
                   className="w-full px-3 py-2 rounded-xl bg-cream-light border border-borderLight text-sm font-bold text-emerald-800"
                 />
               </div>

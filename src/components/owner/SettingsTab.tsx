@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSettings } from '../../context/SettingsContext';
-import { Settings, Save, Check, Phone, Clock, MapPin, DollarSign, Truck } from 'lucide-react';
+import { Save, Check, Phone, Clock } from 'lucide-react';
 
 export const SettingsTab: React.FC = () => {
   const { settings, deliverySlots, updateSettings } = useSettings();
@@ -12,14 +12,63 @@ export const SettingsTab: React.FC = () => {
   const [address, setAddress] = useState(settings.address);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
+  // 12-Hour vs 24-Hour format toggle (Default to 12-hour for owner friendliness)
+  const [timeFormat, setTimeFormat] = useState<'12h' | '24h'>('12h');
+
+  // Parse 24h ("20:00") into 12h parts ({ hour: '8', minute: '00', period: 'PM' })
+  const parse24to12 = (val24: string) => {
+    const parts = (val24 || '20:00').split(':');
+    let h = parseInt(parts[0], 10);
+    const m = parts[1] || '00';
+    if (isNaN(h)) h = 20;
+    const period: 'AM' | 'PM' = h >= 12 ? 'PM' : 'AM';
+    h = h % 12;
+    if (h === 0) h = 12;
+    return {
+      hour: String(h),
+      minute: m,
+      period,
+    };
+  };
+
+  const initial12 = parse24to12(settings.default_cutoff_time.slice(0, 5));
+  const [hour12, setHour12] = useState(initial12.hour);
+  const [minute12, setMinute12] = useState(initial12.minute);
+  const [period12, setPeriod12] = useState<'AM' | 'PM'>(initial12.period);
+
   // Sync state when settings load from DB or cache
-  React.useEffect(() => {
+  useEffect(() => {
     setWhatsappNumber(settings.whatsapp_number);
     setContactPhone(settings.contact_phone);
-    setCutoffTime(settings.default_cutoff_time.slice(0, 5));
+    const timeSlice = settings.default_cutoff_time.slice(0, 5);
+    setCutoffTime(timeSlice);
     setDeliveryCharge(String(settings.delivery_charge));
     setAddress(settings.address);
+
+    const parsed = parse24to12(timeSlice);
+    setHour12(parsed.hour);
+    setMinute12(parsed.minute);
+    setPeriod12(parsed.period);
   }, [settings]);
+
+  // Convert 12h changes into 24h format
+  const handle12hChange = (newHour: string, newMinute: string, newPeriod: 'AM' | 'PM') => {
+    setHour12(newHour);
+    setMinute12(newMinute);
+    setPeriod12(newPeriod);
+
+    let h = parseInt(newHour, 10);
+    if (isNaN(h)) h = 12;
+    if (newPeriod === 'PM' && h < 12) h += 12;
+    if (newPeriod === 'AM' && h === 12) h = 0;
+    const formattedHour = h < 10 ? `0${h}` : `${h}`;
+    setCutoffTime(`${formattedHour}:${newMinute}`);
+  };
+
+  const get12HourDisplay = (val24: string) => {
+    const { hour, minute, period } = parse24to12(val24);
+    return `${hour}:${minute} ${period}`;
+  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,7 +121,7 @@ export const SettingsTab: React.FC = () => {
                 required
                 value={whatsappNumber}
                 onChange={(e) => setWhatsappNumber(e.target.value)}
-                placeholder="e.g. 9204417026"
+                placeholder="WhatsApp number (10 digits)"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-cream border border-borderLight text-sm font-bold text-forest focus:outline-none focus:ring-2 focus:ring-forest/30"
               />
               <span className="text-[11px] text-charcoal/60 mt-1 block">
@@ -89,7 +138,7 @@ export const SettingsTab: React.FC = () => {
                 required
                 value={contactPhone}
                 onChange={(e) => setContactPhone(e.target.value)}
-                placeholder="e.g. 9204417026"
+                placeholder="Customer support number (10 digits)"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-cream border border-borderLight text-sm font-bold text-forest focus:outline-none focus:ring-2 focus:ring-forest/30"
               />
             </div>
@@ -105,18 +154,130 @@ export const SettingsTab: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-charcoal/80 mb-1">
-                Daily Cutoff Time (IST)
-              </label>
-              <input
-                type="time"
-                required
-                value={cutoffTime}
-                onChange={(e) => setCutoffTime(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-cream border border-borderLight text-sm font-bold text-forest focus:outline-none focus:ring-2 focus:ring-forest/30"
-              />
-              <span className="text-[11px] text-charcoal/60 mt-1 block">
-                Orders placed before this time qualify for next-day delivery. Orders placed after roll over to the following day.
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-xs font-bold text-charcoal/80">
+                  Daily Cutoff Time (IST)
+                </label>
+                {/* 12-Hour vs 24-Hour Option Switcher */}
+                <div className="inline-flex items-center p-0.5 rounded-lg bg-cream border border-borderLight text-[10px] font-bold">
+                  <button
+                    type="button"
+                    onClick={() => setTimeFormat('12h')}
+                    className={`px-2 py-0.5 rounded-md transition-all ${
+                      timeFormat === '12h'
+                        ? 'bg-forest text-cream shadow-xs'
+                        : 'text-charcoal/60 hover:text-charcoal'
+                    }`}
+                  >
+                    12-Hour (AM/PM)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTimeFormat('24h')}
+                    className={`px-2 py-0.5 rounded-md transition-all ${
+                      timeFormat === '24h'
+                        ? 'bg-forest text-cream shadow-xs'
+                        : 'text-charcoal/60 hover:text-charcoal'
+                    }`}
+                  >
+                    24-Hour
+                  </button>
+                </div>
+              </div>
+
+              {timeFormat === '12h' ? (
+                /* 12-Hour Selector UI */
+                <div className="flex items-center gap-2">
+                  {/* Hours Dropdown */}
+                  <div className="relative">
+                    <select
+                      value={hour12}
+                      onChange={(e) => handle12hChange(e.target.value, minute12, period12)}
+                      className="px-3.5 py-2.5 rounded-xl bg-cream border border-borderLight text-sm font-bold text-forest focus:outline-none focus:ring-2 focus:ring-forest/30 cursor-pointer appearance-none pr-8"
+                    >
+                      {['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].map((h) => (
+                        <option key={h} value={h}>
+                          {h}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="text-[10px] text-charcoal/40 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">▼</span>
+                  </div>
+
+                  <span className="font-bold text-forest text-base">:</span>
+
+                  {/* Minutes Dropdown */}
+                  <div className="relative">
+                    <select
+                      value={minute12}
+                      onChange={(e) => handle12hChange(hour12, e.target.value, period12)}
+                      className="px-3.5 py-2.5 rounded-xl bg-cream border border-borderLight text-sm font-bold text-forest focus:outline-none focus:ring-2 focus:ring-forest/30 cursor-pointer appearance-none pr-8"
+                    >
+                      {['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'].map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="text-[10px] text-charcoal/40 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">▼</span>
+                  </div>
+
+                  {/* AM / PM Segmented Control */}
+                  <div className="inline-flex rounded-xl bg-cream border border-borderLight p-1">
+                    <button
+                      type="button"
+                      onClick={() => handle12hChange(hour12, minute12, 'AM')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        period12 === 'AM'
+                          ? 'bg-forest text-cream shadow-xs'
+                          : 'text-charcoal/60 hover:text-charcoal'
+                      }`}
+                    >
+                      AM
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handle12hChange(hour12, minute12, 'PM')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        period12 === 'PM'
+                          ? 'bg-forest text-cream shadow-xs'
+                          : 'text-charcoal/60 hover:text-charcoal'
+                      }`}
+                    >
+                      PM
+                    </button>
+                  </div>
+
+                  {/* Equivalent 24h tag */}
+                  <span className="text-xs font-bold text-olive ml-1 shrink-0">
+                    ({cutoffTime} IST)
+                  </span>
+                </div>
+              ) : (
+                /* 24-Hour Input with live 12h badge */
+                <div>
+                  <input
+                    type="time"
+                    required
+                    value={cutoffTime}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setCutoffTime(val);
+                      const parsed = parse24to12(val);
+                      setHour12(parsed.hour);
+                      setMinute12(parsed.minute);
+                      setPeriod12(parsed.period);
+                    }}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-cream border border-borderLight text-sm font-bold text-forest focus:outline-none focus:ring-2 focus:ring-forest/30"
+                  />
+                  <span className="text-xs font-bold text-olive mt-1 block">
+                    Equals {get12HourDisplay(cutoffTime)} IST
+                  </span>
+                </div>
+              )}
+
+              <span className="text-[11px] text-charcoal/60 mt-1.5 block">
+                Orders placed before <strong className="text-forest">{get12HourDisplay(cutoffTime)}</strong> ({cutoffTime} IST) qualify for next-day delivery.
               </span>
             </div>
 
@@ -176,4 +337,3 @@ export const SettingsTab: React.FC = () => {
     </div>
   );
 };
-

@@ -1,0 +1,682 @@
+[
+  {
+    "id": "item-1",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Corn Bunch",
+    "slug": "corn-bunch",
+    "filename": "corn-bunch.webp",
+    "rel_path": "images/menu/starters/corn-bunch.webp",
+    "full_path": "public/images/menu/starters/corn-bunch.webp"
+  },
+  {
+    "id": "item-2",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Cheese Corn Balls",
+    "slug": "cheese-corn-balls",
+    "filename": "cheese-corn-balls.webp",
+    "rel_path": "images/menu/starters/cheese-corn-balls.webp",
+    "full_path": "public/images/menu/starters/cheese-corn-balls.webp"
+  },
+  {
+    "id": "item-3",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Garlic Bread",
+    "slug": "garlic-bread",
+    "filename": "garlic-bread.webp",
+    "rel_path": "images/menu/starters/garlic-bread.webp",
+    "full_path": "public/images/menu/starters/garlic-bread.webp"
+  },
+  {
+    "id": "item-4",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Hara Bhara Kebab",
+    "slug": "hara-bhara-kebab",
+    "filename": "hara-bhara-kebab.webp",
+    "rel_path": "images/menu/starters/hara-bhara-kebab.webp",
+    "full_path": "public/images/menu/starters/hara-bhara-kebab.webp"
+  },
+  {
+    "id": "item-5",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Hara Bhara Paneer Roll",
+    "slug": "hara-bhara-paneer-roll",
+    "filename": "hara-bhara-paneer-roll.webp",
+    "rel_path": "images/menu/starters/hara-bhara-paneer-roll.webp",
+    "full_path": "public/images/menu/starters/hara-bhara-paneer-roll.webp"
+  },
+  {
+    "id": "item-6",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Tart with Corn Filling",
+    "slug": "tart-with-corn-filling",
+    "filename": "tart-with-corn-filling.webp",
+    "rel_path": "images/menu/starters/tart-with-corn-filling.webp",
+    "full_path": "public/images/menu/starters/tart-with-corn-filling.webp"
+  },
+  {
+    "id": "item-7",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Bruschetta",
+    "slug": "bruschetta",
+    "filename": "bruschetta.webp",
+    "rel_path": "images/menu/starters/bruschetta.webp",
+    "full_path": "public/images/menu/starters/bruschetta.webp"
+  },
+  {
+    "id": "item-8",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Nachos with Salsa & Cheese Dip",
+    "slug": "nachos-with-salsa-cheese-dip",
+    "filename": "nachos-with-salsa-cheese-dip.webp",
+    "rel_path": "images/menu/starters/nachos-with-salsa-cheese-dip.webp",
+    "full_path": "public/images/menu/starters/nachos-with-salsa-cheese-dip.webp"
+  },
+  {
+    "id": "item-9",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Dabeli",
+    "slug": "dabeli",
+    "filename": "dabeli.webp",
+    "rel_path": "images/menu/starters/dabeli.webp",
+    "full_path": "public/images/menu/starters/dabeli.webp"
+  },
+  {
+    "id": "item-10",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Vada pav",
+    "slug": "vada-pav",
+    "filename": "vada-pav.webp",
+    "rel_path": "images/menu/starters/vada-pav.webp",
+    "full_path": "public/images/menu/starters/vada-pav.webp"
+  },
+  {
+    "id": "item-11",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Dabeli bruschetta",
+    "slug": "dabeli-bruschetta",
+    "filename": "dabeli-bruschetta.webp",
+    "rel_path": "images/menu/starters/dabeli-bruschetta.webp",
+    "full_path": "public/images/menu/starters/dabeli-bruschetta.webp"
+  },
+  {
+    "id": "item-12",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Pav bhaji fondue",
+    "slug": "pav-bhaji-fondue",
+    "filename": "pav-bhaji-fondue.webp",
+    "rel_path": "images/menu/starters/pav-bhaji-fondue.webp",
+    "full_path": "public/images/menu/starters/pav-bhaji-fondue.webp"
+  },
+  {
+    "id": "item-13",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Thecha masala pav",
+    "slug": "thecha-masala-pav",
+    "filename": "thecha-masala-pav.webp",
+    "rel_path": "images/menu/starters/thecha-masala-pav.webp",
+    "full_path": "public/images/menu/starters/thecha-masala-pav.webp"
+  },
+  {
+    "id": "item-14",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Mexican Chilli Burger",
+    "slug": "mexican-chilli-burger",
+    "filename": "mexican-chilli-burger.webp",
+    "rel_path": "images/menu/starters/mexican-chilli-burger.webp",
+    "full_path": "public/images/menu/starters/mexican-chilli-burger.webp"
+  },
+  {
+    "id": "item-15",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Paneer chilli burger",
+    "slug": "paneer-chilli-burger",
+    "filename": "paneer-chilli-burger.webp",
+    "rel_path": "images/menu/starters/paneer-chilli-burger.webp",
+    "full_path": "public/images/menu/starters/paneer-chilli-burger.webp"
+  },
+  {
+    "id": "item-16",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Dahi ke kabab",
+    "slug": "dahi-ke-kabab",
+    "filename": "dahi-ke-kabab.webp",
+    "rel_path": "images/menu/starters/dahi-ke-kabab.webp",
+    "full_path": "public/images/menu/starters/dahi-ke-kabab.webp"
+  },
+  {
+    "id": "item-17",
+    "cat_id": "cat-1",
+    "cat_slug": "starters",
+    "name": "Thatte idli",
+    "slug": "thatte-idli",
+    "filename": "thatte-idli.webp",
+    "rel_path": "images/menu/starters/thatte-idli.webp",
+    "full_path": "public/images/menu/starters/thatte-idli.webp"
+  },
+  {
+    "id": "item-18",
+    "cat_id": "cat-2",
+    "cat_slug": "chaats",
+    "name": "Gold Coin Chaat",
+    "slug": "gold-coin-chaat",
+    "filename": "gold-coin-chaat.webp",
+    "rel_path": "images/menu/chaats/gold-coin-chaat.webp",
+    "full_path": "public/images/menu/chaats/gold-coin-chaat.webp"
+  },
+  {
+    "id": "item-19",
+    "cat_id": "cat-2",
+    "cat_slug": "chaats",
+    "name": "Pineapple Bhel",
+    "slug": "pineapple-bhel",
+    "filename": "pineapple-bhel.webp",
+    "rel_path": "images/menu/chaats/pineapple-bhel.webp",
+    "full_path": "public/images/menu/chaats/pineapple-bhel.webp"
+  },
+  {
+    "id": "item-20",
+    "cat_id": "cat-2",
+    "cat_slug": "chaats",
+    "name": "Tiranga Bhel",
+    "slug": "tiranga-bhel",
+    "filename": "tiranga-bhel.webp",
+    "rel_path": "images/menu/chaats/tiranga-bhel.webp",
+    "full_path": "public/images/menu/chaats/tiranga-bhel.webp"
+  },
+  {
+    "id": "item-21",
+    "cat_id": "cat-2",
+    "cat_slug": "chaats",
+    "name": "Hara Bhara Bird\u2019s Nest Chaat",
+    "slug": "hara-bhara-bird-s-nest-chaat",
+    "filename": "hara-bhara-bird-s-nest-chaat.webp",
+    "rel_path": "images/menu/chaats/hara-bhara-bird-s-nest-chaat.webp",
+    "full_path": "public/images/menu/chaats/hara-bhara-bird-s-nest-chaat.webp"
+  },
+  {
+    "id": "item-22",
+    "cat_id": "cat-2",
+    "cat_slug": "chaats",
+    "name": "Mexican Khakhra Chaat",
+    "slug": "mexican-khakhra-chaat",
+    "filename": "mexican-khakhra-chaat.webp",
+    "rel_path": "images/menu/chaats/mexican-khakhra-chaat.webp",
+    "full_path": "public/images/menu/chaats/mexican-khakhra-chaat.webp"
+  },
+  {
+    "id": "item-23",
+    "cat_id": "cat-2",
+    "cat_slug": "chaats",
+    "name": "Tamatar Chaat",
+    "slug": "tamatar-chaat",
+    "filename": "tamatar-chaat.webp",
+    "rel_path": "images/menu/chaats/tamatar-chaat.webp",
+    "full_path": "public/images/menu/chaats/tamatar-chaat.webp"
+  },
+  {
+    "id": "item-24",
+    "cat_id": "cat-2",
+    "cat_slug": "chaats",
+    "name": "Chinese Bhel",
+    "slug": "chinese-bhel",
+    "filename": "chinese-bhel.webp",
+    "rel_path": "images/menu/chaats/chinese-bhel.webp",
+    "full_path": "public/images/menu/chaats/chinese-bhel.webp"
+  },
+  {
+    "id": "item-25",
+    "cat_id": "cat-2",
+    "cat_slug": "chaats",
+    "name": "Batata Chaat",
+    "slug": "batata-chaat",
+    "filename": "batata-chaat.webp",
+    "rel_path": "images/menu/chaats/batata-chaat.webp",
+    "full_path": "public/images/menu/chaats/batata-chaat.webp"
+  },
+  {
+    "id": "item-26",
+    "cat_id": "cat-2",
+    "cat_slug": "chaats",
+    "name": "Matar Chaat",
+    "slug": "matar-chaat",
+    "filename": "matar-chaat.webp",
+    "rel_path": "images/menu/chaats/matar-chaat.webp",
+    "full_path": "public/images/menu/chaats/matar-chaat.webp"
+  },
+  {
+    "id": "item-27",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "Spanish Rice with Tandoori Sauce",
+    "slug": "spanish-rice-with-tandoori-sauce",
+    "filename": "spanish-rice-with-tandoori-sauce.webp",
+    "rel_path": "images/menu/mains/spanish-rice-with-tandoori-sauce.webp",
+    "full_path": "public/images/menu/mains/spanish-rice-with-tandoori-sauce.webp"
+  },
+  {
+    "id": "item-28",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "Paneer Begum Bahar",
+    "slug": "paneer-begum-bahar",
+    "filename": "paneer-begum-bahar.webp",
+    "rel_path": "images/menu/mains/paneer-begum-bahar.webp",
+    "full_path": "public/images/menu/mains/paneer-begum-bahar.webp"
+  },
+  {
+    "id": "item-29",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "Paneer Tikka Roll",
+    "slug": "paneer-tikka-roll",
+    "filename": "paneer-tikka-roll.webp",
+    "rel_path": "images/menu/mains/paneer-tikka-roll.webp",
+    "full_path": "public/images/menu/mains/paneer-tikka-roll.webp"
+  },
+  {
+    "id": "item-30",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "Veg Frankie",
+    "slug": "veg-frankie",
+    "filename": "veg-frankie.webp",
+    "rel_path": "images/menu/mains/veg-frankie.webp",
+    "full_path": "public/images/menu/mains/veg-frankie.webp"
+  },
+  {
+    "id": "item-31",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "Pav Bhaji",
+    "slug": "pav-bhaji",
+    "filename": "pav-bhaji.webp",
+    "rel_path": "images/menu/mains/pav-bhaji.webp",
+    "full_path": "public/images/menu/mains/pav-bhaji.webp"
+  },
+  {
+    "id": "item-32",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "Paneer Fried Noodles",
+    "slug": "paneer-fried-noodles",
+    "filename": "paneer-fried-noodles.webp",
+    "rel_path": "images/menu/mains/paneer-fried-noodles.webp",
+    "full_path": "public/images/menu/mains/paneer-fried-noodles.webp"
+  },
+  {
+    "id": "item-33",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "Chili Garlic Paneer Burger",
+    "slug": "chili-garlic-paneer-burger",
+    "filename": "chili-garlic-paneer-burger.webp",
+    "rel_path": "images/menu/mains/chili-garlic-paneer-burger.webp",
+    "full_path": "public/images/menu/mains/chili-garlic-paneer-burger.webp"
+  },
+  {
+    "id": "item-34",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "Chola kulcha platter",
+    "slug": "chola-kulcha-platter",
+    "filename": "chola-kulcha-platter.webp",
+    "rel_path": "images/menu/mains/chola-kulcha-platter.webp",
+    "full_path": "public/images/menu/mains/chola-kulcha-platter.webp"
+  },
+  {
+    "id": "item-35",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "Pan fried noodles",
+    "slug": "pan-fried-noodles",
+    "filename": "pan-fried-noodles.webp",
+    "rel_path": "images/menu/mains/pan-fried-noodles.webp",
+    "full_path": "public/images/menu/mains/pan-fried-noodles.webp"
+  },
+  {
+    "id": "item-36",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "French Casserole",
+    "slug": "french-casserole",
+    "filename": "french-casserole.webp",
+    "rel_path": "images/menu/mains/french-casserole.webp",
+    "full_path": "public/images/menu/mains/french-casserole.webp"
+  },
+  {
+    "id": "item-37",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "Stacked Enchiladas",
+    "slug": "stacked-enchiladas",
+    "filename": "stacked-enchiladas.webp",
+    "rel_path": "images/menu/mains/stacked-enchiladas.webp",
+    "full_path": "public/images/menu/mains/stacked-enchiladas.webp"
+  },
+  {
+    "id": "item-38",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "American Chop Suey",
+    "slug": "american-chop-suey",
+    "filename": "american-chop-suey.webp",
+    "rel_path": "images/menu/mains/american-chop-suey.webp",
+    "full_path": "public/images/menu/mains/american-chop-suey.webp"
+  },
+  {
+    "id": "item-39",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "Chinese Rice with Fried Noodles",
+    "slug": "chinese-rice-with-fried-noodles",
+    "filename": "chinese-rice-with-fried-noodles.webp",
+    "rel_path": "images/menu/mains/chinese-rice-with-fried-noodles.webp",
+    "full_path": "public/images/menu/mains/chinese-rice-with-fried-noodles.webp"
+  },
+  {
+    "id": "item-40",
+    "cat_id": "cat-3",
+    "cat_slug": "mains",
+    "name": "Muglai paratha with Lehsun chutney",
+    "slug": "muglai-paratha-with-lehsun-chutney",
+    "filename": "muglai-paratha-with-lehsun-chutney.webp",
+    "rel_path": "images/menu/mains/muglai-paratha-with-lehsun-chutney.webp",
+    "full_path": "public/images/menu/mains/muglai-paratha-with-lehsun-chutney.webp"
+  },
+  {
+    "id": "item-41",
+    "cat_id": "cat-4",
+    "cat_slug": "mexican-mains",
+    "name": "Mexican Rice",
+    "slug": "mexican-rice",
+    "filename": "mexican-rice.webp",
+    "rel_path": "images/menu/mexican-mains/mexican-rice.webp",
+    "full_path": "public/images/menu/mexican-mains/mexican-rice.webp"
+  },
+  {
+    "id": "item-42",
+    "cat_id": "cat-4",
+    "cat_slug": "mexican-mains",
+    "name": "Quesadillas",
+    "slug": "quesadillas",
+    "filename": "quesadillas.webp",
+    "rel_path": "images/menu/mexican-mains/quesadillas.webp",
+    "full_path": "public/images/menu/mexican-mains/quesadillas.webp"
+  },
+  {
+    "id": "item-43",
+    "cat_id": "cat-4",
+    "cat_slug": "mexican-mains",
+    "name": "Pocket Pizza",
+    "slug": "pocket-pizza",
+    "filename": "pocket-pizza.webp",
+    "rel_path": "images/menu/mexican-mains/pocket-pizza.webp",
+    "full_path": "public/images/menu/mexican-mains/pocket-pizza.webp"
+  },
+  {
+    "id": "item-44",
+    "cat_id": "cat-4",
+    "cat_slug": "mexican-mains",
+    "name": "Nachos with Salsa & Cheese Dip",
+    "slug": "nachos-with-salsa-cheese-dip",
+    "filename": "nachos-with-salsa-cheese-dip.webp",
+    "rel_path": "images/menu/mexican-mains/nachos-with-salsa-cheese-dip.webp",
+    "full_path": "public/images/menu/mexican-mains/nachos-with-salsa-cheese-dip.webp"
+  },
+  {
+    "id": "item-45",
+    "cat_id": "cat-5",
+    "cat_slug": "baked-dishes",
+    "name": "Baked Begum Bahar",
+    "slug": "baked-begum-bahar",
+    "filename": "baked-begum-bahar.webp",
+    "rel_path": "images/menu/baked-dishes/baked-begum-bahar.webp",
+    "full_path": "public/images/menu/baked-dishes/baked-begum-bahar.webp"
+  },
+  {
+    "id": "item-46",
+    "cat_id": "cat-5",
+    "cat_slug": "baked-dishes",
+    "name": "Vegetable Gratin",
+    "slug": "vegetable-gratin",
+    "filename": "vegetable-gratin.webp",
+    "rel_path": "images/menu/baked-dishes/vegetable-gratin.webp",
+    "full_path": "public/images/menu/baked-dishes/vegetable-gratin.webp"
+  },
+  {
+    "id": "item-47",
+    "cat_id": "cat-5",
+    "cat_slug": "baked-dishes",
+    "name": "Tri-Colour Baking Delight",
+    "slug": "tri-colour-baking-delight",
+    "filename": "tri-colour-baking-delight.webp",
+    "rel_path": "images/menu/baked-dishes/tri-colour-baking-delight.webp",
+    "full_path": "public/images/menu/baked-dishes/tri-colour-baking-delight.webp"
+  },
+  {
+    "id": "item-48",
+    "cat_id": "cat-5",
+    "cat_slug": "baked-dishes",
+    "name": "Baked Florentine",
+    "slug": "baked-florentine",
+    "filename": "baked-florentine.webp",
+    "rel_path": "images/menu/baked-dishes/baked-florentine.webp",
+    "full_path": "public/images/menu/baked-dishes/baked-florentine.webp"
+  },
+  {
+    "id": "item-49",
+    "cat_id": "cat-5",
+    "cat_slug": "baked-dishes",
+    "name": "Lasagne Verdi",
+    "slug": "lasagne-verdi",
+    "filename": "lasagne-verdi.webp",
+    "rel_path": "images/menu/baked-dishes/lasagne-verdi.webp",
+    "full_path": "public/images/menu/baked-dishes/lasagne-verdi.webp"
+  },
+  {
+    "id": "item-50",
+    "cat_id": "cat-5",
+    "cat_slug": "baked-dishes",
+    "name": "Baked Spanish Rice with Tomato Sauce",
+    "slug": "baked-spanish-rice-with-tomato-sauce",
+    "filename": "baked-spanish-rice-with-tomato-sauce.webp",
+    "rel_path": "images/menu/baked-dishes/baked-spanish-rice-with-tomato-sauce.webp",
+    "full_path": "public/images/menu/baked-dishes/baked-spanish-rice-with-tomato-sauce.webp"
+  },
+  {
+    "id": "item-51",
+    "cat_id": "cat-5",
+    "cat_slug": "baked-dishes",
+    "name": "Tart with Corn Filling & Cheese Sauce",
+    "slug": "tart-with-corn-filling-cheese-sauce",
+    "filename": "tart-with-corn-filling-cheese-sauce.webp",
+    "rel_path": "images/menu/baked-dishes/tart-with-corn-filling-cheese-sauce.webp",
+    "full_path": "public/images/menu/baked-dishes/tart-with-corn-filling-cheese-sauce.webp"
+  },
+  {
+    "id": "item-52",
+    "cat_id": "cat-5",
+    "cat_slug": "baked-dishes",
+    "name": "Moussaka",
+    "slug": "moussaka",
+    "filename": "moussaka.webp",
+    "rel_path": "images/menu/baked-dishes/moussaka.webp",
+    "full_path": "public/images/menu/baked-dishes/moussaka.webp"
+  },
+  {
+    "id": "item-53",
+    "cat_id": "cat-6",
+    "cat_slug": "sandwich-corner",
+    "name": "Russian Sandwich",
+    "slug": "russian-sandwich",
+    "filename": "russian-sandwich.webp",
+    "rel_path": "images/menu/sandwich-corner/russian-sandwich.webp",
+    "full_path": "public/images/menu/sandwich-corner/russian-sandwich.webp"
+  },
+  {
+    "id": "item-54",
+    "cat_id": "cat-6",
+    "cat_slug": "sandwich-corner",
+    "name": "Corn Toast",
+    "slug": "corn-toast",
+    "filename": "corn-toast.webp",
+    "rel_path": "images/menu/sandwich-corner/corn-toast.webp",
+    "full_path": "public/images/menu/sandwich-corner/corn-toast.webp"
+  },
+  {
+    "id": "item-55",
+    "cat_id": "cat-6",
+    "cat_slug": "sandwich-corner",
+    "name": "Pinwheel Sandwich",
+    "slug": "pinwheel-sandwich",
+    "filename": "pinwheel-sandwich.webp",
+    "rel_path": "images/menu/sandwich-corner/pinwheel-sandwich.webp",
+    "full_path": "public/images/menu/sandwich-corner/pinwheel-sandwich.webp"
+  },
+  {
+    "id": "item-56",
+    "cat_id": "cat-6",
+    "cat_slug": "sandwich-corner",
+    "name": "Creamy Spanish Sandwich",
+    "slug": "creamy-spanish-sandwich",
+    "filename": "creamy-spanish-sandwich.webp",
+    "rel_path": "images/menu/sandwich-corner/creamy-spanish-sandwich.webp",
+    "full_path": "public/images/menu/sandwich-corner/creamy-spanish-sandwich.webp"
+  },
+  {
+    "id": "item-57",
+    "cat_id": "cat-7",
+    "cat_slug": "fondue",
+    "name": "Pav bhaji fondue",
+    "slug": "pav-bhaji-fondue",
+    "filename": "pav-bhaji-fondue.webp",
+    "rel_path": "images/menu/fondue/pav-bhaji-fondue.webp",
+    "full_path": "public/images/menu/fondue/pav-bhaji-fondue.webp"
+  },
+  {
+    "id": "item-58",
+    "cat_id": "cat-7",
+    "cat_slug": "fondue",
+    "name": "Mexican fondue",
+    "slug": "mexican-fondue",
+    "filename": "mexican-fondue.webp",
+    "rel_path": "images/menu/fondue/mexican-fondue.webp",
+    "full_path": "public/images/menu/fondue/mexican-fondue.webp"
+  },
+  {
+    "id": "item-59",
+    "cat_id": "cat-7",
+    "cat_slug": "fondue",
+    "name": "Cheese fondue",
+    "slug": "cheese-fondue",
+    "filename": "cheese-fondue.webp",
+    "rel_path": "images/menu/fondue/cheese-fondue.webp",
+    "full_path": "public/images/menu/fondue/cheese-fondue.webp"
+  },
+  {
+    "id": "item-60",
+    "cat_id": "cat-8",
+    "cat_slug": "drinks",
+    "name": "Frappe",
+    "slug": "frappe",
+    "filename": "frappe.webp",
+    "rel_path": "images/menu/drinks/frappe.webp",
+    "full_path": "public/images/menu/drinks/frappe.webp"
+  },
+  {
+    "id": "item-61",
+    "cat_id": "cat-8",
+    "cat_slug": "drinks",
+    "name": "Iced Mojito",
+    "slug": "iced-mojito",
+    "filename": "iced-mojito.webp",
+    "rel_path": "images/menu/drinks/iced-mojito.webp",
+    "full_path": "public/images/menu/drinks/iced-mojito.webp"
+  },
+  {
+    "id": "item-62",
+    "cat_id": "cat-8",
+    "cat_slug": "drinks",
+    "name": "Tulsi Mojito",
+    "slug": "tulsi-mojito",
+    "filename": "tulsi-mojito.webp",
+    "rel_path": "images/menu/drinks/tulsi-mojito.webp",
+    "full_path": "public/images/menu/drinks/tulsi-mojito.webp"
+  },
+  {
+    "id": "item-63",
+    "cat_id": "cat-9",
+    "cat_slug": "desserts",
+    "name": "Butterscotch Spanish Cr\u00e8me",
+    "slug": "butterscotch-spanish-cr-me",
+    "filename": "butterscotch-spanish-cr-me.webp",
+    "rel_path": "images/menu/desserts/butterscotch-spanish-cr-me.webp",
+    "full_path": "public/images/menu/desserts/butterscotch-spanish-cr-me.webp"
+  },
+  {
+    "id": "item-64",
+    "cat_id": "cat-9",
+    "cat_slug": "desserts",
+    "name": "Chocolate Spanish Cr\u00e8me",
+    "slug": "chocolate-spanish-cr-me",
+    "filename": "chocolate-spanish-cr-me.webp",
+    "rel_path": "images/menu/desserts/chocolate-spanish-cr-me.webp",
+    "full_path": "public/images/menu/desserts/chocolate-spanish-cr-me.webp"
+  },
+  {
+    "id": "item-65",
+    "cat_id": "cat-9",
+    "cat_slug": "desserts",
+    "name": "Mango Spanish Cr\u00e8me",
+    "slug": "mango-spanish-cr-me",
+    "filename": "mango-spanish-cr-me.webp",
+    "rel_path": "images/menu/desserts/mango-spanish-cr-me.webp",
+    "full_path": "public/images/menu/desserts/mango-spanish-cr-me.webp"
+  },
+  {
+    "id": "item-66",
+    "cat_id": "cat-9",
+    "cat_slug": "desserts",
+    "name": "Chocolate Monte Carlo",
+    "slug": "chocolate-monte-carlo",
+    "filename": "chocolate-monte-carlo.webp",
+    "rel_path": "images/menu/desserts/chocolate-monte-carlo.webp",
+    "full_path": "public/images/menu/desserts/chocolate-monte-carlo.webp"
+  },
+  {
+    "id": "item-67",
+    "cat_id": "cat-9",
+    "cat_slug": "desserts",
+    "name": "Apple Crumble",
+    "slug": "apple-crumble",
+    "filename": "apple-crumble.webp",
+    "rel_path": "images/menu/desserts/apple-crumble.webp",
+    "full_path": "public/images/menu/desserts/apple-crumble.webp"
+  },
+  {
+    "id": "item-68",
+    "cat_id": "cat-9",
+    "cat_slug": "desserts",
+    "name": "Chocolate fondue",
+    "slug": "chocolate-fondue",
+    "filename": "chocolate-fondue.webp",
+    "rel_path": "images/menu/desserts/chocolate-fondue.webp",
+    "full_path": "public/images/menu/desserts/chocolate-fondue.webp"
+  }
+]

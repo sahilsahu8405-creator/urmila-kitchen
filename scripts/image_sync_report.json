@@ -1,0 +1,682 @@
+[
+  {
+    "id": "d32f8518-402e-4f78-9d40-0aaa6b43d5b8",
+    "name": "Pav bhaji fondue (Platter)",
+    "category": "fondue",
+    "filename": "pav-bhaji-fondue-platter.webp",
+    "local_path": "/images/menu/fondue/pav-bhaji-fondue-platter.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/fondue/pav-bhaji-fondue-platter.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6f/Nothing_like_some_good_Indian_street_food%21_-_Pav_Bhaji_%21.jpg/960px-Nothing_like_some_good_Indian_street_food%21_-_Pav_Bhaji_%21.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "256c91a0-4268-47f1-9dff-873d62afb21e",
+    "name": "Spanish Rice with Tandoori Sauce",
+    "category": "mains",
+    "filename": "spanish-rice-with-tandoori-sauce.webp",
+    "local_path": "/images/menu/mains/spanish-rice-with-tandoori-sauce.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/spanish-rice-with-tandoori-sauce.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Farmers%27_Bulletin._No._0110%2C_1900_-_Rice_culture_in_the_United_States_%28IA_CAT87201521%29.pdf/page1-500px-Farmers%27_Bulletin._No._0110%2C_1900_-_Rice_culture_in_the_United_States_%28IA_CAT87201521%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "2487db18-da74-4866-bbd0-b95e949f3db5",
+    "name": "Corn Bunch",
+    "category": "starters",
+    "filename": "corn-bunch.webp",
+    "local_path": "/images/menu/starters/corn-bunch.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/corn-bunch.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/1907_Spring_catalogue_%28IA_CAT31288939%29.pdf/page1-960px-1907_Spring_catalogue_%28IA_CAT31288939%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "6ccd6939-1890-4a9b-a681-4db01f5591b1",
+    "name": "Butterscotch Spanish Cr\u00e8me",
+    "category": "desserts",
+    "filename": "butterscotch-spanish-cr-me.webp",
+    "local_path": "/images/menu/desserts/butterscotch-spanish-cr-me.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/desserts/butterscotch-spanish-cr-me.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/Creme_catalane.jpg/960px-Creme_catalane.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "79024234-1356-483f-9c6d-cfcc517c0154",
+    "name": "Frappe",
+    "category": "drinks",
+    "filename": "frappe.webp",
+    "local_path": "/images/menu/drinks/frappe.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/drinks/frappe.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/25/An_ice_cream_laboratory_guide_%28IA_cu31924003582537%29.pdf/page1-500px-An_ice_cream_laboratory_guide_%28IA_cu31924003582537%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "d3e97e55-1e3b-4be9-aaa5-50a3bf637f42",
+    "name": "Russian Sandwich",
+    "category": "sandwich-corner",
+    "filename": "russian-sandwich.webp",
+    "local_path": "/images/menu/sandwich-corner/russian-sandwich.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/sandwich-corner/russian-sandwich.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/20260117_Sandwich_in_Moscow.jpg/960px-20260117_Sandwich_in_Moscow.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "bcf07f42-cdc8-4494-8598-0c06b837e7f2",
+    "name": "Baked Begum Bahar",
+    "category": "baked-dishes",
+    "filename": "baked-begum-bahar.webp",
+    "local_path": "/images/menu/baked-dishes/baked-begum-bahar.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/baked-dishes/baked-begum-bahar.webp",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Leek_au_gratin_%287456975464%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "aa76004e-41ca-454b-87ee-1c2d970f24b3",
+    "name": "Mexican Rice",
+    "category": "mexican-mains",
+    "filename": "mexican-rice.webp",
+    "local_path": "/images/menu/mexican-mains/mexican-rice.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mexican-mains/mexican-rice.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Jamaican_Spanish_rice_%28Arroz_amarillo%29.jpg/960px-Jamaican_Spanish_rice_%28Arroz_amarillo%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "1d456077-fe64-42f9-98dc-566de25562d1",
+    "name": "Gold Coin Chaat",
+    "category": "chaats",
+    "filename": "gold-coin-chaat.webp",
+    "local_path": "/images/menu/chaats/gold-coin-chaat.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/chaats/gold-coin-chaat.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Chaat_feast.jpg/960px-Chaat_feast.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "e34d6645-606b-47f8-98e4-4e3d42b7f48e",
+    "name": "Corn Toast",
+    "category": "sandwich-corner",
+    "filename": "corn-toast.webp",
+    "local_path": "/images/menu/sandwich-corner/corn-toast.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/sandwich-corner/corn-toast.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Cheese_buying_guide_for_consumers_%28IA_cheesebuyingguid17unit%29.pdf/page1-960px-Cheese_buying_guide_for_consumers_%28IA_cheesebuyingguid17unit%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "a39432cd-4c7c-4625-83c8-fd0e329c1863",
+    "name": "Pineapple Bhel",
+    "category": "chaats",
+    "filename": "pineapple-bhel.webp",
+    "local_path": "/images/menu/chaats/pineapple-bhel.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/chaats/pineapple-bhel.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Bhel_Puri_Chaat.JPG/960px-Bhel_Puri_Chaat.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "6007bd72-3a5b-496a-8163-013cabf77e8c",
+    "name": "Paneer Begum Bahar",
+    "category": "mains",
+    "filename": "paneer-begum-bahar.webp",
+    "local_path": "/images/menu/mains/paneer-begum-bahar.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/paneer-begum-bahar.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Proceedings_of_the_Asiatic_Society_of_Bengal_%28IA_proceedingsofasi1881asia%29.pdf/page1-500px-Proceedings_of_the_Asiatic_Society_of_Bengal_%28IA_proceedingsofasi1881asia%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "3e8c6cd7-f5a8-454c-bb45-6bcc77750352",
+    "name": "Quesadillas",
+    "category": "mexican-mains",
+    "filename": "quesadillas.webp",
+    "local_path": "/images/menu/mexican-mains/quesadillas.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mexican-mains/quesadillas.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/Celebrate_healthy%2C_active_celebrations_-_easy_ways_to_eat_smart_and_play_hard_with_friends_and_family_%28IA_CAT31310859%29.pdf/page1-960px-Celebrate_healthy%2C_active_celebrations_-_easy_ways_to_eat_smart_and_play_hard_with_friends_and_family_%28IA_CAT31310859%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "a12e04c3-502f-4ff1-8e60-cd470eb7fd48",
+    "name": "Vegetable Gratin",
+    "category": "baked-dishes",
+    "filename": "vegetable-gratin.webp",
+    "local_path": "/images/menu/baked-dishes/vegetable-gratin.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/baked-dishes/vegetable-gratin.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Cooking_dehydrated_vegetables_%28IA_cookingdehydrate08unit%29.pdf/page1-500px-Cooking_dehydrated_vegetables_%28IA_cookingdehydrate08unit%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "c1832417-b44a-4b9d-a813-c246b003b0b8",
+    "name": "Cheese Corn Balls",
+    "category": "starters",
+    "filename": "cheese-corn-balls.webp",
+    "local_path": "/images/menu/starters/cheese-corn-balls.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/cheese-corn-balls.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Cheese_Puff_%2816522654807%29.jpg/960px-Cheese_Puff_%2816522654807%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "7e3a991f-647c-4505-ad09-31f5d24af13c",
+    "name": "Mexican fondue",
+    "category": "fondue",
+    "filename": "mexican-fondue.webp",
+    "local_path": "/images/menu/fondue/mexican-fondue.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/fondue/mexican-fondue.webp",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Queso_Flameado_de_Oaxaca.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "048c0126-fef7-4af2-9701-a29bde3d7dbc",
+    "name": "Iced Mojito",
+    "category": "drinks",
+    "filename": "iced-mojito.webp",
+    "local_path": "/images/menu/drinks/iced-mojito.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/drinks/iced-mojito.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/Mocktails_%28%22Virgin_mojito%22_and_%22Fresh%22%29_-_Le_Moulin_de_la_Galette%2C_Bayeux_2025-03-25.jpg/960px-Mocktails_%28%22Virgin_mojito%22_and_%22Fresh%22%29_-_Le_Moulin_de_la_Galette%2C_Bayeux_2025-03-25.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "725f56d1-68e0-4631-bb32-f844b6a320ac",
+    "name": "Chocolate Spanish Cr\u00e8me",
+    "category": "desserts",
+    "filename": "chocolate-spanish-cr-me.webp",
+    "local_path": "/images/menu/desserts/chocolate-spanish-cr-me.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/desserts/chocolate-spanish-cr-me.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/25th_anniversary_-_the_girl_%26_the_fig_-_August_2022_-_Sarah_Stierch_02.jpg/960px-25th_anniversary_-_the_girl_%26_the_fig_-_August_2022_-_Sarah_Stierch_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "f5b4c8e9-2ab2-42c6-a52d-29d8750b5781",
+    "name": "Pocket Pizza",
+    "category": "mexican-mains",
+    "filename": "pocket-pizza.webp",
+    "local_path": "/images/menu/mexican-mains/pocket-pizza.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mexican-mains/pocket-pizza.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/Child_and_Adult_Care_Food_Program_-_nutrition_guidance_for_child_care_centers_%28IA_CAT30967875%29.pdf/page1-960px-Child_and_Adult_Care_Food_Program_-_nutrition_guidance_for_child_care_centers_%28IA_CAT30967875%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "e5cfde29-0999-4a5c-a62e-aa21a45342b4",
+    "name": "Mango Spanish Cr\u00e8me",
+    "category": "desserts",
+    "filename": "mango-spanish-cr-me.webp",
+    "local_path": "/images/menu/desserts/mango-spanish-cr-me.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/desserts/mango-spanish-cr-me.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Domestic_economy%2C_or%2C_A_complete_system_of_English_housekeeping_%2C_containing_the_most_approved_receipts%2C_confirmed_by_observation_and_practice_%28IA_2484057R.nlm.nih.gov%29.pdf/page1-500px-thumbnail.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "0e45e968-9141-42b8-baaf-0f245907b5b8",
+    "name": "Tiranga Bhel",
+    "category": "chaats",
+    "filename": "tiranga-bhel.webp",
+    "local_path": "/images/menu/chaats/tiranga-bhel.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/chaats/tiranga-bhel.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9f/Dahi_masala_puri.jpg/960px-Dahi_masala_puri.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "034a70ac-c5d9-47f0-aae6-1a0180765437",
+    "name": "Tulsi Mojito",
+    "category": "drinks",
+    "filename": "tulsi-mojito.webp",
+    "local_path": "/images/menu/drinks/tulsi-mojito.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/drinks/tulsi-mojito.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Owner%27s_manual_for_your_body_-_how_to_fuel_it_and_move_it_for_a_fun_and_healthy_life_%28IA_CAT31307267%29.pdf/page1-960px-Owner%27s_manual_for_your_body_-_how_to_fuel_it_and_move_it_for_a_fun_and_healthy_life_%28IA_CAT31307267%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "0daf1ce3-e1f6-4eb9-b32f-9b551de1e5d0",
+    "name": "Cheese fondue",
+    "category": "fondue",
+    "filename": "cheese-fondue.webp",
+    "local_path": "/images/menu/fondue/cheese-fondue.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/fondue/cheese-fondue.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/A_Cheese_Fondue_in_Swiss_Diner_Hong_Kong.jpg/960px-A_Cheese_Fondue_in_Swiss_Diner_Hong_Kong.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "3d50ca23-30b5-4b7a-99bc-47be72ee8e34",
+    "name": "Paneer Tikka Roll",
+    "category": "mains",
+    "filename": "paneer-tikka-roll.webp",
+    "local_path": "/images/menu/mains/paneer-tikka-roll.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/paneer-tikka-roll.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Aim_for_a_healthy_weight_%28IA_CAT31307268%29.pdf/page1-960px-Aim_for_a_healthy_weight_%28IA_CAT31307268%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "8d3f9e77-0c8e-4236-938d-4bf4e6c4ad6f",
+    "name": "Garlic Bread",
+    "category": "starters",
+    "filename": "garlic-bread.webp",
+    "local_path": "/images/menu/starters/garlic-bread.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/garlic-bread.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/%22Garlic_Bread%22_%2813348195234%29.jpg/960px-%22Garlic_Bread%22_%2813348195234%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "a1d760ee-7529-4387-b6bc-f5f5e32489dd",
+    "name": "Pinwheel Sandwich",
+    "category": "sandwich-corner",
+    "filename": "pinwheel-sandwich.webp",
+    "local_path": "/images/menu/sandwich-corner/pinwheel-sandwich.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/sandwich-corner/pinwheel-sandwich.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/AfternoonTea.JPG/960px-AfternoonTea.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "2795df24-8d94-4ab8-9183-f1318e233711",
+    "name": "Tri-Colour Baking Delight",
+    "category": "baked-dishes",
+    "filename": "tri-colour-baking-delight.webp",
+    "local_path": "/images/menu/baked-dishes/tri-colour-baking-delight.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/baked-dishes/tri-colour-baking-delight.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/eb/A_jaunt_in_Japan%2C_or%2C_Ninety_days%27_leave_in_the_Far_East_%28IA_cu31924023490471%29.pdf/page1-500px-A_jaunt_in_Japan%2C_or%2C_Ninety_days%27_leave_in_the_Far_East_%28IA_cu31924023490471%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "164af026-96ce-4ecf-8549-3383a1abd9f7",
+    "name": "Chocolate Monte Carlo",
+    "category": "desserts",
+    "filename": "chocolate-monte-carlo.webp",
+    "local_path": "/images/menu/desserts/chocolate-monte-carlo.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/desserts/chocolate-monte-carlo.webp",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/f/fb/300x300_choc_rose_cake.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "78f956a9-5d58-4981-9a16-8aa79ad31f8f",
+    "name": "Veg Frankie",
+    "category": "mains",
+    "filename": "veg-frankie.webp",
+    "local_path": "/images/menu/mains/veg-frankie.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/veg-frankie.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/A_Vegetable_Rice_Noodle_Roll_at_Old_street_food_shop_in_Old_street_at_Jiangmen.jpg/960px-A_Vegetable_Rice_Noodle_Roll_at_Old_street_food_shop_in_Old_street_at_Jiangmen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "6468b10d-3135-4812-b498-f3b8e0ee2b28",
+    "name": "Nachos with Salsa & Cheese Dip (Mexican)",
+    "category": "mexican-mains",
+    "filename": "nachos-with-salsa-cheese-dip-mexican.webp",
+    "local_path": "/images/menu/mexican-mains/nachos-with-salsa-cheese-dip-mexican.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mexican-mains/nachos-with-salsa-cheese-dip-mexican.webp",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Air_fried_%22Terror_Dogs%22.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "5e57c9f4-b296-4469-a714-64f94d8bc4c3",
+    "name": "Baked Florentine",
+    "category": "baked-dishes",
+    "filename": "baked-florentine.webp",
+    "local_path": "/images/menu/baked-dishes/baked-florentine.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/baked-dishes/baked-florentine.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/My_favorite_receipt_%28IA_myfavoritereceip00roya%29.pdf/page1-500px-My_favorite_receipt_%28IA_myfavoritereceip00roya%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "de0e3ca7-72a0-4996-9d6c-85ea54764a05",
+    "name": "Hara Bhara Kebab",
+    "category": "starters",
+    "filename": "hara-bhara-kebab.webp",
+    "local_path": "/images/menu/starters/hara-bhara-kebab.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/hara-bhara-kebab.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Hara_Bhara_Kabab.JPG/960px-Hara_Bhara_Kabab.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "4a6936d8-b3f9-442c-81d6-35b9718ac530",
+    "name": "Creamy Spanish Sandwich",
+    "category": "sandwich-corner",
+    "filename": "creamy-spanish-sandwich.webp",
+    "local_path": "/images/menu/sandwich-corner/creamy-spanish-sandwich.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/sandwich-corner/creamy-spanish-sandwich.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/1902_annual_catalogue_of_vegetable%2C_field_%26_flower_seeds_%28IA_CAT31292782%29.pdf/page1-500px-1902_annual_catalogue_of_vegetable%2C_field_%26_flower_seeds_%28IA_CAT31292782%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "15f65ff6-2ab7-4d91-9e39-089dd45a81d8",
+    "name": "Hara Bhara Bird\u2019s Nest Chaat",
+    "category": "chaats",
+    "filename": "hara-bhara-bird-s-nest-chaat.webp",
+    "local_path": "/images/menu/chaats/hara-bhara-bird-s-nest-chaat.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/chaats/hara-bhara-bird-s-nest-chaat.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Basket_Chaat_Bareilly.jpg/960px-Basket_Chaat_Bareilly.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "e28cccba-104b-428e-8cd9-d6b9b3eaeb6a",
+    "name": "Apple Crumble",
+    "category": "desserts",
+    "filename": "apple-crumble.webp",
+    "local_path": "/images/menu/desserts/apple-crumble.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/desserts/apple-crumble.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e3/Apple_Crisp.jpg/960px-Apple_Crisp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "ae39cc7d-7d96-4a35-a67f-75fedb9e68b7",
+    "name": "Lasagne Verdi",
+    "category": "baked-dishes",
+    "filename": "lasagne-verdi.webp",
+    "local_path": "/images/menu/baked-dishes/lasagne-verdi.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/baked-dishes/lasagne-verdi.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Flickr_-_cyclonebill_-_Salat_og_lasagne_med_laks%2C_spinat_og_kydderurtepastaplader.jpg/960px-Flickr_-_cyclonebill_-_Salat_og_lasagne_med_laks%2C_spinat_og_kydderurtepastaplader.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "c3b3a98c-d706-4cce-b3ee-d03996ffaab9",
+    "name": "Hara Bhara Paneer Roll",
+    "category": "starters",
+    "filename": "hara-bhara-paneer-roll.webp",
+    "local_path": "/images/menu/starters/hara-bhara-paneer-roll.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/hara-bhara-paneer-roll.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/A_practical_treatise_on_mine_engineering_%28IA_apracticaltreati00greeuoft%29.pdf/page1-960px-A_practical_treatise_on_mine_engineering_%28IA_apracticaltreati00greeuoft%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "d8c631bc-cb11-49c1-a2eb-88072bc7c498",
+    "name": "Pav Bhaji",
+    "category": "mains",
+    "filename": "pav-bhaji.webp",
+    "local_path": "/images/menu/mains/pav-bhaji.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/pav-bhaji.webp",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/9/93/Butter_Pav_Bhaji.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "9f4c861b-5c16-4fc6-a3d1-9866bbcb85c2",
+    "name": "Mexican Khakhra Chaat",
+    "category": "chaats",
+    "filename": "mexican-khakhra-chaat.webp",
+    "local_path": "/images/menu/chaats/mexican-khakhra-chaat.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/chaats/mexican-khakhra-chaat.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/Fried_Masala_Papad.jpg/960px-Fried_Masala_Papad.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "3341a169-2d2d-4d3a-b5dd-d3417a3230b0",
+    "name": "Chocolate fondue",
+    "category": "desserts",
+    "filename": "chocolate-fondue.webp",
+    "local_path": "/images/menu/desserts/chocolate-fondue.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/desserts/chocolate-fondue.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/20160121_Sri_Lanka_3576%2B64-8_Colombo_sRGB_%2825744912436%29.jpg/960px-20160121_Sri_Lanka_3576%2B64-8_Colombo_sRGB_%2825744912436%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "dc7d5916-51b7-4889-a82f-bc66fb52689f",
+    "name": "Baked Spanish Rice with Tomato Sauce",
+    "category": "baked-dishes",
+    "filename": "baked-spanish-rice-with-tomato-sauce.webp",
+    "local_path": "/images/menu/baked-dishes/baked-spanish-rice-with-tomato-sauce.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/baked-dishes/baked-spanish-rice-with-tomato-sauce.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/California_Mexican-Spanish_cook_book%3B_selected_Mexican_and_Spanish_recipes_%28IA_californiamexica00ging%29.pdf/page1-500px-California_Mexican-Spanish_cook_book%3B_selected_Mexican_and_Spanish_recipes_%28IA_californiamexica00ging%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "aa9fbe49-b8cc-4a89-8add-d17d682dd07b",
+    "name": "Paneer Fried Noodles",
+    "category": "mains",
+    "filename": "paneer-fried-noodles.webp",
+    "local_path": "/images/menu/mains/paneer-fried-noodles.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/paneer-fried-noodles.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9f/Chicken_yakisoba_Merelymel13.jpg/960px-Chicken_yakisoba_Merelymel13.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "4240d7cf-5f98-41c7-b41b-1dcc46b1ad65",
+    "name": "Tart with Corn Filling",
+    "category": "starters",
+    "filename": "tart-with-corn-filling.webp",
+    "local_path": "/images/menu/starters/tart-with-corn-filling.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/tart-with-corn-filling.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/366_menus_%2C_each_consisting_of_a_soup%2C_a_savoury_course%2C_a_sweet_course%2C_a_cheese_course%2C_and_a_beverage%2C_with_all_their_suitable_accompaniments%2C_for_every_day_in_the_year_%28IA_b28132270%29.pdf/page1-500px-thumbnail.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "dfe13d1d-5431-41a6-a62e-93313018308f",
+    "name": "Tamatar Chaat",
+    "category": "chaats",
+    "filename": "tamatar-chaat.webp",
+    "local_path": "/images/menu/chaats/tamatar-chaat.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/chaats/tamatar-chaat.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/A_vendor_selling_a_local_spicy_snack_%2844223142652%29.jpg/960px-A_vendor_selling_a_local_spicy_snack_%2844223142652%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "fafb894a-69ce-493f-9b19-536602e00af8",
+    "name": "Tart with Corn Filling & Cheese Sauce",
+    "category": "baked-dishes",
+    "filename": "tart-with-corn-filling-cheese-sauce.webp",
+    "local_path": "/images/menu/baked-dishes/tart-with-corn-filling-cheese-sauce.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/baked-dishes/tart-with-corn-filling-cheese-sauce.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/Modern_practical_baking_%28IA_modernpracticalb00brooiala%29.pdf/page1-960px-Modern_practical_baking_%28IA_modernpracticalb00brooiala%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "aa281767-61f3-411f-b731-84740f2c9cb7",
+    "name": "Bruschetta",
+    "category": "starters",
+    "filename": "bruschetta.webp",
+    "local_path": "/images/menu/starters/bruschetta.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/bruschetta.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/2014_Bruschetta_The_Larder_Chiang_Mai.jpg/960px-2014_Bruschetta_The_Larder_Chiang_Mai.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "02df9ae4-990c-4aa8-8ec8-468c4714390b",
+    "name": "Chili Garlic Paneer Burger",
+    "category": "mains",
+    "filename": "chili-garlic-paneer-burger.webp",
+    "local_path": "/images/menu/mains/chili-garlic-paneer-burger.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/chili-garlic-paneer-burger.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/Hand_book_of_the_first_Pan-American_Medical_Congress_-_Washington%2C_D.C.%2C_U.S.A.%2C_September_5%2C_6%2C_7%2C_and_8%2C_A.D._1893_%28IA_24730530R.nlm.nih.gov%29.pdf/page1-500px-Hand_book_of_the_first_Pan-American_Medical_Congress_-_Washington%2C_D.C.%2C_U.S.A.%2C_September_5%2C_6%2C_7%2C_and_8%2C_A.D._1893_%28IA_24730530R.nlm.nih.gov%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "0cb8c9c0-a9e7-4fa0-a71d-31a7ed0cab1b",
+    "name": "Chinese Bhel",
+    "category": "chaats",
+    "filename": "chinese-bhel.webp",
+    "local_path": "/images/menu/chaats/chinese-bhel.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/chaats/chinese-bhel.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Manchurian.jpg/960px-Manchurian.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "9f242af4-5b55-4860-bb26-04d24358c4b3",
+    "name": "Nachos with Salsa & Cheese Dip",
+    "category": "starters",
+    "filename": "nachos-with-salsa-cheese-dip.webp",
+    "local_path": "/images/menu/starters/nachos-with-salsa-cheese-dip.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/nachos-with-salsa-cheese-dip.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Mexican_food_cheese_enchiladas_with_salsa_verde_20261007_155352_%2829%29.jpg/960px-Mexican_food_cheese_enchiladas_with_salsa_verde_20261007_155352_%2829%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "9ff2bb24-cb02-406d-87f6-a423490d0a01",
+    "name": "Chola kulcha platter",
+    "category": "mains",
+    "filename": "chola-kulcha-platter.webp",
+    "local_path": "/images/menu/mains/chola-kulcha-platter.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/chola-kulcha-platter.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Chole_Kulche_%28Indian_Food%29.jpg/960px-Chole_Kulche_%28Indian_Food%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "dfb28298-bd89-46d4-9690-52e0b7a7092f",
+    "name": "Batata Chaat",
+    "category": "chaats",
+    "filename": "batata-chaat.webp",
+    "local_path": "/images/menu/chaats/batata-chaat.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/chaats/batata-chaat.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3c/Aloo_Dahi_Chaat.JPG/960px-Aloo_Dahi_Chaat.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "5ce5aeeb-50f9-451e-863c-bb155632f3fb",
+    "name": "Moussaka",
+    "category": "baked-dishes",
+    "filename": "moussaka.webp",
+    "local_path": "/images/menu/baked-dishes/moussaka.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/baked-dishes/moussaka.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Eggplant_Potato_Moussaka_%2841367622210%29.jpg/960px-Eggplant_Potato_Moussaka_%2841367622210%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "354f52c7-b1c2-47ae-867f-2896302e746e",
+    "name": "Dabeli",
+    "category": "starters",
+    "filename": "dabeli.webp",
+    "local_path": "/images/menu/starters/dabeli.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/dabeli.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/Kachchi_Dabeli.jpg/960px-Kachchi_Dabeli.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "367482b0-8f7e-4065-8a4a-729bec9c5e46",
+    "name": "Matar Chaat",
+    "category": "chaats",
+    "filename": "matar-chaat.webp",
+    "local_path": "/images/menu/chaats/matar-chaat.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/chaats/matar-chaat.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Aaloo_ki_tikki_or_Aaloo_Pattice.jpg/960px-Aaloo_ki_tikki_or_Aaloo_Pattice.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "07091a63-ad56-4b47-a512-5613f7bb47a2",
+    "name": "Pan fried noodles",
+    "category": "mains",
+    "filename": "pan-fried-noodles.webp",
+    "local_path": "/images/menu/mains/pan-fried-noodles.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/pan-fried-noodles.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/Indian_Spring_Rolls_with_spicy_red_chilli_%28Dalle_Khursani%29_chutney_DSC_0726.jpg/960px-Indian_Spring_Rolls_with_spicy_red_chilli_%28Dalle_Khursani%29_chutney_DSC_0726.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "1bac95be-b527-45f6-89bf-87b13b7b4511",
+    "name": "Vada pav",
+    "category": "starters",
+    "filename": "vada-pav.webp",
+    "local_path": "/images/menu/starters/vada-pav.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/vada-pav.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Puneri_Vada_Pav.jpg/960px-Puneri_Vada_Pav.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "24b26ed9-b13f-42b9-a463-781b13904c5a",
+    "name": "French Casserole",
+    "category": "mains",
+    "filename": "french-casserole.webp",
+    "local_path": "/images/menu/mains/french-casserole.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/french-casserole.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/Canadian_vegetables_for_every_day_%28IA_canadivegevday%29.pdf/page1-500px-Canadian_vegetables_for_every_day_%28IA_canadivegevday%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "8acfac17-7597-4f57-8ec2-cad010bc91ec",
+    "name": "Stacked Enchiladas",
+    "category": "mains",
+    "filename": "stacked-enchiladas.webp",
+    "local_path": "/images/menu/mains/stacked-enchiladas.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/stacked-enchiladas.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/Food_sources_of_energy_%28energy-rich_foods%29.pdf/page1-960px-Food_sources_of_energy_%28energy-rich_foods%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "68bb7a46-cf4f-4638-ab64-98f84f14b5a5",
+    "name": "Dabeli bruschetta",
+    "category": "starters",
+    "filename": "dabeli-bruschetta.webp",
+    "local_path": "/images/menu/starters/dabeli-bruschetta.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/dabeli-bruschetta.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/Breakfast_special.jpg/960px-Breakfast_special.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "3226b94e-c2e5-4548-b717-ce6edfd40f16",
+    "name": "American Chop Suey",
+    "category": "mains",
+    "filename": "american-chop-suey.webp",
+    "local_path": "/images/menu/mains/american-chop-suey.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/american-chop-suey.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/1958_Census_of_Manufactures._Numerical_List_of_manufactured_Products_%28IA_1958censusofman1958unse%29.pdf/page1-960px-1958_Census_of_Manufactures._Numerical_List_of_manufactured_Products_%28IA_1958censusofman1958unse%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "a3957883-52e5-4d4a-9c1d-49812c50aa2b",
+    "name": "Pav bhaji fondue",
+    "category": "starters",
+    "filename": "pav-bhaji-fondue.webp",
+    "local_path": "/images/menu/starters/pav-bhaji-fondue.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/pav-bhaji-fondue.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/A_Pav_Bhaji_stand_in_Kolkata.jpg/960px-A_Pav_Bhaji_stand_in_Kolkata.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "68ac2a64-c8ae-4dda-b6d4-681ec574ca12",
+    "name": "Chinese Rice with Fried Noodles",
+    "category": "mains",
+    "filename": "chinese-rice-with-fried-noodles.webp",
+    "local_path": "/images/menu/mains/chinese-rice-with-fried-noodles.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/chinese-rice-with-fried-noodles.webp",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Crispy_Chicken_Rice_-_YourThai_%28444240080%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "d9c2a5f1-b8bb-4551-bf32-519a2f9337a0",
+    "name": "Thecha masala pav",
+    "category": "starters",
+    "filename": "thecha-masala-pav.webp",
+    "local_path": "/images/menu/starters/thecha-masala-pav.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/thecha-masala-pav.webp",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Bambayya_Pav_bhaji.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "e3e773a6-a0e8-428c-a92d-196add8a6eb4",
+    "name": "Mexican Chilli Burger",
+    "category": "starters",
+    "filename": "mexican-chilli-burger.webp",
+    "local_path": "/images/menu/starters/mexican-chilli-burger.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/mexican-chilli-burger.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Chicken_cheese_burger_and_Mexican_vegetarian_burger_-_Grubbs.jpg/960px-Chicken_cheese_burger_and_Mexican_vegetarian_burger_-_Grubbs.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "2841e214-a7d2-46f5-bfd7-3ebe0ff7fed8",
+    "name": "Muglai paratha with Lehsun chutney",
+    "category": "mains",
+    "filename": "muglai-paratha-with-lehsun-chutney.webp",
+    "local_path": "/images/menu/mains/muglai-paratha-with-lehsun-chutney.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/mains/muglai-paratha-with-lehsun-chutney.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Moglai_Porota.jpg/960px-Moglai_Porota.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "f4e7574d-db8b-44e5-a459-d0e2f15a12b6",
+    "name": "Paneer chilli burger",
+    "category": "starters",
+    "filename": "paneer-chilli-burger.webp",
+    "local_path": "/images/menu/starters/paneer-chilli-burger.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/paneer-chilli-burger.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Burger_King_double_cheeseburger.jpg/960px-Burger_King_double_cheeseburger.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "5f3fa40f-9388-4bc9-aa76-c6f591e1183a",
+    "name": "Dahi ke kabab",
+    "category": "starters",
+    "filename": "dahi-ke-kabab.webp",
+    "local_path": "/images/menu/starters/dahi-ke-kabab.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/dahi-ke-kabab.webp",
+    "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/Aksam_1936_temmuz_1.pdf/page1-960px-Aksam_1936_temmuz_1.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "status": "SUCCESS"
+  },
+  {
+    "id": "4c108c71-e519-49af-98ec-f6c2b19f45ae",
+    "name": "Thatte idli",
+    "category": "starters",
+    "filename": "thatte-idli.webp",
+    "local_path": "/images/menu/starters/thatte-idli.webp",
+    "public_url": "https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/product-images/menu/starters/thatte-idli.webp",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Tatte-idli.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "status": "SUCCESS"
+  }
+]

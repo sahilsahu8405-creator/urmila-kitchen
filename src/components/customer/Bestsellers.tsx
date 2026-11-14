@@ -85,12 +85,13 @@ export const Bestsellers: React.FC<BestsellersProps> = ({ onSelectDish }) => {
                 </div>
 
                 {/* Dish Info */}
-                <h3 className="font-serif text-lg font-bold text-forest leading-snug group-hover:text-forest-light transition-colors">
+                <h3 className="font-serif text-lg font-bold text-forest leading-snug group-hover:text-forest-light transition-colors line-clamp-1">
                   {dish.name}
                 </h3>
-                <p className="text-xs text-charcoal/70 line-clamp-2 mt-1 min-h-8">
-                  {dish.description || 'Artisanal vegetarian delicacy prepared fresh with authentic spices.'}
-                </p>
+                <div className="flex items-center gap-1.5 mt-1 text-[11px] font-semibold text-emerald-700">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 inline-block shrink-0" />
+                  <span>Pure Vegetarian</span>
+                </div>
               </div>
 
               {/* Price & Action Button */}

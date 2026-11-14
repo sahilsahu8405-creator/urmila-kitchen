@@ -270,7 +270,7 @@ export const CalendarTab: React.FC = () => {
                   required
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  placeholder="e.g. Diwali Holiday, Deep Cleaning, Special Festive Opening..."
+                  placeholder="Reason (Festival Holiday, Maintenance, Special Opening...)"
                   className="w-full px-3 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal"
                 />
               </div>

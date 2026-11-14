@@ -113,7 +113,6 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({ is
                   required
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  placeholder="e.g. Ananya Roy"
                   className="w-full px-4 py-2.5 rounded-xl bg-cream-light border border-borderLight text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-forest/30 focus:border-forest"
                 />
               </div>
@@ -159,7 +158,6 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({ is
                     type="text"
                     value={dishHighlight}
                     onChange={(e) => setDishHighlight(e.target.value)}
-                    placeholder="e.g. Cheese Corn Balls"
                     className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-charcoal text-xs focus:outline-none focus:ring-2 focus:ring-forest/30 focus:border-forest"
                   />
                 </div>
@@ -172,7 +170,6 @@ export const ReviewSubmissionModal: React.FC<ReviewSubmissionModalProps> = ({ is
                     type="text"
                     value={eventType}
                     onChange={(e) => setEventType(e.target.value)}
-                    placeholder="e.g. Family Dinner / Birthday"
                     className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-charcoal text-xs focus:outline-none focus:ring-2 focus:ring-forest/30 focus:border-forest"
                   />
                 </div>

@@ -49,7 +49,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         </button>
 
         {/* Dish Photograph */}
-        <div className="relative aspect-16/9 bg-cream-dark/30 shrink-0">
+        <div className="relative aspect-16/10 max-h-[360px] w-full bg-cream-dark/30 shrink-0 mx-auto overflow-hidden">
           <DishImage
             src={item.image_url}
             alt={item.name}
@@ -75,9 +75,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         <div className="p-6 overflow-y-auto space-y-5 flex-1">
           <div>
             <h2 className="font-serif text-2xl font-bold text-forest">{item.name}</h2>
-            <p className="text-sm text-charcoal/75 mt-1.5 leading-relaxed">
-              {item.description || 'Authentic dish handcrafted fresh in our kitchen with pure desi ingredients and aromatic spices.'}
-            </p>
+            <div className="flex items-center gap-1.5 mt-1.5 text-xs font-semibold text-emerald-700">
+              <span className="w-2 h-2 rounded-full bg-emerald-600 inline-block" />
+              <span>100% Pure Vegetarian</span>
+            </div>
           </div>
 
           {/* Pricing Box */}
@@ -115,8 +116,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 type="text"
                 value={instructions}
                 onChange={(e) => setInstructions(e.target.value)}
-                placeholder="e.g. Less spicy, please / No onions / Extra crispy"
-                className="w-full px-4 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal placeholder-charcoal/40 focus:outline-none focus:ring-2 focus:ring-forest/30"
+                className="w-full px-4 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
               />
             </div>
           )}

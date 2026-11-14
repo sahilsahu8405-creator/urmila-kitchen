@@ -1,0 +1,1226 @@
+[
+  {
+    "id": "d32f8518-402e-4f78-9d40-0aaa6b43d5b8",
+    "category_id": "c1000000-0000-0000-0000-000000000007",
+    "name": "Pav bhaji fondue (Platter)",
+    "description": null,
+    "price": 200,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 1,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T16:42:29.133468+00:00"
+  },
+  {
+    "id": "256c91a0-4268-47f1-9dff-873d62afb21e",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "Spanish Rice with Tandoori Sauce",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 1,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "2487db18-da74-4866-bbd0-b95e949f3db5",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Corn Bunch",
+    "description": null,
+    "price": 180,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 1,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T16:42:24.724908+00:00"
+  },
+  {
+    "id": "6ccd6939-1890-4a9b-a681-4db01f5591b1",
+    "category_id": "c1000000-0000-0000-0000-000000000009",
+    "name": "Butterscotch Spanish Crème",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 1,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "79024234-1356-483f-9c6d-cfcc517c0154",
+    "category_id": "c1000000-0000-0000-0000-000000000008",
+    "name": "Frappe",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 1,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "d3e97e55-1e3b-4be9-aaa5-50a3bf637f42",
+    "category_id": "c1000000-0000-0000-0000-000000000006",
+    "name": "Russian Sandwich",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 1,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "bcf07f42-cdc8-4494-8598-0c06b837e7f2",
+    "category_id": "c1000000-0000-0000-0000-000000000005",
+    "name": "Baked Begum Bahar",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 1,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "aa76004e-41ca-454b-87ee-1c2d970f24b3",
+    "category_id": "c1000000-0000-0000-0000-000000000004",
+    "name": "Mexican Rice",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 1,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "1d456077-fe64-42f9-98dc-566de25562d1",
+    "category_id": "c1000000-0000-0000-0000-000000000002",
+    "name": "Gold Coin Chaat",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 1,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "e34d6645-606b-47f8-98e4-4e3d42b7f48e",
+    "category_id": "c1000000-0000-0000-0000-000000000006",
+    "name": "Corn Toast",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 2,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "a39432cd-4c7c-4625-83c8-fd0e329c1863",
+    "category_id": "c1000000-0000-0000-0000-000000000002",
+    "name": "Pineapple Bhel",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 2,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "6007bd72-3a5b-496a-8163-013cabf77e8c",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "Paneer Begum Bahar",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 2,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "3e8c6cd7-f5a8-454c-bb45-6bcc77750352",
+    "category_id": "c1000000-0000-0000-0000-000000000004",
+    "name": "Quesadillas",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 2,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "a12e04c3-502f-4ff1-8e60-cd470eb7fd48",
+    "category_id": "c1000000-0000-0000-0000-000000000005",
+    "name": "Vegetable Gratin",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 2,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "c1832417-b44a-4b9d-a813-c246b003b0b8",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Cheese Corn Balls",
+    "description": null,
+    "price": 220,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 2,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T16:42:25.221067+00:00"
+  },
+  {
+    "id": "7e3a991f-647c-4505-ad09-31f5d24af13c",
+    "category_id": "c1000000-0000-0000-0000-000000000007",
+    "name": "Mexican fondue",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 2,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "048c0126-fef7-4af2-9701-a29bde3d7dbc",
+    "category_id": "c1000000-0000-0000-0000-000000000008",
+    "name": "Iced Mojito",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 2,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "725f56d1-68e0-4631-bb32-f844b6a320ac",
+    "category_id": "c1000000-0000-0000-0000-000000000009",
+    "name": "Chocolate Spanish Crème",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 2,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "f5b4c8e9-2ab2-42c6-a52d-29d8750b5781",
+    "category_id": "c1000000-0000-0000-0000-000000000004",
+    "name": "Pocket Pizza",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 3,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "e5cfde29-0999-4a5c-a62e-aa21a45342b4",
+    "category_id": "c1000000-0000-0000-0000-000000000009",
+    "name": "Mango Spanish Crème",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 3,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "0e45e968-9141-42b8-baaf-0f245907b5b8",
+    "category_id": "c1000000-0000-0000-0000-000000000002",
+    "name": "Tiranga Bhel",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 3,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "034a70ac-c5d9-47f0-aae6-1a0180765437",
+    "category_id": "c1000000-0000-0000-0000-000000000008",
+    "name": "Tulsi Mojito",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 3,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "0daf1ce3-e1f6-4eb9-b32f-9b551de1e5d0",
+    "category_id": "c1000000-0000-0000-0000-000000000007",
+    "name": "Cheese fondue",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 3,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "3d50ca23-30b5-4b7a-99bc-47be72ee8e34",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "Paneer Tikka Roll",
+    "description": null,
+    "price": 180,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 3,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T16:42:30.085589+00:00"
+  },
+  {
+    "id": "8d3f9e77-0c8e-4236-938d-4bf4e6c4ad6f",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Garlic Bread",
+    "description": null,
+    "price": 160,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 3,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T16:42:25.72188+00:00"
+  },
+  {
+    "id": "a1d760ee-7529-4387-b6bc-f5f5e32489dd",
+    "category_id": "c1000000-0000-0000-0000-000000000006",
+    "name": "Pinwheel Sandwich",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 3,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "2795df24-8d94-4ab8-9183-f1318e233711",
+    "category_id": "c1000000-0000-0000-0000-000000000005",
+    "name": "Tri-Colour Baking Delight",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 3,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "164af026-96ce-4ecf-8549-3383a1abd9f7",
+    "category_id": "c1000000-0000-0000-0000-000000000009",
+    "name": "Chocolate Monte Carlo",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 4,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "78f956a9-5d58-4981-9a16-8aa79ad31f8f",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "Veg Frankie",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 4,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "6468b10d-3135-4812-b498-f3b8e0ee2b28",
+    "category_id": "c1000000-0000-0000-0000-000000000004",
+    "name": "Nachos with Salsa & Cheese Dip (Mexican)",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 4,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "5e57c9f4-b296-4469-a714-64f94d8bc4c3",
+    "category_id": "c1000000-0000-0000-0000-000000000005",
+    "name": "Baked Florentine",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 4,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "de0e3ca7-72a0-4996-9d6c-85ea54764a05",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Hara Bhara Kebab",
+    "description": null,
+    "price": 190,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 4,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T16:42:26.217366+00:00"
+  },
+  {
+    "id": "4a6936d8-b3f9-442c-81d6-35b9718ac530",
+    "category_id": "c1000000-0000-0000-0000-000000000006",
+    "name": "Creamy Spanish Sandwich",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 4,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "15f65ff6-2ab7-4d91-9e39-089dd45a81d8",
+    "category_id": "c1000000-0000-0000-0000-000000000002",
+    "name": "Hara Bhara Bird’s Nest Chaat",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 4,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "e28cccba-104b-428e-8cd9-d6b9b3eaeb6a",
+    "category_id": "c1000000-0000-0000-0000-000000000009",
+    "name": "Apple Crumble",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 5,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "ae39cc7d-7d96-4a35-a67f-75fedb9e68b7",
+    "category_id": "c1000000-0000-0000-0000-000000000005",
+    "name": "Lasagne Verdi",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 5,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "c3b3a98c-d706-4cce-b3ee-d03996ffaab9",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Hara Bhara Paneer Roll",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 5,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "d8c631bc-cb11-49c1-a2eb-88072bc7c498",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "Pav Bhaji",
+    "description": null,
+    "price": 160,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 5,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T16:42:29.628779+00:00"
+  },
+  {
+    "id": "9f4c861b-5c16-4fc6-a3d1-9866bbcb85c2",
+    "category_id": "c1000000-0000-0000-0000-000000000002",
+    "name": "Mexican Khakhra Chaat",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 5,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "3341a169-2d2d-4d3a-b5dd-d3417a3230b0",
+    "category_id": "c1000000-0000-0000-0000-000000000009",
+    "name": "Chocolate fondue",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 6,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "dc7d5916-51b7-4889-a82f-bc66fb52689f",
+    "category_id": "c1000000-0000-0000-0000-000000000005",
+    "name": "Baked Spanish Rice with Tomato Sauce",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 6,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "aa9fbe49-b8cc-4a89-8add-d17d682dd07b",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "Paneer Fried Noodles",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 6,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "4240d7cf-5f98-41c7-b41b-1dcc46b1ad65",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Tart with Corn Filling",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 6,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "dfe13d1d-5431-41a6-a62e-93313018308f",
+    "category_id": "c1000000-0000-0000-0000-000000000002",
+    "name": "Tamatar Chaat",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 6,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "fafb894a-69ce-493f-9b19-536602e00af8",
+    "category_id": "c1000000-0000-0000-0000-000000000005",
+    "name": "Tart with Corn Filling & Cheese Sauce",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 7,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "aa281767-61f3-411f-b731-84740f2c9cb7",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Bruschetta",
+    "description": null,
+    "price": 190,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 7,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T16:42:26.684115+00:00"
+  },
+  {
+    "id": "02df9ae4-990c-4aa8-8ec8-468c4714390b",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "Chili Garlic Paneer Burger",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 7,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "0cb8c9c0-a9e7-4fa0-a71d-31a7ed0cab1b",
+    "category_id": "c1000000-0000-0000-0000-000000000002",
+    "name": "Chinese Bhel",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 7,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "9f242af4-5b55-4860-bb26-04d24358c4b3",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Nachos with Salsa & Cheese Dip",
+    "description": null,
+    "price": 210,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 8,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T16:42:27.165811+00:00"
+  },
+  {
+    "id": "9ff2bb24-cb02-406d-87f6-a423490d0a01",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "Chola kulcha platter",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 8,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "dfb28298-bd89-46d4-9690-52e0b7a7092f",
+    "category_id": "c1000000-0000-0000-0000-000000000002",
+    "name": "Batata Chaat",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 8,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "5ce5aeeb-50f9-451e-863c-bb155632f3fb",
+    "category_id": "c1000000-0000-0000-0000-000000000005",
+    "name": "Moussaka",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 8,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "354f52c7-b1c2-47ae-867f-2896302e746e",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Dabeli",
+    "description": null,
+    "price": 90,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 9,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T16:42:27.66136+00:00"
+  },
+  {
+    "id": "367482b0-8f7e-4065-8a4a-729bec9c5e46",
+    "category_id": "c1000000-0000-0000-0000-000000000002",
+    "name": "Matar Chaat",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 9,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "07091a63-ad56-4b47-a512-5613f7bb47a2",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "Pan fried noodles",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 9,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "1bac95be-b527-45f6-89bf-87b13b7b4511",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Vada pav",
+    "description": null,
+    "price": 70,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 10,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T16:42:28.157116+00:00"
+  },
+  {
+    "id": "24b26ed9-b13f-42b9-a463-781b13904c5a",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "French Casserole",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 10,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "8acfac17-7597-4f57-8ec2-cad010bc91ec",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "Stacked Enchiladas",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 11,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "68bb7a46-cf4f-4638-ab64-98f84f14b5a5",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Dabeli bruschetta",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 11,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "3226b94e-c2e5-4548-b717-ce6edfd40f16",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "American Chop Suey",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 12,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "a3957883-52e5-4d4a-9c1d-49812c50aa2b",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Pav bhaji fondue",
+    "description": null,
+    "price": 250,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 12,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T16:42:28.605671+00:00"
+  },
+  {
+    "id": "68ac2a64-c8ae-4dda-b6d4-681ec574ca12",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "Chinese Rice with Fried Noodles",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 13,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "d9c2a5f1-b8bb-4551-bf32-519a2f9337a0",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Thecha masala pav",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 13,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "e3e773a6-a0e8-428c-a92d-196add8a6eb4",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Mexican Chilli Burger",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 14,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "2841e214-a7d2-46f5-bfd7-3ebe0ff7fed8",
+    "category_id": "c1000000-0000-0000-0000-000000000003",
+    "name": "Muglai paratha with Lehsun chutney",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 14,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "f4e7574d-db8b-44e5-a459-d0e2f15a12b6",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Paneer chilli burger",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 15,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "5f3fa40f-9388-4bc9-aa76-c6f591e1183a",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Dahi ke kabab",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 16,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  },
+  {
+    "id": "4c108c71-e519-49af-98ec-f6c2b19f45ae",
+    "category_id": "c1000000-0000-0000-0000-000000000001",
+    "name": "Thatte idli",
+    "description": null,
+    "price": null,
+    "image_url": null,
+    "is_available": true,
+    "is_bestseller": false,
+    "is_party_special": false,
+    "dietary_flags": {
+      "is_veg": true
+    },
+    "min_party_qty": "For 10+ guests",
+    "display_order": 17,
+    "created_at": "2026-11-12T14:43:33.116434+00:00",
+    "updated_at": "2026-11-12T14:43:33.116434+00:00"
+  }
+]

@@ -168,7 +168,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onProceedToCheckout }) =
                               type="text"
                               value={noteInput}
                               onChange={(e) => setNoteInput(e.target.value)}
-                              placeholder="e.g. Less spicy, please"
                               className="flex-1 px-2.5 py-1 text-xs rounded-lg bg-cream border border-borderLight text-charcoal focus:outline-none focus:ring-1 focus:ring-forest"
                             />
                             <button
@@ -217,8 +216,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onProceedToCheckout }) =
                     rows={2}
                     value={orderInstructions}
                     onChange={(e) => setOrderInstructions(e.target.value)}
-                    placeholder="e.g. Please call before delivery, leave with security..."
-                    className="w-full px-3 py-2 text-xs rounded-xl bg-cream border border-borderLight text-charcoal placeholder-charcoal/40 focus:outline-none focus:ring-1 focus:ring-forest resize-none"
+                    className="w-full px-3 py-2 text-xs rounded-xl bg-cream border border-borderLight text-charcoal focus:outline-none focus:ring-1 focus:ring-forest resize-none"
                   />
                 </div>
               </>
