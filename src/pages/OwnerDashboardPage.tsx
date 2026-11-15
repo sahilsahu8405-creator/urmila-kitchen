@@ -4,11 +4,13 @@ import { OverviewTab } from '../components/owner/OverviewTab';
 import { OrdersTab } from '../components/owner/OrdersTab';
 import { KitchenPrepTab } from '../components/owner/KitchenPrepTab';
 import { MenuTab } from '../components/owner/MenuTab';
+import { EarningsTab } from '../components/owner/EarningsTab';
 import { PartyEnquiriesTab } from '../components/owner/PartyEnquiriesTab';
 import { CalendarTab } from '../components/owner/CalendarTab';
 import { SettingsTab } from '../components/owner/SettingsTab';
 import { GalleryTab } from '../components/owner/GalleryTab';
 import { ReviewsTab } from '../components/owner/ReviewsTab';
+import { AddDishModal } from '../components/owner/AddDishModal';
 import { useOwnerAuth } from '../context/OwnerAuthContext';
 import { useSettings } from '../context/SettingsContext';
 import { Order, OrderStatus, PartyEnquiry, MenuItem } from '../types/database.types';
@@ -30,6 +32,7 @@ import {
   Image as ImageIcon,
   MessageSquare,
   Camera,
+  TrendingUp,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -43,16 +46,6 @@ export const OwnerDashboardPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [enquiries, setEnquiries] = useState<PartyEnquiry[]>([]);
   const [isAddDishOpen, setIsAddDishOpen] = useState(false);
-
-  // New Dish Form State
-  const [newDishName, setNewDishName] = useState('');
-  const [newDishCatId, setNewDishCatId] = useState('');
-  const [newDishPrice, setNewDishPrice] = useState('');
-  const [newDishDesc, setNewDishDesc] = useState('');
-  const [newDishImage, setNewDishImage] = useState('');
-  const [dishFile, setDishFile] = useState<File | null>(null);
-  const [dishImagePreview, setDishImagePreview] = useState<string | null>(null);
-  const [isUploadingDishImg, setIsUploadingDishImg] = useState(false);
 
   // Protect route
   useEffect(() => {
@@ -141,65 +134,11 @@ export const OwnerDashboardPage: React.FC = () => {
     }
   };
 
-  const handleCreateDish = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newDishName.trim()) return;
-
-    const catId = newDishCatId || categories[0]?.id;
-    const price = newDishPrice.trim() ? Number(newDishPrice) : null;
-
-    let finalImageUrl = newDishImage.trim() || null;
-    if (dishFile) {
-      setIsUploadingDishImg(true);
-      const uploadRes = await uploadImageFile(dishFile, 'product-images');
-      setIsUploadingDishImg(false);
-      if (uploadRes.success) {
-        finalImageUrl = uploadRes.url;
-      }
-    }
-
-    const newItem: Partial<MenuItem> = {
-      name: newDishName,
-      category_id: catId,
-      price,
-      description: newDishDesc || null,
-      image_url: finalImageUrl,
-      is_available: true,
-      is_bestseller: false,
-      is_party_special: false,
-      dietary_flags: { is_veg: true },
-      display_order: menuItems.length + 1,
-    };
-
-    if (!isUsingFallback) {
-      await supabase.from('menu_items').insert([newItem]);
-      await refreshData();
-    } else {
-      // Local fallback addition
-      const mockId = `item-${Date.now()}`;
-      const createdItem: MenuItem = { ...(newItem as MenuItem), id: mockId };
-      try {
-        const savedCustom = JSON.parse(localStorage.getItem('urmila_custom_prices') || '{}');
-        savedCustom[mockId] = price;
-        localStorage.setItem('urmila_custom_prices', JSON.stringify(savedCustom));
-      } catch (e) {}
-      await refreshData();
-    }
-
-    setIsAddDishOpen(false);
-    setNewDishName('');
-    setNewDishPrice('');
-    setNewDishDesc('');
-    setNewDishImage('');
-    setDishFile(null);
-    setDishImagePreview(null);
-    setActiveTab('menu');
-  };
-
   const navItems = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'orders', label: 'Orders', icon: ShoppingBag, badge: orders.filter(o => o.order_status === 'pending_whatsapp' || o.order_status === 'awaiting_confirmation').length },
     { id: 'prep', label: 'Kitchen Prep Sheet', icon: ChefHat },
+    { id: 'earnings', label: 'Daily Earnings', icon: TrendingUp },
     { id: 'menu', label: 'Menu & Prices', icon: UtensilsCrossed },
     { id: 'party', label: 'Party Enquiries', icon: Sparkles, badge: enquiries.filter(e => e.status === 'new_enquiry').length },
     { id: 'gallery', label: 'Kitchen Gallery', icon: ImageIcon },
@@ -330,6 +269,13 @@ export const OwnerDashboardPage: React.FC = () => {
           <KitchenPrepTab orders={orders} />
         )}
 
+        {activeTab === 'earnings' && (
+          <EarningsTab
+            orders={orders}
+            onNavigateTab={(tab) => setActiveTab(tab)}
+          />
+        )}
+
         {activeTab === 'menu' && (
           <MenuTab onOpenAddDishModal={() => setIsAddDishOpen(true)} />
         )}
@@ -351,128 +297,10 @@ export const OwnerDashboardPage: React.FC = () => {
       </main>
 
       {/* Add Dish Modal */}
-      {isAddDishOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal/60 backdrop-blur-sm">
-          <div className="bg-cream rounded-2xl border border-borderLight p-6 max-w-md w-full shadow-elevated space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="font-serif text-lg font-bold text-forest">Add Dish to Menu</h3>
-              <button
-                onClick={() => setIsAddDishOpen(false)}
-                className="p-1 rounded-lg text-charcoal/50 hover:text-charcoal"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleCreateDish} className="space-y-3 text-xs">
-              <div>
-                <label className="block font-bold text-charcoal/80 mb-1">Dish Name *</label>
-                <input
-                  type="text"
-                  required
-                  value={newDishName}
-                  onChange={(e) => setNewDishName(e.target.value)}
-                  placeholder="Dish name"
-                  className="w-full px-3 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold text-charcoal/80 mb-1">Category *</label>
-                <select
-                  value={newDishCatId}
-                  onChange={(e) => setNewDishCatId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal"
-                >
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block font-bold text-charcoal/80 mb-1">
-                  Price (₹) — Leave blank for Party/Bulk only
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  value={newDishPrice}
-                  onChange={(e) => setNewDishPrice(e.target.value)}
-                  placeholder="Price in ₹ (leave blank for party special)"
-                  className="w-full px-3 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold text-charcoal/80 mb-1">Short Description</label>
-                <textarea
-                  rows={2}
-                  value={newDishDesc}
-                  onChange={(e) => setNewDishDesc(e.target.value)}
-                  placeholder="Enter dish description..."
-                  className="w-full px-3 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal resize-none"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold text-charcoal/80 mb-1">
-                  Dish Photograph (Mobile Camera or Gallery)
-                </label>
-                <div className="flex items-center gap-3">
-                  <label className="cursor-pointer px-4 py-2 rounded-xl bg-forest/10 hover:bg-forest/20 text-forest font-bold text-xs flex items-center gap-1.5 transition-colors">
-                    <Camera className="w-4 h-4" />
-                    <span>Choose Photo / Take Picture</span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          setDishFile(file);
-                          setDishImagePreview(URL.createObjectURL(file));
-                        }
-                      }}
-                      className="hidden"
-                    />
-                  </label>
-                  {dishImagePreview && (
-                    <div className="w-10 h-10 rounded-lg overflow-hidden border border-borderLight shrink-0">
-                      <img src={dishImagePreview} alt="Preview" className="w-full h-full object-cover" />
-                    </div>
-                  )}
-                </div>
-                <p className="text-[10px] text-charcoal/50 mt-1">Or paste an existing photo URL below:</p>
-                <input
-                  type="url"
-                  value={newDishImage}
-                  onChange={(e) => setNewDishImage(e.target.value)}
-                  placeholder="https://..."
-                  className="w-full px-3 py-1.5 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal mt-1"
-                />
-              </div>
-
-              <div className="pt-2 flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsAddDishOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-cream-dark/40 font-semibold hover:bg-cream-dark"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl bg-forest text-cream font-bold hover:bg-forest-light"
-                >
-                  Save Dish
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <AddDishModal
+        isOpen={isAddDishOpen}
+        onClose={() => setIsAddDishOpen(false)}
+      />
     </div>
   );
 };

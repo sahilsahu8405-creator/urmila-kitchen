@@ -32,6 +32,10 @@ interface SettingsContextType {
   isLoading: boolean;
   isUsingFallback: boolean;
   refreshData: () => Promise<void>;
+  addMenuItem: (item: Omit<MenuItem, 'id' | 'created_at'>) => Promise<{ success: boolean; item?: MenuItem; error?: string }>;
+  deleteMenuItem: (itemId: string) => Promise<{ success: boolean; error?: string }>;
+  addCategory: (category: { name: string; description?: string | null }) => Promise<{ success: boolean; category?: Category; error?: string }>;
+  deleteCategory: (categoryId: string) => Promise<{ success: boolean; error?: string }>;
   updateMenuItemPrice: (itemId: string, newPrice: number | null) => Promise<{ success: boolean; error?: string }>;
   updateMenuItemImage: (itemId: string, imageUrl: string | null) => Promise<{ success: boolean; error?: string }>;
   toggleMenuItemAvailability: (itemId: string, isAvailable: boolean) => Promise<{ success: boolean; error?: string }>;
@@ -55,6 +59,15 @@ interface SettingsContextType {
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 const GALLERY_MANIFEST_URL = 'https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/gallery-images/meta/gallery_manifest.json';
+const CUSTOM_MENU_MANIFEST_URL = 'https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/gallery-images/meta/custom_menu_manifest.json';
+
+interface CustomMenuManifest {
+  customCategories: Category[];
+  customDishes: MenuItem[];
+  deletedItemIds: string[];
+  deletedCategoryIds: string[];
+  updatedAt: string;
+}
 
 const syncGalleryToCloud = async (images: GalleryImage[]) => {
   try {
@@ -69,6 +82,21 @@ const syncGalleryToCloud = async (images: GalleryImage[]) => {
   }
 };
 
+const syncMenuToCloud = async (manifest: CustomMenuManifest) => {
+  try {
+    const payload = JSON.stringify(manifest, null, 2);
+    const blob = new Blob([payload], { type: 'image/webp' });
+    try {
+      await supabase.storage.from('gallery-images').remove(['meta/custom_menu_manifest.json']);
+    } catch {}
+    await supabase.storage.from('gallery-images').upload('meta/custom_menu_manifest.json', blob, {
+      contentType: 'image/webp',
+    });
+  } catch (err) {
+    console.warn('Notice: Menu cloud manifest sync error:', err);
+  }
+};
+
 const broadcastGalleryChange = (images: GalleryImage[]) => {
   try {
     if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
@@ -79,9 +107,69 @@ const broadcastGalleryChange = (images: GalleryImage[]) => {
   } catch {}
 };
 
+const broadcastMenuChange = (payload: any) => {
+  try {
+    if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+      const channel = new BroadcastChannel('urmila_menu_channel');
+      channel.postMessage({ type: 'MENU_UPDATED', ...payload });
+      channel.close();
+    }
+  } catch {}
+};
+
 const getStoredDeletedGalleryIds = (): string[] => {
   try {
     const raw = localStorage.getItem('urmila_deleted_gallery_ids');
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return [];
+};
+
+const getStoredCustomCategories = (): Category[] => {
+  try {
+    const raw = localStorage.getItem('urmila_custom_categories_list');
+    if (raw) {
+      const parsed: Category[] = JSON.parse(raw);
+      const cleaned = parsed.filter(
+        (c) => c.id !== 'cat-test' && c.name?.toLowerCase() !== 'signature biryani'
+      );
+      if (cleaned.length !== parsed.length) {
+        localStorage.setItem('urmila_custom_categories_list', JSON.stringify(cleaned));
+      }
+      return cleaned;
+    }
+  } catch {}
+  return [];
+};
+
+const getStoredCustomDishes = (): MenuItem[] => {
+  try {
+    const raw = localStorage.getItem('urmila_custom_dishes_list');
+    if (raw) {
+      const parsed: MenuItem[] = JSON.parse(raw);
+      const cleaned = parsed.filter(
+        (d) => d.id !== 'dish-test' && d.name?.toLowerCase() !== 'dum biryani'
+      );
+      if (cleaned.length !== parsed.length) {
+        localStorage.setItem('urmila_custom_dishes_list', JSON.stringify(cleaned));
+      }
+      return cleaned;
+    }
+  } catch {}
+  return [];
+};
+
+const getStoredDeletedItemIds = (): string[] => {
+  try {
+    const raw = localStorage.getItem('urmila_deleted_item_ids');
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return [];
+};
+
+const getStoredDeletedCategoryIds = (): string[] => {
+  try {
+    const raw = localStorage.getItem('urmila_deleted_category_ids');
     if (raw) return JSON.parse(raw);
   } catch {}
   return [];
@@ -124,90 +212,132 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     try {
-      // 1. Fetch categories
+      // 0. Fetch custom menu manifest from cloud storage
+      let cloudCustomCats: Category[] = [];
+      let cloudCustomDishes: MenuItem[] = [];
+      let cloudDeletedItemIds: string[] = [];
+      let cloudDeletedCategoryIds: string[] = [];
+
+      try {
+        const manifestRes = await fetch(CUSTOM_MENU_MANIFEST_URL + '?t=' + Date.now(), {
+          cache: 'no-store',
+        });
+        if (manifestRes.ok) {
+          const manifestJson = await manifestRes.json();
+          if (Array.isArray(manifestJson.customCategories)) {
+            cloudCustomCats = manifestJson.customCategories.filter(
+              (c: any) => c.id !== 'cat-test' && c.name?.toLowerCase() !== 'signature biryani'
+            );
+          }
+          if (Array.isArray(manifestJson.customDishes)) {
+            cloudCustomDishes = manifestJson.customDishes.filter(
+              (d: any) => d.id !== 'dish-test' && d.name?.toLowerCase() !== 'dum biryani'
+            );
+          }
+          if (Array.isArray(manifestJson.deletedItemIds)) cloudDeletedItemIds = manifestJson.deletedItemIds;
+          if (Array.isArray(manifestJson.deletedCategoryIds)) cloudDeletedCategoryIds = manifestJson.deletedCategoryIds;
+        }
+      } catch (err) {
+        // Fall back to local
+      }
+
+      // Merge local with cloud
+      const localCustomCats = getStoredCustomCategories();
+      const allCustomCatsMap = new Map<string, Category>();
+      [...cloudCustomCats, ...localCustomCats].forEach((c) => allCustomCatsMap.set(c.id, c));
+      const mergedCustomCats = Array.from(allCustomCatsMap.values());
+
+      const localDeletedCatIds = getStoredDeletedCategoryIds();
+      const allDeletedCatIds = Array.from(new Set([...cloudDeletedCategoryIds, ...localDeletedCatIds]));
+
+      const localCustomDishes = getStoredCustomDishes();
+      const allCustomDishesMap = new Map<string, MenuItem>();
+      [...cloudCustomDishes, ...localCustomDishes].forEach((d) => allCustomDishesMap.set(d.id, d));
+      const mergedCustomDishes = Array.from(allCustomDishesMap.values());
+
+      const localDeletedDishIds = getStoredDeletedItemIds();
+      const allDeletedDishIds = Array.from(new Set([...cloudDeletedItemIds, ...localDeletedDishIds]));
+
+      // 1. Fetch categories from Supabase (or fallback)
       const { data: catData, error: catError } = await supabase
         .from('categories')
         .select('*')
         .order('display_order', { ascending: true });
 
-      // If table doesn't exist yet, we fall back to initialData
+      const baseCategories = (!catError && catData && catData.length > 0) ? catData : INITIAL_CATEGORIES;
+      const combinedCatsMap = new Map<string, Category>();
+      baseCategories.forEach((c) => combinedCatsMap.set(c.id, c));
+      mergedCustomCats.forEach((c) => combinedCatsMap.set(c.id, c));
+
+      const finalCategories = Array.from(combinedCatsMap.values()).filter(
+        (c) => !allDeletedCatIds.includes(c.id)
+      );
+      setCategories(finalCategories);
+
       if (catError || !catData || catData.length === 0) {
         setIsUsingFallback(true);
-        // Load locally saved custom prices if any
-        const savedCustomPrices = localStorage.getItem('urmila_custom_prices');
-        const savedCustomImages = localStorage.getItem('urmila_custom_images');
-        let parsedPrices: Record<string, number | null> = {};
-        let parsedImages: Record<string, string | null> = {};
-        try {
-          if (savedCustomPrices) parsedPrices = JSON.parse(savedCustomPrices);
-          if (savedCustomImages) parsedImages = JSON.parse(savedCustomImages);
-        } catch {}
-
-        setMenuItems(prev =>
-          prev.map(it => {
-            let updated = { ...it };
-            if (parsedPrices[it.id] !== undefined) updated.price = parsedPrices[it.id];
-            if (parsedImages[it.id] !== undefined) updated.image_url = parsedImages[it.id];
-            return updated;
-          })
-        );
-        setIsLoading(false);
-        return;
+      } else {
+        setIsUsingFallback(false);
       }
-
-      setCategories(catData);
-      setIsUsingFallback(false);
 
       // 2. Fetch menu items
       const { data: itemData } = await supabase
         .from('menu_items')
         .select('*')
         .order('display_order', { ascending: true });
-      if (itemData && itemData.length > 0) {
-        // Overlay local custom prices and images so changes are immediately persistent across refreshes
-        let parsedPrices: Record<string, number | null> = {};
-        let parsedImages: Record<string, string | null> = {};
-        let parsedAvail: Record<string, boolean> = {};
-        let parsedBestseller: Record<string, boolean> = {};
-        try {
-          const sp = localStorage.getItem('urmila_custom_prices');
-          const si = localStorage.getItem('urmila_custom_images');
-          const sa = localStorage.getItem('urmila_custom_avail');
-          const sb = localStorage.getItem('urmila_custom_bestseller');
-          if (sp) parsedPrices = JSON.parse(sp);
-          if (si) parsedImages = JSON.parse(si);
-          if (sa) parsedAvail = JSON.parse(sa);
-          if (sb) parsedBestseller = JSON.parse(sb);
-        } catch {}
 
-        const initialMap = new Map(
-          INITIAL_MENU_ITEMS.map(m => [m.name.trim().toLowerCase(), m])
-        );
+      const baseItems = (itemData && itemData.length > 0) ? itemData : INITIAL_MENU_ITEMS;
+      const combinedItemsMap = new Map<string, MenuItem>();
+      baseItems.forEach((m) => combinedItemsMap.set(m.id, m));
+      mergedCustomDishes.forEach((m) => combinedItemsMap.set(m.id, m));
 
-        setMenuItems(
-          itemData.map(it => {
-            let updated = { ...it };
-            const cleanName = (it.name || '').trim().toLowerCase();
-            const matchedInit = initialMap.get(cleanName);
+      const finalItemsList = Array.from(combinedItemsMap.values()).filter(
+        (m) => !allDeletedDishIds.includes(m.id)
+      );
 
-            // Restore unique culinary description if database value is null/empty
-            if (!updated.description && matchedInit?.description) {
-              updated.description = matchedInit.description;
-            }
+      // Overlay local custom prices and images so changes are immediately persistent across refreshes
+      let parsedPrices: Record<string, number | null> = {};
+      let parsedImages: Record<string, string | null> = {};
+      let parsedAvail: Record<string, boolean> = {};
+      let parsedBestseller: Record<string, boolean> = {};
+      try {
+        const sp = localStorage.getItem('urmila_custom_prices');
+        const si = localStorage.getItem('urmila_custom_images');
+        const sa = localStorage.getItem('urmila_custom_avail');
+        const sb = localStorage.getItem('urmila_custom_bestseller');
+        if (sp) parsedPrices = JSON.parse(sp);
+        if (si) parsedImages = JSON.parse(si);
+        if (sa) parsedAvail = JSON.parse(sa);
+        if (sb) parsedBestseller = JSON.parse(sb);
+      } catch {}
 
-            // Restore curated image if database value is null
-            if (!updated.image_url && matchedInit?.image_url) {
-              updated.image_url = matchedInit.image_url;
-            }
+      const initialMap = new Map(
+        INITIAL_MENU_ITEMS.map((m) => [m.name.trim().toLowerCase(), m])
+      );
 
-            if (parsedPrices[it.id] !== undefined) updated.price = parsedPrices[it.id];
-            if (parsedImages[it.id] !== undefined) updated.image_url = parsedImages[it.id];
-            if (parsedAvail[it.id] !== undefined) updated.is_available = parsedAvail[it.id];
-            if (parsedBestseller[it.id] !== undefined) updated.is_bestseller = parsedBestseller[it.id];
-            return updated;
-          })
-        );
-      }
+      setMenuItems(
+        finalItemsList.map((it) => {
+          let updated = { ...it };
+          const cleanName = (it.name || '').trim().toLowerCase();
+          const matchedInit = initialMap.get(cleanName);
+
+          // Restore unique culinary description if database value is null/empty
+          if (!updated.description && matchedInit?.description) {
+            updated.description = matchedInit.description;
+          }
+
+          // Restore curated image if database value is null
+          if (!updated.image_url && matchedInit?.image_url) {
+            updated.image_url = matchedInit.image_url;
+          }
+
+          if (parsedPrices[it.id] !== undefined) updated.price = parsedPrices[it.id];
+          if (parsedImages[it.id] !== undefined) updated.image_url = parsedImages[it.id];
+          if (parsedAvail[it.id] !== undefined) updated.is_available = parsedAvail[it.id];
+          if (parsedBestseller[it.id] !== undefined) updated.is_bestseller = parsedBestseller[it.id];
+          return updated;
+        })
+      );
 
       // 3. Fetch delivery slots
       const { data: slotData } = await supabase
@@ -339,12 +469,20 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     // Cross-tab real-time sync via BroadcastChannel
     let channel: BroadcastChannel | null = null;
+    let menuChannel: BroadcastChannel | null = null;
     try {
       if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
         channel = new BroadcastChannel('urmila_gallery_channel');
         channel.onmessage = (event) => {
           if (event.data?.type === 'GALLERY_UPDATED' && Array.isArray(event.data.images)) {
             setGalleryImages(event.data.images);
+          }
+        };
+
+        menuChannel = new BroadcastChannel('urmila_menu_channel');
+        menuChannel.onmessage = (event) => {
+          if (event.data?.type === 'MENU_UPDATED') {
+            fetchData();
           }
         };
       }
@@ -358,6 +496,15 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             setGalleryImages(parsed);
           }
         } catch {}
+      }
+      if (
+        (e.key === 'urmila_custom_dishes_list' ||
+          e.key === 'urmila_custom_categories_list' ||
+          e.key === 'urmila_deleted_item_ids' ||
+          e.key === 'urmila_deleted_category_ids') &&
+        e.newValue
+      ) {
+        fetchData();
       }
     };
 
@@ -380,6 +527,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     return () => {
       channel?.close();
+      menuChannel?.close();
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('focus', handleFocus);
     };
@@ -511,6 +659,218 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         }
       }
     }
+    return { success: true };
+  };
+
+  // Add Menu Item
+  const addMenuItem = async (dish: Omit<MenuItem, 'id' | 'created_at'>) => {
+    const tempId = `dish-${Date.now()}`;
+    const newDish: MenuItem = {
+      ...dish,
+      id: tempId,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    // 1. Update State immediately
+    setMenuItems((prev) => [...prev, newDish]);
+
+    // 2. Persist to LocalStorage
+    const currentCustom = getStoredCustomDishes();
+    const updatedCustom = [...currentCustom, newDish];
+    try {
+      localStorage.setItem('urmila_custom_dishes_list', JSON.stringify(updatedCustom));
+      if (newDish.price !== null) {
+        const sp = JSON.parse(localStorage.getItem('urmila_custom_prices') || '{}');
+        sp[tempId] = newDish.price;
+        localStorage.setItem('urmila_custom_prices', JSON.stringify(sp));
+      }
+      if (newDish.image_url) {
+        const si = JSON.parse(localStorage.getItem('urmila_custom_images') || '{}');
+        si[tempId] = newDish.image_url;
+        localStorage.setItem('urmila_custom_images', JSON.stringify(si));
+      }
+    } catch {}
+
+    // 3. Sync to Cloud Storage Manifest
+    const manifest: CustomMenuManifest = {
+      customCategories: getStoredCustomCategories(),
+      customDishes: updatedCustom,
+      deletedItemIds: getStoredDeletedItemIds(),
+      deletedCategoryIds: getStoredDeletedCategoryIds(),
+      updatedAt: new Date().toISOString(),
+    };
+    await syncMenuToCloud(manifest);
+    broadcastMenuChange({ dish: newDish });
+
+    // 4. Attempt Supabase direct insert (if table policy permits)
+    try {
+      const { data: dbItem, error: dbErr } = await supabase
+        .from('menu_items')
+        .insert([dish])
+        .select()
+        .single();
+      if (!dbErr && dbItem) {
+        setMenuItems((prev) => prev.map((m) => (m.id === tempId ? dbItem : m)));
+        const syncedCustom = updatedCustom.map((m) => (m.id === tempId ? dbItem : m));
+        localStorage.setItem('urmila_custom_dishes_list', JSON.stringify(syncedCustom));
+        manifest.customDishes = syncedCustom;
+        await syncMenuToCloud(manifest);
+        return { success: true, item: dbItem };
+      }
+    } catch (err) {
+      console.warn('Notice: menu_items DB insert fallback to cloud storage:', err);
+    }
+
+    return { success: true, item: newDish };
+  };
+
+  // Delete Menu Item
+  const deleteMenuItem = async (itemId: string) => {
+    // 1. Update State immediately
+    setMenuItems((prev) => prev.filter((m) => m.id !== itemId));
+
+    // 2. Remove from custom dishes
+    const currentCustom = getStoredCustomDishes().filter((m) => m.id !== itemId);
+    localStorage.setItem('urmila_custom_dishes_list', JSON.stringify(currentCustom));
+
+    // 3. Record in deleted list so default or DB item stays deleted
+    const deleted = Array.from(new Set([...getStoredDeletedItemIds(), itemId]));
+    localStorage.setItem('urmila_deleted_item_ids', JSON.stringify(deleted));
+
+    // 4. Sync Cloud Manifest
+    const manifest: CustomMenuManifest = {
+      customCategories: getStoredCustomCategories(),
+      customDishes: currentCustom,
+      deletedItemIds: deleted,
+      deletedCategoryIds: getStoredDeletedCategoryIds(),
+      updatedAt: new Date().toISOString(),
+    };
+    await syncMenuToCloud(manifest);
+    broadcastMenuChange({ deletedItemId: itemId });
+
+    // 5. Attempt DB Delete
+    try {
+      await supabase.from('menu_items').delete().eq('id', itemId);
+    } catch {}
+
+    return { success: true };
+  };
+
+  // Add Category
+  const addCategory = async (category: { name: string; description?: string | null }) => {
+    const cleanName = category.name.trim();
+    if (!cleanName) {
+      return { success: false, error: 'Category name is required.' };
+    }
+
+    const slug =
+      cleanName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '') || `cat-${Date.now()}`;
+
+    const tempId = `cat-${Date.now()}`;
+    const newCategory: Category = {
+      id: tempId,
+      name: cleanName,
+      slug,
+      description: category.description || null,
+      display_order: categories.length + 1,
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    // 1. Update State immediately
+    setCategories((prev) => [...prev, newCategory]);
+
+    // 2. Persist to LocalStorage
+    const currentCustom = getStoredCustomCategories();
+    const updatedCustom = [...currentCustom, newCategory];
+    try {
+      localStorage.setItem('urmila_custom_categories_list', JSON.stringify(updatedCustom));
+    } catch {}
+
+    // 3. Sync to Cloud Storage Manifest
+    const manifest: CustomMenuManifest = {
+      customCategories: updatedCustom,
+      customDishes: getStoredCustomDishes(),
+      deletedItemIds: getStoredDeletedItemIds(),
+      deletedCategoryIds: getStoredDeletedCategoryIds(),
+      updatedAt: new Date().toISOString(),
+    };
+    await syncMenuToCloud(manifest);
+    broadcastMenuChange({ category: newCategory });
+
+    // 4. Attempt Supabase direct insert
+    try {
+      const { data: dbCat, error: dbErr } = await supabase
+        .from('categories')
+        .insert([
+          {
+            name: newCategory.name,
+            slug: newCategory.slug,
+            description: newCategory.description,
+            display_order: newCategory.display_order,
+            is_active: true,
+          },
+        ])
+        .select()
+        .single();
+      if (!dbErr && dbCat) {
+        setCategories((prev) => prev.map((c) => (c.id === tempId ? dbCat : c)));
+        const syncedCustom = updatedCustom.map((c) => (c.id === tempId ? dbCat : c));
+        localStorage.setItem('urmila_custom_categories_list', JSON.stringify(syncedCustom));
+        manifest.customCategories = syncedCustom;
+        await syncMenuToCloud(manifest);
+        return { success: true, category: dbCat };
+      }
+    } catch (err) {
+      console.warn('Notice: categories DB insert fallback to cloud storage:', err);
+    }
+
+    return { success: true, category: newCategory };
+  };
+
+  // Delete Category
+  const deleteCategory = async (categoryId: string) => {
+    // Check if category has dishes
+    const count = menuItems.filter((m) => m.category_id === categoryId).length;
+    if (count > 0) {
+      return {
+        success: false,
+        error: `Cannot delete category: it currently contains ${count} dish${count > 1 ? 'es' : ''}. Please move or delete the dishes first.`,
+      };
+    }
+
+    // 1. Update State immediately
+    setCategories((prev) => prev.filter((c) => c.id !== categoryId));
+
+    // 2. Remove from custom categories
+    const currentCustom = getStoredCustomCategories().filter((c) => c.id !== categoryId);
+    localStorage.setItem('urmila_custom_categories_list', JSON.stringify(currentCustom));
+
+    // 3. Add to deleted list
+    const deleted = Array.from(new Set([...getStoredDeletedCategoryIds(), categoryId]));
+    localStorage.setItem('urmila_deleted_category_ids', JSON.stringify(deleted));
+
+    // 4. Sync Cloud Manifest
+    const manifest: CustomMenuManifest = {
+      customCategories: currentCustom,
+      customDishes: getStoredCustomDishes(),
+      deletedItemIds: getStoredDeletedItemIds(),
+      deletedCategoryIds: deleted,
+      updatedAt: new Date().toISOString(),
+    };
+    await syncMenuToCloud(manifest);
+    broadcastMenuChange({ deletedCategoryId: categoryId });
+
+    // 5. Attempt DB Delete
+    try {
+      await supabase.from('categories').delete().eq('id', categoryId);
+    } catch {}
+
     return { success: true };
   };
 
@@ -868,6 +1228,10 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         isLoading,
         isUsingFallback,
         refreshData: fetchData,
+        addMenuItem,
+        deleteMenuItem,
+        addCategory,
+        deleteCategory,
         updateMenuItemPrice,
         updateMenuItemImage,
         toggleMenuItemAvailability,

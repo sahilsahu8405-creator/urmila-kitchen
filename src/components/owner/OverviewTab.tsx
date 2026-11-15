@@ -1,5 +1,6 @@
 import React from 'react';
 import { Order, PartyEnquiry } from '../../types/database.types';
+import { getNowInIST } from '../../lib/cutoff';
 import {
   ShoppingBag,
   CheckCircle,
@@ -12,6 +13,8 @@ import {
   TrendingUp,
   AlertCircle,
   Phone,
+  IndianRupee,
+  ArrowRight,
 } from 'lucide-react';
 
 interface OverviewTabProps {
@@ -27,6 +30,10 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
   onNavigateTab,
   onOpenAddDishModal,
 }) => {
+  const now = getNowInIST();
+  const todayStr = now.toISOString().slice(0, 10);
+  const tomorrowStr = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
   // Metric calculations
   const newOrders = orders.filter(
     (o) => o.order_status === 'pending_whatsapp' || o.order_status === 'awaiting_confirmation'
@@ -40,22 +47,44 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
     (e) => e.status === 'new_enquiry' || e.status === 'contacted'
   ).length;
 
-  const confirmedRevenue = orders
-    .filter((o) => o.order_status === 'confirmed' || o.order_status === 'delivered')
-    .reduce((sum, o) => sum + o.total_amount, 0);
+  // Revenue for today
+  const todayRevenue = orders
+    .filter((o) => {
+      const d = o.delivery_date ? o.delivery_date.slice(0, 10) : o.created_at.slice(0, 10);
+      return d === todayStr && o.order_status !== 'cancelled';
+    })
+    .reduce((sum, o) => sum + (o.total_amount || 0), 0);
+
+  // Tomorrow booked
+  const tomorrowOrders = orders.filter((o) => {
+    const d = o.delivery_date ? o.delivery_date.slice(0, 10) : '';
+    return d === tomorrowStr && o.order_status !== 'cancelled';
+  });
+  const tomorrowRevenue = tomorrowOrders.reduce((sum, o) => sum + (o.total_amount || 0), 0);
 
   return (
     <div className="space-y-8">
       {/* Top Banner: Today's Overview */}
-      <div>
-        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest">Today's Overview</h2>
-        <p className="text-sm text-charcoal/70 mt-1">
-          Simple real-time snapshot of your cloud kitchen pre-orders and party requests.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest">Today's Overview</h2>
+          <p className="text-sm text-charcoal/70 mt-1">
+            Real-time snapshot of cloud kitchen operations, pre-orders, and party requests.
+          </p>
+        </div>
+
+        <button
+          onClick={() => onNavigateTab('earnings')}
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-forest text-cream text-xs font-bold hover:bg-forest-light transition-all shadow-sm self-start sm:self-auto"
+        >
+          <TrendingUp className="w-3.5 h-3.5" />
+          <span>View Daily Earnings Tab</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </button>
       </div>
 
-      {/* 3 Prominent Stat Cards Matching Reference 1 */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      {/* 4 Clean Metric Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {/* Metric 1: New Orders */}
         <div
           onClick={() => onNavigateTab('orders')}
@@ -90,7 +119,28 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
           </div>
         </div>
 
-        {/* Metric 3: Party Enquiries */}
+        {/* Metric 3: Today's Revenue */}
+        <div
+          onClick={() => onNavigateTab('earnings')}
+          className="bg-cream-light p-6 rounded-2xl border-2 border-borderLight hover:border-forest/40 transition-all cursor-pointer shadow-subtle hover:shadow-card flex flex-col justify-between"
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-xs uppercase font-bold tracking-wider text-charcoal/70">Today's Earnings</span>
+            <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+              <IndianRupee className="w-5 h-5" />
+            </div>
+          </div>
+          <div className="mt-4">
+            <span className="font-serif text-3xl sm:text-4xl font-bold text-forest">
+              ₹{todayRevenue.toLocaleString('en-IN')}
+            </span>
+            <span className="text-xs text-charcoal/60 ml-2 font-medium">
+              {tomorrowRevenue > 0 ? `+ ₹${tomorrowRevenue} tmrw` : 'Live today'}
+            </span>
+          </div>
+        </div>
+
+        {/* Metric 4: Party Enquiries */}
         <div
           onClick={() => onNavigateTab('party')}
           className="bg-cream-light p-6 rounded-2xl border-2 border-borderLight hover:border-forest/40 transition-all cursor-pointer shadow-subtle hover:shadow-card flex flex-col justify-between"
@@ -108,9 +158,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
         </div>
       </div>
 
-      {/* Quick Action Cards Matching Reference 1 */}
+      {/* Quick Action Cards */}
       <div>
-        <h3 className="font-serif text-xl font-bold text-forest mb-4">Quick Actions</h3>
+        <h3 className="font-serif text-xl font-bold text-forest mb-4">Quick Kitchen Actions</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           <button
             onClick={onOpenAddDishModal}
@@ -143,6 +193,16 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
           </button>
 
           <button
+            onClick={() => onNavigateTab('earnings')}
+            className="p-4 rounded-2xl bg-cream-light border-2 border-borderLight hover:border-forest hover:bg-cream-dark/30 transition-all flex flex-col items-center justify-center gap-3 text-center group"
+          >
+            <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <TrendingUp className="w-6 h-6" />
+            </div>
+            <span className="text-xs font-bold text-forest">Daily Earnings</span>
+          </button>
+
+          <button
             onClick={() => onNavigateTab('prep')}
             className="p-4 rounded-2xl bg-cream-light border-2 border-borderLight hover:border-forest hover:bg-cream-dark/30 transition-all flex flex-col items-center justify-center gap-3 text-center group"
           >
@@ -150,16 +210,6 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
               <Printer className="w-6 h-6" />
             </div>
             <span className="text-xs font-bold text-forest">Kitchen Prep Sheet</span>
-          </button>
-
-          <button
-            onClick={() => onNavigateTab('calendar')}
-            className="p-4 rounded-2xl bg-cream-light border-2 border-borderLight hover:border-forest hover:bg-cream-dark/30 transition-all flex flex-col items-center justify-center gap-3 text-center group"
-          >
-            <div className="w-12 h-12 rounded-full bg-sage/20 text-forest flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Calendar className="w-6 h-6" />
-            </div>
-            <span className="text-xs font-bold text-forest">Business Calendar</span>
           </button>
 
           <button
@@ -198,12 +248,16 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                     <span className="text-xs font-semibold text-charcoal">{order.customer_name}</span>
                   </div>
                   <p className="text-[11px] text-charcoal/60 mt-0.5">
-                    For: <strong className="text-forest">{order.delivery_date}</strong> • {order.delivery_type === 'pickup' ? '🛍️ Kitchen Pickup' : '🚚 Delivery'} • {order.delivery_slot?.name || 'Selected Slot'}
+                    For: <strong className="text-forest">{order.delivery_date}</strong> •{' '}
+                    {order.delivery_type === 'pickup' ? '🛍️ Kitchen Pickup' : '🚚 Delivery'} •{' '}
+                    {order.delivery_slot?.name || 'Selected Slot'}
                   </p>
                 </div>
                 <div className="text-right">
                   <span className="font-serif font-bold text-sm text-forest">₹{order.total_amount}</span>
-                  <span className="block text-[10px] uppercase font-bold text-olive">{order.order_status.replace(/_/g, ' ')}</span>
+                  <span className="block text-[10px] uppercase font-bold text-olive">
+                    {order.order_status.replace(/_/g, ' ')}
+                  </span>
                 </div>
               </div>
             ))}
@@ -213,4 +267,3 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
     </div>
   );
 };
-

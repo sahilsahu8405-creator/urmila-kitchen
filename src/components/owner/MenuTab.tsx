@@ -3,7 +3,26 @@ import { useSettings } from '../../context/SettingsContext';
 import { MenuItem } from '../../types/database.types';
 import { DishImage } from '../common/DishImage';
 import { uploadImageFile } from '../../lib/storage';
-import { Search, Plus, Edit2, Check, X, Sparkles, AlertCircle, Eye, EyeOff, Camera, Upload, Trash2 } from 'lucide-react';
+import { AddCategoryModal } from './AddCategoryModal';
+import { AddDishModal } from './AddDishModal';
+import {
+  Search,
+  Plus,
+  Edit2,
+  Check,
+  X,
+  Sparkles,
+  AlertCircle,
+  Eye,
+  EyeOff,
+  Camera,
+  Upload,
+  Trash2,
+  Utensils,
+  CheckCircle2,
+  ShoppingBag,
+  FolderPlus,
+} from 'lucide-react';
 
 interface MenuTabProps {
   onOpenAddDishModal: () => void;
@@ -13,6 +32,7 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
   const {
     categories,
     menuItems,
+    deleteMenuItem,
     updateMenuItemPrice,
     updateMenuItemImage,
     toggleMenuItemAvailability,
@@ -24,6 +44,8 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
   const [editingPriceId, setEditingPriceId] = useState<string | null>(null);
   const [priceInput, setPriceInput] = useState('');
   const [uploadingItemId, setUploadingItemId] = useState<string | null>(null);
+  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
+  const [isAddDishModalOpen, setIsAddDishModalOpen] = useState(false);
   const [previewModal, setPreviewModal] = useState<{
     item: MenuItem;
     file: File;
@@ -31,6 +53,11 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
   } | null>(null);
   const [isSavingImage, setIsSavingImage] = useState(false);
   const fileInputMap = useRef<{ [key: string]: HTMLInputElement | null }>({});
+
+  const totalDishes = menuItems.length;
+  const orderableCount = menuItems.filter(m => m.is_available && m.price !== null && m.price > 0).length;
+  const bestsellersCount = menuItems.filter(m => m.is_bestseller).length;
+  const unpricedCount = menuItems.filter(m => m.price === null || m.price <= 0).length;
 
   const filteredItems = menuItems.filter((item) => {
     const matchesCat = selectedCatId === 'all' ? true : item.category_id === selectedCatId;
@@ -94,21 +121,76 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
           </p>
         </div>
 
-        <button
-          onClick={onOpenAddDishModal}
-          className="px-5 py-3 rounded-full bg-forest text-cream font-bold text-xs hover:bg-forest-light transition-all flex items-center gap-2 self-start sm:self-auto shadow-sm"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add New Dish</span>
-        </button>
+        <div className="flex items-center gap-2.5 self-start sm:self-auto">
+          <button
+            type="button"
+            onClick={() => setIsAddCategoryOpen(true)}
+            className="px-4 py-2.5 rounded-full bg-cream-light border border-borderLight text-forest font-bold text-xs hover:bg-cream-dark transition-all flex items-center gap-2 shadow-2xs"
+            title="Create or manage menu categories"
+          >
+            <FolderPlus className="w-4 h-4 text-forest" />
+            <span>+ Add Category</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsAddDishModalOpen(true)}
+            className="px-5 py-2.5 rounded-full bg-forest text-cream font-bold text-xs hover:bg-forest-light transition-all flex items-center gap-2 shadow-sm"
+            title="Add a new dish to the menu"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add New Dish</span>
+          </button>
+        </div>
       </div>
 
-      {/* Info notice about Unpriced Dishes */}
-      <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200/80 flex items-start gap-3 text-xs text-amber-900">
-        <AlertCircle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
-        <p>
-          <strong>Owner Rule:</strong> Dishes imported from the menu PDF start without prices and are not orderable online until you set a price. Click <strong>"Set Price"</strong> on any dish below to enter its price and activate customer pre-ordering.
-        </p>
+      {/* Live Menu Status & Catalog Health Ribbon */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="p-4 rounded-2xl bg-cream-light border border-borderLight shadow-2xs flex items-center justify-between">
+          <div>
+            <p className="text-[11px] font-bold text-charcoal/60 uppercase tracking-wider">Total Catalog</p>
+            <h4 className="font-serif text-2xl font-bold text-forest mt-0.5">{totalDishes} Dishes</h4>
+            <p className="text-[10px] text-olive font-semibold mt-0.5">Across {categories.length} categories</p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-forest/10 flex items-center justify-center text-forest shrink-0">
+            <Utensils className="w-5 h-5" />
+          </div>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-cream-light border border-borderLight shadow-2xs flex items-center justify-between">
+          <div>
+            <p className="text-[11px] font-bold text-charcoal/60 uppercase tracking-wider">Live & Orderable</p>
+            <h4 className="font-serif text-2xl font-bold text-emerald-800 mt-0.5">{orderableCount} Active</h4>
+            <p className="text-[10px] text-emerald-700 font-semibold mt-0.5">Ready for online pre-orders</p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-800 shrink-0">
+            <CheckCircle2 className="w-5 h-5" />
+          </div>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-cream-light border border-borderLight shadow-2xs flex items-center justify-between">
+          <div>
+            <p className="text-[11px] font-bold text-charcoal/60 uppercase tracking-wider">Bestsellers</p>
+            <h4 className="font-serif text-2xl font-bold text-amber-900 mt-0.5">{bestsellersCount} Featured</h4>
+            <p className="text-[10px] text-amber-700 font-semibold mt-0.5">Starred on customer site</p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-800 shrink-0">
+            <Sparkles className="w-5 h-5" />
+          </div>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-cream-light border border-borderLight shadow-2xs flex items-center justify-between">
+          <div>
+            <p className="text-[11px] font-bold text-charcoal/60 uppercase tracking-wider">Priced Items</p>
+            <h4 className="font-serif text-2xl font-bold text-forest mt-0.5">{totalDishes - unpricedCount} / {totalDishes}</h4>
+            <p className="text-[10px] text-charcoal/60 font-semibold mt-0.5">
+              {unpricedCount > 0 ? `${unpricedCount} price pending` : 'All prices set'}
+            </p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-cream-dark/50 flex items-center justify-center text-forest shrink-0">
+            <ShoppingBag className="w-5 h-5" />
+          </div>
+        </div>
       </div>
 
       {/* Search and Category Filter */}
@@ -129,25 +211,46 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
             onClick={() => setSelectedCatId('all')}
             className={`px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
               selectedCatId === 'all'
-                ? 'bg-forest text-cream'
-                : 'bg-cream-light text-charcoal border border-borderLight'
+                ? 'bg-forest text-cream shadow-2xs'
+                : 'bg-cream-light text-charcoal border border-borderLight hover:bg-cream'
             }`}
           >
             All Categories ({menuItems.length})
           </button>
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCatId(cat.id)}
-              className={`px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
-                selectedCatId === cat.id
-                  ? 'bg-forest text-cream'
-                  : 'bg-cream-light text-charcoal border border-borderLight'
-              }`}
-            >
-              {cat.name}
-            </button>
-          ))}
+          {categories.map((cat) => {
+            const count = menuItems.filter((m) => m.category_id === cat.id).length;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCatId(cat.id)}
+                className={`px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 ${
+                  selectedCatId === cat.id
+                    ? 'bg-forest text-cream shadow-2xs'
+                    : 'bg-cream-light text-charcoal border border-borderLight hover:bg-cream'
+                }`}
+              >
+                <span>{cat.name}</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                    selectedCatId === cat.id
+                      ? 'bg-cream/20 text-cream'
+                      : 'bg-forest/10 text-forest'
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+          <button
+            type="button"
+            onClick={() => setIsAddCategoryOpen(true)}
+            className="px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border border-dashed border-forest/40 text-forest bg-forest/5 hover:bg-forest/10 flex items-center gap-1"
+            title="Create a new category"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>New Category</span>
+          </button>
         </div>
       </div>
 
@@ -334,11 +437,64 @@ export const MenuTab: React.FC<MenuTabProps> = ({ onOpenAddDishModal }) => {
                     </>
                   )}
                 </button>
+
+                {/* Delete Dish Button */}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (confirm(`Are you sure you want to delete "${item.name}" from the menu?`)) {
+                      await deleteMenuItem(item.id);
+                    }
+                  }}
+                  className="p-2 rounded-xl text-charcoal/40 hover:text-terracotta hover:bg-terracotta/10 transition-colors"
+                  title={`Delete "${item.name}" from menu`}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
               </div>
             </div>
           );
         })}
+
+        {/* Empty State when no dishes match */}
+        {filteredItems.length === 0 && (
+          <div className="p-10 sm:p-14 text-center space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-forest/10 text-forest mx-auto flex items-center justify-center">
+              <Utensils className="w-6 h-6" />
+            </div>
+            <h4 className="font-serif font-bold text-forest text-base sm:text-lg">
+              No dishes found in this category
+            </h4>
+            <p className="text-xs text-charcoal/60 max-w-sm mx-auto">
+              {searchQuery
+                ? `No dishes matching "${searchQuery}". Try a different keyword.`
+                : 'This category is currently empty. Click below to add your first dish here!'}
+            </p>
+            <button
+              type="button"
+              onClick={() => setIsAddDishModalOpen(true)}
+              className="px-5 py-2.5 rounded-full bg-forest text-cream font-bold text-xs hover:bg-forest-light transition-all inline-flex items-center gap-1.5 shadow-sm"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Dish to This Category</span>
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Add Category Modal */}
+      <AddCategoryModal
+        isOpen={isAddCategoryOpen}
+        onClose={() => setIsAddCategoryOpen(false)}
+        onCategoryCreated={(newId) => setSelectedCatId(newId)}
+      />
+
+      {/* Add Dish Modal */}
+      <AddDishModal
+        isOpen={isAddDishModalOpen}
+        onClose={() => setIsAddDishModalOpen(false)}
+        initialCategoryId={selectedCatId !== 'all' ? selectedCatId : null}
+      />
 
       {/* Image Preview & Confirmation Modal before saving */}
       {previewModal && (

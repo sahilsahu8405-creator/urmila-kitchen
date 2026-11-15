@@ -13,12 +13,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   item,
   onClose,
 }) => {
-  if (!item) return null;
-
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [instructions, setInstructions] = useState('');
   const [isAdded, setIsAdded] = useState(false);
+
+  if (!item) return null;
 
   const isPriced = item.price !== null && item.price > 0;
 
