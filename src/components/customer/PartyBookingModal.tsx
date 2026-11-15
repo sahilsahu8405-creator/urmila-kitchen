@@ -391,7 +391,7 @@ export const PartyBookingModal: React.FC<PartyBookingModalProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-charcoal/80 mb-1">
-                  Delivery Location / Event Venue Address <span className="text-terracotta">*</span>
+                  Event Venue Address or Kitchen Self-Pickup <span className="text-terracotta">*</span>
                 </label>
                 <input
                   type="text"

@@ -86,7 +86,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
           </div>
           <div className="mt-4">
             <span className="font-serif text-4xl sm:text-5xl font-bold text-forest">{confirmedOrders}</span>
-            <span className="text-xs text-charcoal/60 ml-2 font-medium">To prepare / deliver</span>
+            <span className="text-xs text-charcoal/60 ml-2 font-medium">To prepare / fulfill</span>
           </div>
         </div>
 
@@ -198,7 +198,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
                     <span className="text-xs font-semibold text-charcoal">{order.customer_name}</span>
                   </div>
                   <p className="text-[11px] text-charcoal/60 mt-0.5">
-                    For: <strong className="text-forest">{order.delivery_date}</strong> • Slot: {order.delivery_slot?.name || 'Selected'}
+                    For: <strong className="text-forest">{order.delivery_date}</strong> • {order.delivery_type === 'pickup' ? '🛍️ Kitchen Pickup' : '🚚 Delivery'} • {order.delivery_slot?.name || 'Selected Slot'}
                   </p>
                 </div>
                 <div className="text-right">

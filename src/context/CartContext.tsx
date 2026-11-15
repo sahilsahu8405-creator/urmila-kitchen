@@ -145,7 +145,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const subtotal = items.reduce((sum, ci) => sum + (ci.item.price || 0) * ci.quantity, 0);
   // Dynamically uses settings.delivery_charge from database/owner settings
-  const configuredDeliveryCharge = typeof settings.delivery_charge === 'number' ? settings.delivery_charge : 50;
+  // If fulfillment is pickup_only or delivery is disabled, delivery fee is 0
+  const isDeliveryActive = settings.fulfillment_mode !== 'pickup_only' && settings.is_delivery_enabled !== false;
+  const configuredDeliveryCharge = isDeliveryActive
+    ? (typeof settings.delivery_charge === 'number' ? settings.delivery_charge : 50)
+    : 0;
   const deliveryFee = items.length > 0 ? configuredDeliveryCharge : 0;
   const total = subtotal + deliveryFee;
   const itemCount = items.reduce((sum, ci) => sum + ci.quantity, 0);

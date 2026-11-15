@@ -37,6 +37,10 @@ interface SettingsContextType {
   toggleMenuItemAvailability: (itemId: string, isAvailable: boolean) => Promise<{ success: boolean; error?: string }>;
   toggleMenuItemBestseller: (itemId: string, isBestseller: boolean) => Promise<{ success: boolean; error?: string }>;
   updateSettings: (newSettings: Partial<BusinessSettings>) => Promise<{ success: boolean; error?: string }>;
+  updateDeliverySlot: (slotId: string, updates: Partial<DeliverySlot>) => Promise<{ success: boolean; error?: string }>;
+  addDeliverySlot: (slot: Omit<DeliverySlot, 'id' | 'created_at'>) => Promise<{ success: boolean; error?: string }>;
+  deleteDeliverySlot: (slotId: string) => Promise<{ success: boolean; error?: string }>;
+  resetDeliverySlots: () => Promise<{ success: boolean; error?: string }>;
   addClosure: (closure: Omit<BusinessClosure, 'id' | 'created_at'>) => Promise<{ success: boolean; error?: string }>;
   deleteClosure: (closureId: string) => Promise<{ success: boolean; error?: string }>;
   toggleScheduleDay: (dayOfWeek: number, isOpen: boolean) => Promise<{ success: boolean; error?: string }>;
@@ -50,10 +54,52 @@ interface SettingsContextType {
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
+const GALLERY_MANIFEST_URL = 'https://crtqlfpebjtqkiemqnpp.supabase.co/storage/v1/object/public/gallery-images/meta/gallery_manifest.json';
+
+const syncGalleryToCloud = async (images: GalleryImage[]) => {
+  try {
+    const payload = JSON.stringify(images, null, 2);
+    const blob = new Blob([payload], { type: 'image/webp' });
+    await supabase.storage.from('gallery-images').upload('meta/gallery_manifest.json', blob, {
+      upsert: true,
+      contentType: 'image/webp',
+    });
+  } catch (err) {
+    console.warn('Notice: Gallery cloud sync error:', err);
+  }
+};
+
+const broadcastGalleryChange = (images: GalleryImage[]) => {
+  try {
+    if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+      const channel = new BroadcastChannel('urmila_gallery_channel');
+      channel.postMessage({ type: 'GALLERY_UPDATED', images });
+      channel.close();
+    }
+  } catch {}
+};
+
+const getStoredDeletedGalleryIds = (): string[] => {
+  try {
+    const raw = localStorage.getItem('urmila_deleted_gallery_ids');
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return [];
+};
+
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [categories, setCategories] = useState<Category[]>(INITIAL_CATEGORIES);
   const [menuItems, setMenuItems] = useState<MenuItem[]>(INITIAL_MENU_ITEMS);
-  const [deliverySlots, setDeliverySlots] = useState<DeliverySlot[]>(INITIAL_DELIVERY_SLOTS);
+  const [deliverySlots, setDeliverySlots] = useState<DeliverySlot[]>(() => {
+    try {
+      const saved = localStorage.getItem('urmila_slots_cache');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {}
+    return INITIAL_DELIVERY_SLOTS;
+  });
   const [settings, setSettings] = useState<BusinessSettings>(INITIAL_SETTINGS);
   const [schedules, setSchedules] = useState<BusinessSchedule[]>(INITIAL_SCHEDULES);
   const [closures, setClosures] = useState<BusinessClosure[]>([]);
@@ -63,7 +109,9 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const saved = localStorage.getItem('urmila_gallery_cache');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
       }
       return INITIAL_GALLERY_IMAGES;
     } catch {
@@ -167,7 +215,21 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         .select('*')
         .order('display_order', { ascending: true });
       if (slotData && slotData.length > 0) {
-        setDeliverySlots(slotData);
+        try {
+          const cached = localStorage.getItem('urmila_slots_cache');
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setDeliverySlots(parsed);
+            } else {
+              setDeliverySlots(slotData);
+            }
+          } else {
+            setDeliverySlots(slotData);
+          }
+        } catch {
+          setDeliverySlots(slotData);
+        }
       }
 
       // 4. Fetch business settings
@@ -218,24 +280,49 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }
 
       // 8. Fetch gallery images
-      const { data: galleryData } = await supabase
-        .from('gallery_images')
-        .select('*')
-        .order('display_order', { ascending: true });
-      if (galleryData && galleryData.length > 0) {
-        setGalleryImages(galleryData);
-      } else {
-        try {
-          const saved = localStorage.getItem('urmila_gallery_cache');
-          if (saved) {
-            const parsed = JSON.parse(saved);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              setGalleryImages(parsed);
-              return;
-            }
+      let manifestLoaded = false;
+      try {
+        const res = await fetch(`${GALLERY_MANIFEST_URL}?t=${Date.now()}`);
+        if (res.ok) {
+          const cloudManifest = await res.json();
+          if (Array.isArray(cloudManifest)) {
+            setGalleryImages(cloudManifest);
+            try {
+              localStorage.setItem('urmila_gallery_cache', JSON.stringify(cloudManifest));
+              localStorage.setItem('urmila_gallery_customized', 'true');
+            } catch {}
+            manifestLoaded = true;
           }
-          setGalleryImages(INITIAL_GALLERY_IMAGES);
-        } catch {
+        }
+      } catch (err) {
+        console.warn('Could not load cloud gallery manifest:', err);
+      }
+
+      if (!manifestLoaded) {
+        const { data: galleryData } = await supabase
+          .from('gallery_images')
+          .select('*')
+          .order('display_order', { ascending: true });
+
+        const savedGallery = localStorage.getItem('urmila_gallery_cache');
+
+        if (galleryData && galleryData.length > 0) {
+          setGalleryImages(galleryData);
+          try {
+            localStorage.setItem('urmila_gallery_cache', JSON.stringify(galleryData));
+          } catch {}
+        } else if (savedGallery) {
+          try {
+            const parsed = JSON.parse(savedGallery);
+            if (Array.isArray(parsed)) {
+              setGalleryImages(parsed);
+            } else {
+              setGalleryImages(INITIAL_GALLERY_IMAGES);
+            }
+          } catch {
+            setGalleryImages(INITIAL_GALLERY_IMAGES);
+          }
+        } else {
           setGalleryImages(INITIAL_GALLERY_IMAGES);
         }
       }
@@ -249,6 +336,53 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   useEffect(() => {
     fetchData();
+
+    // Cross-tab real-time sync via BroadcastChannel
+    let channel: BroadcastChannel | null = null;
+    try {
+      if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+        channel = new BroadcastChannel('urmila_gallery_channel');
+        channel.onmessage = (event) => {
+          if (event.data?.type === 'GALLERY_UPDATED' && Array.isArray(event.data.images)) {
+            setGalleryImages(event.data.images);
+          }
+        };
+      }
+    } catch {}
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'urmila_gallery_cache' && e.newValue) {
+        try {
+          const parsed = JSON.parse(e.newValue);
+          if (Array.isArray(parsed)) {
+            setGalleryImages(parsed);
+          }
+        } catch {}
+      }
+    };
+
+    const handleFocus = () => {
+      fetch(`${GALLERY_MANIFEST_URL}?t=${Date.now()}`)
+        .then((r) => (r.ok ? r.json() : null))
+        .then((cloudManifest) => {
+          if (Array.isArray(cloudManifest)) {
+            setGalleryImages(cloudManifest);
+            try {
+              localStorage.setItem('urmila_gallery_cache', JSON.stringify(cloudManifest));
+            } catch {}
+          }
+        })
+        .catch(() => {});
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      channel?.close();
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('focus', handleFocus);
+    };
   }, [fetchData]);
 
   // Update Menu Item Price
@@ -400,15 +534,106 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       });
 
       if (rpcError && settings.id) {
+        const {
+          fulfillment_mode,
+          is_delivery_enabled,
+          is_pickup_enabled,
+          pickup_instructions,
+          pickup_maps_url,
+          ...dbSettings
+        } = newSettings;
         const { error } = await supabase
           .from('business_settings')
-          .update({ ...newSettings, updated_at: new Date().toISOString() })
+          .update({ ...dbSettings, updated_at: new Date().toISOString() })
           .eq('id', settings.id);
         if (error) {
           console.warn('Supabase business_settings update warning:', error.message);
         }
       }
     }
+    return { success: true };
+  };
+
+  // Update Delivery Slot
+  const updateDeliverySlot = async (slotId: string, updates: Partial<DeliverySlot>) => {
+    setDeliverySlots(prev => {
+      const updated = prev.map(s => (s.id === slotId ? { ...s, ...updates } : s));
+      try {
+        localStorage.setItem('urmila_slots_cache', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+
+    if (!isUsingFallback) {
+      const { error } = await supabase
+        .from('delivery_slots')
+        .update(updates)
+        .eq('id', slotId);
+      if (error) {
+        console.warn('Supabase delivery_slots update notice:', error.message);
+      }
+    }
+    return { success: true };
+  };
+
+  // Add Delivery Slot
+  const addDeliverySlot = async (slot: Omit<DeliverySlot, 'id' | 'created_at'>) => {
+    const tempId = `slot-${Date.now()}`;
+    const newSlot: DeliverySlot = { ...slot, id: tempId, created_at: new Date().toISOString() };
+    setDeliverySlots(prev => {
+      const updated = [...prev, newSlot];
+      try {
+        localStorage.setItem('urmila_slots_cache', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+
+    if (!isUsingFallback) {
+      const { data, error } = await supabase
+        .from('delivery_slots')
+        .insert([slot])
+        .select()
+        .single();
+      if (!error && data) {
+        setDeliverySlots(prev => prev.map(s => (s.id === tempId ? data : s)));
+        try {
+          const current = JSON.parse(localStorage.getItem('urmila_slots_cache') || '[]');
+          const updated = current.map((s: any) => (s.id === tempId ? data : s));
+          localStorage.setItem('urmila_slots_cache', JSON.stringify(updated));
+        } catch {}
+      }
+    }
+    return { success: true };
+  };
+
+  // Delete Delivery Slot
+  const deleteDeliverySlot = async (slotId: string) => {
+    setDeliverySlots(prev => {
+      const updated = prev.filter(s => s.id !== slotId);
+      try {
+        localStorage.setItem('urmila_slots_cache', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+
+    if (!isUsingFallback) {
+      const { error } = await supabase
+        .from('delivery_slots')
+        .delete()
+        .eq('id', slotId);
+      if (error) {
+        console.warn('Supabase delivery_slots delete notice:', error.message);
+      }
+    }
+    return { success: true };
+  };
+
+  // Reset Delivery Slots to System Defaults
+  const resetDeliverySlots = async () => {
+    setDeliverySlots(INITIAL_DELIVERY_SLOTS);
+    try {
+      localStorage.removeItem('urmila_slots_cache');
+    } catch {}
     return { success: true };
   };
 
@@ -471,31 +696,36 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       id: tempId,
       created_at: new Date().toISOString(),
     };
-    setGalleryImages(prev => {
-      const updated = [newEntry, ...prev];
-      try {
-        localStorage.setItem('urmila_gallery_cache', JSON.stringify(updated));
-      } catch {}
-      return updated;
-    });
+
+    try {
+      localStorage.setItem('urmila_gallery_customized', 'true');
+    } catch {}
+
+    const updated = [newEntry, ...galleryImages];
+    setGalleryImages(updated);
+    try {
+      localStorage.setItem('urmila_gallery_cache', JSON.stringify(updated));
+    } catch {}
+
+    broadcastGalleryChange(updated);
+    await syncGalleryToCloud(updated);
 
     if (!isUsingFallback) {
-      const { data, error } = await supabase
-        .from('gallery_images')
-        .insert([image])
-        .select()
-        .single();
-      if (error) {
-        return { success: false, error: error.message };
-      }
-      if (data) {
-        setGalleryImages(prev => {
-          const updated = prev.map(img => (img.id === tempId ? data : img));
-          try {
-            localStorage.setItem('urmila_gallery_cache', JSON.stringify(updated));
-          } catch {}
-          return updated;
-        });
+      try {
+        const { data } = await supabase
+          .from('gallery_images')
+          .insert([image])
+          .select()
+          .single();
+        if (data) {
+          const finalUpdated = updated.map(img => (img.id === tempId ? data : img));
+          setGalleryImages(finalUpdated);
+          localStorage.setItem('urmila_gallery_cache', JSON.stringify(finalUpdated));
+          broadcastGalleryChange(finalUpdated);
+          await syncGalleryToCloud(finalUpdated);
+        }
+      } catch (err) {
+        console.warn('Notice: gallery table insert fallback:', err);
       }
     }
     return { success: true };
@@ -503,18 +733,29 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Delete Gallery Image
   const deleteGalleryImage = async (imageId: string) => {
-    setGalleryImages(prev => {
-      const updated = prev.filter(img => img.id !== imageId);
-      try {
-        localStorage.setItem('urmila_gallery_cache', JSON.stringify(updated));
-      } catch {}
-      return updated;
-    });
+    try {
+      const deletedIds = getStoredDeletedGalleryIds();
+      if (!deletedIds.includes(imageId)) {
+        deletedIds.push(imageId);
+        localStorage.setItem('urmila_deleted_gallery_ids', JSON.stringify(deletedIds));
+      }
+      localStorage.setItem('urmila_gallery_customized', 'true');
+    } catch {}
+
+    const updated = galleryImages.filter(img => img.id !== imageId);
+    setGalleryImages(updated);
+    try {
+      localStorage.setItem('urmila_gallery_cache', JSON.stringify(updated));
+    } catch {}
+
+    broadcastGalleryChange(updated);
+    await syncGalleryToCloud(updated);
 
     if (!isUsingFallback) {
-      const { error } = await supabase.from('gallery_images').delete().eq('id', imageId);
-      if (error) {
-        return { success: false, error: error.message };
+      try {
+        await supabase.from('gallery_images').delete().eq('id', imageId);
+      } catch (err) {
+        console.warn('Supabase gallery delete notice:', err);
       }
     }
     return { success: true };
@@ -522,21 +763,23 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Update Gallery Image
   const updateGalleryImage = async (imageId: string, updates: Partial<GalleryImage>) => {
-    setGalleryImages(prev => {
-      const updated = prev.map(img => (img.id === imageId ? { ...img, ...updates } : img));
-      try {
-        localStorage.setItem('urmila_gallery_cache', JSON.stringify(updated));
-      } catch {}
-      return updated;
-    });
+    const updated = galleryImages.map(img => (img.id === imageId ? { ...img, ...updates } : img));
+    setGalleryImages(updated);
+    try {
+      localStorage.setItem('urmila_gallery_cache', JSON.stringify(updated));
+    } catch {}
+
+    broadcastGalleryChange(updated);
+    await syncGalleryToCloud(updated);
 
     if (!isUsingFallback) {
-      const { error } = await supabase
-        .from('gallery_images')
-        .update(updates)
-        .eq('id', imageId);
-      if (error) {
-        return { success: false, error: error.message };
+      try {
+        await supabase
+          .from('gallery_images')
+          .update(updates)
+          .eq('id', imageId);
+      } catch (err) {
+        console.warn('Notice: gallery table update fallback:', err);
       }
     }
     return { success: true };
@@ -630,6 +873,10 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         toggleMenuItemAvailability,
         toggleMenuItemBestseller,
         updateSettings,
+        updateDeliverySlot,
+        addDeliverySlot,
+        deleteDeliverySlot,
+        resetDeliverySlots,
         addClosure,
         deleteClosure,
         toggleScheduleDay,

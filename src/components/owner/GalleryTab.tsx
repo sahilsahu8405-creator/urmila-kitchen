@@ -234,7 +234,7 @@ export const GalleryTab: React.FC = () => {
             </h3>
           </div>
           <span className="text-xs text-charcoal/60">
-            {galleryImages.length === 0 ? 'Showing default showcase on public site' : 'Live on public site'}
+            {galleryImages.length === 0 ? 'Gallery is currently hidden on public site' : `${galleryImages.length} live on public site`}
           </span>
         </div>
 
@@ -243,15 +243,15 @@ export const GalleryTab: React.FC = () => {
             <div className="w-14 h-14 rounded-full bg-cream-dark/30 flex items-center justify-center mx-auto text-charcoal/40">
               <Camera className="w-7 h-7" />
             </div>
-            <p className="font-serif text-base font-bold text-forest">No Custom Photos Uploaded Yet</p>
+            <p className="font-serif text-base font-bold text-forest">No Photos In Gallery</p>
             <p className="text-xs text-charcoal/60 max-w-sm mx-auto">
-              Your public website is currently displaying the initial curated kitchen showcase. Upload photos from your camera or gallery to personalize it!
+              Your gallery is currently empty. Upload photos from your camera or files to showcase your kitchen on the website!
             </p>
             <button
               onClick={() => setShowAddForm(true)}
               className="px-5 py-2.5 rounded-full bg-forest text-cream text-xs font-bold hover:bg-forest-light transition-all shadow-sm"
             >
-              Upload First Photograph
+              Upload Photograph
             </button>
           </div>
         ) : (
@@ -299,9 +299,9 @@ export const GalleryTab: React.FC = () => {
                   </button>
 
                   <button
-                    onClick={() => {
+                    onClick={async () => {
                       if (confirm(`Delete "${img.title}" from kitchen gallery?`)) {
-                        deleteGalleryImage(img.id);
+                        await deleteGalleryImage(img.id);
                       }
                     }}
                     className="p-1.5 text-charcoal/40 hover:text-terracotta hover:bg-terracotta/10 rounded-lg transition-colors"

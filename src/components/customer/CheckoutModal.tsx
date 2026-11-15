@@ -1,10 +1,27 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useCart } from '../../context/CartContext';
 import { useSettings } from '../../context/SettingsContext';
 import { supabase } from '../../lib/supabase';
 import { Order } from '../../types/database.types';
 import { calculateCutoffCountdown, isDateOpenForDelivery, formatDateToYYYYMMDD, getNowInIST } from '../../lib/cutoff';
-import { X, Calendar, MapPin, User, Check, AlertCircle, ArrowRight, Loader2, MessageSquare, Utensils, CreditCard, Banknote, QrCode } from 'lucide-react';
+import {
+  X,
+  Calendar,
+  MapPin,
+  User,
+  Check,
+  AlertCircle,
+  ArrowRight,
+  Loader2,
+  MessageSquare,
+  Utensils,
+  CreditCard,
+  Banknote,
+  QrCode,
+  ShoppingBag,
+  Truck,
+  ExternalLink,
+} from 'lucide-react';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -17,10 +34,30 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   onClose,
   onOrderSuccess,
 }) => {
-  const { items, subtotal, deliveryFee, total, clearCart, orderInstructions } = useCart();
+  const { items, subtotal, deliveryFee, clearCart, orderInstructions } = useCart();
   const { settings, deliverySlots, schedules, closures, isUsingFallback } = useSettings();
 
-  // Compute eligible delivery dates (next 7 days starting from next eligible open day)
+  // Determine fulfillment mode capability
+  const fulfillmentMode = settings.fulfillment_mode || 'pickup_only';
+  const isPickupOnly = fulfillmentMode === 'pickup_only';
+  const isDeliveryOnly = fulfillmentMode === 'delivery_only';
+  const allowsBoth = fulfillmentMode === 'both';
+
+  // Selected fulfillment state: 'pickup' | 'delivery'
+  const [selectedFulfillment, setSelectedFulfillment] = useState<'pickup' | 'delivery'>(() => {
+    return isDeliveryOnly ? 'delivery' : 'pickup';
+  });
+
+  // Keep state in sync if settings update
+  useEffect(() => {
+    if (isPickupOnly) {
+      setSelectedFulfillment('pickup');
+    } else if (isDeliveryOnly) {
+      setSelectedFulfillment('delivery');
+    }
+  }, [isPickupOnly, isDeliveryOnly]);
+
+  // Compute eligible dates (next 7 days starting from next eligible open day)
   const eligibleDates = useMemo(() => {
     const countdown = calculateCutoffCountdown(settings.default_cutoff_time, schedules, closures);
     const nowIST = getNowInIST();
@@ -35,12 +72,19 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       if (isDateOpenForDelivery(dStr, schedules, closures)) {
         const isTomorrow = i === 1;
         const options: Intl.DateTimeFormatOptions = { weekday: 'short', month: 'short', day: 'numeric' };
-        const label = isTomorrow ? `Tomorrow, ${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}` : d.toLocaleDateString('en-US', options);
+        const label = isTomorrow
+          ? `Tomorrow, ${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+          : d.toLocaleDateString('en-US', options);
         list.push({ dateStr: dStr, label });
       }
     }
     return list;
   }, [settings.default_cutoff_time, schedules, closures]);
+
+  // Active slots filter
+  const activeSlots = useMemo(() => {
+    return deliverySlots.filter(s => s.is_active !== false);
+  }, [deliverySlots]);
 
   // Form State
   const [customerName, setCustomerName] = useState('');
@@ -53,22 +97,21 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [paymentPreference, setPaymentPreference] = useState<'UPI' | 'Cash on Delivery'>('UPI');
   const [overallNotes, setOverallNotes] = useState(orderInstructions);
   const [deliveryDate, setDeliveryDate] = useState(() => eligibleDates[0]?.dateStr || '');
-  const [selectedSlotId, setSelectedSlotId] = useState(() => deliverySlots[0]?.id || '');
+  const [selectedSlotId, setSelectedSlotId] = useState(() => activeSlots[0]?.id || deliverySlots[0]?.id || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Sync selectedSlotId and deliveryDate when props / context load
-  React.useEffect(() => {
-    if (deliverySlots.length > 0) {
-      // If current selectedSlotId is invalid or not in deliverySlots, update it to the first active slot
-      const exists = deliverySlots.some(s => s.id === selectedSlotId);
+  useEffect(() => {
+    if (activeSlots.length > 0) {
+      const exists = activeSlots.some(s => s.id === selectedSlotId);
       if (!exists) {
-        setSelectedSlotId(deliverySlots[0].id);
+        setSelectedSlotId(activeSlots[0].id);
       }
     }
-  }, [deliverySlots, selectedSlotId]);
+  }, [activeSlots, selectedSlotId]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (eligibleDates.length > 0 && !eligibleDates.some(d => d.dateStr === deliveryDate)) {
       setDeliveryDate(eligibleDates[0].dateStr);
     }
@@ -76,11 +119,20 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   if (!isOpen) return null;
 
+  // Active delivery fee based on fulfillment choice
+  const activeDeliveryFee = selectedFulfillment === 'pickup' ? 0 : deliveryFee;
+  const activeGrandTotal = subtotal + activeDeliveryFee;
+
+  const kitchenAddress = settings.address || 'Main Kitchen, Bandra West, Mumbai, Maharashtra';
+  const mapsUrl =
+    settings.pickup_maps_url ||
+    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(kitchenAddress)}`;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
-    // Validation
+    // Basic Validation
     if (!customerName.trim()) {
       setErrorMessage('Please enter your full name.');
       return;
@@ -92,18 +144,26 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       return;
     }
 
-    if (!deliveryAddress.trim()) {
-      setErrorMessage('Please enter your complete delivery address.');
+    if (selectedFulfillment === 'delivery' && !deliveryAddress.trim()) {
+      setErrorMessage('Please enter your complete delivery street address.');
       return;
     }
 
     if (!deliveryDate) {
-      setErrorMessage('Please select an eligible delivery date.');
+      setErrorMessage(
+        selectedFulfillment === 'pickup'
+          ? 'Please select a pickup date.'
+          : 'Please select an eligible delivery date.'
+      );
       return;
     }
 
     if (!selectedSlotId) {
-      setErrorMessage('Please select a delivery slot.');
+      setErrorMessage(
+        selectedFulfillment === 'pickup'
+          ? 'Please select a pickup time slot.'
+          : 'Please select a delivery slot.'
+      );
       return;
     }
 
@@ -125,29 +185,36 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       let orderRef = `UK-${formatDateToYYYYMMDD(new Date()).replace(/-/g, '')}-${Math.floor(1000 + Math.random() * 9000)}`;
       let orderId = `order-${Date.now()}`;
 
+      const finalAddress =
+        selectedFulfillment === 'pickup'
+          ? `Kitchen Pickup: ${kitchenAddress}`
+          : deliveryAddress.trim();
+
       // Call Supabase RPC create_customer_order if live
       if (!isUsingFallback) {
         const { data, error } = await supabase.rpc('create_customer_order', {
           p_customer_name: customerName.trim(),
           p_customer_phone: cleanPhone,
           p_customer_email: customerEmail.trim() || null,
-          p_delivery_address: deliveryAddress.trim(),
-          p_locality: locality.trim() || null,
-          p_pin_code: pinCode.trim() || null,
-          p_landmark: landmark.trim() || null,
+          p_delivery_address: finalAddress,
+          p_locality: selectedFulfillment === 'pickup' ? 'Kitchen Counter' : locality.trim() || null,
+          p_pin_code: selectedFulfillment === 'pickup' ? null : pinCode.trim() || null,
+          p_landmark: selectedFulfillment === 'pickup' ? null : landmark.trim() || null,
           p_delivery_instructions: overallNotes.trim() || null,
           p_delivery_date: deliveryDate,
           p_delivery_slot_id: selectedSlotId,
-          p_delivery_type: 'delivery',
+          p_delivery_type: selectedFulfillment,
           p_order_notes: overallNotes.trim() || null,
           p_items: itemsPayload,
         });
 
         if (error) {
-          // If RPC failed due to missing extension or schema function in Supabase,
-          // log the warning and fallback gracefully to resilient local order creation so customer order & WhatsApp message are never lost!
-          console.warn('Backend RPC error, proceeding with resilient checkout:', error.message);
-          if (!error.message.includes('uuid_generate_v4') && !error.message.includes('function') && !error.message.includes('type uuid')) {
+          console.warn('Backend RPC notice, proceeding with resilient checkout:', error.message);
+          if (
+            !error.message.includes('uuid_generate_v4') &&
+            !error.message.includes('function') &&
+            !error.message.includes('type uuid')
+          ) {
             throw new Error(error.message);
           }
         } else if (data && data.order_reference) {
@@ -164,19 +231,19 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         customer_name: customerName.trim(),
         customer_phone: cleanPhone,
         customer_email: customerEmail.trim() || null,
-        delivery_address: deliveryAddress.trim(),
-        locality: locality.trim() || null,
-        pin_code: pinCode.trim() || null,
-        landmark: landmark.trim() || null,
+        delivery_address: finalAddress,
+        locality: selectedFulfillment === 'pickup' ? 'Kitchen Counter' : locality.trim() || null,
+        pin_code: selectedFulfillment === 'pickup' ? null : pinCode.trim() || null,
+        landmark: selectedFulfillment === 'pickup' ? null : landmark.trim() || null,
         delivery_instructions: overallNotes.trim() || null,
         delivery_date: deliveryDate,
         delivery_slot_id: selectedSlotId,
-        delivery_type: 'delivery',
+        delivery_type: selectedFulfillment,
         payment_preference: paymentPreference,
         order_notes: overallNotes.trim() || null,
         subtotal,
-        delivery_fee: deliveryFee,
-        total_amount: total,
+        delivery_fee: activeDeliveryFee,
+        total_amount: activeGrandTotal,
         order_status: 'pending_whatsapp',
         whatsapp_opened: false,
         items_snapshot: items.map(ci => ({
@@ -219,12 +286,16 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         {/* Header */}
         <div className="p-5 sm:p-6 border-b border-borderLight bg-cream-light flex items-center justify-between shrink-0">
           <div>
-            <span className="text-xs font-semibold text-olive uppercase tracking-wider">Regular Food Order</span>
-            <h2 className="font-serif text-2xl font-bold text-forest mt-0.5">Checkout & Delivery Details</h2>
+            <span className="text-xs font-semibold text-olive uppercase tracking-wider">
+              {selectedFulfillment === 'pickup' ? 'Kitchen Self-Pickup' : 'Home Delivery Order'}
+            </span>
+            <h2 className="font-serif text-2xl font-bold text-forest mt-0.5">
+              {selectedFulfillment === 'pickup' ? 'Checkout & Pickup Details' : 'Checkout & Delivery Details'}
+            </h2>
           </div>
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-cream border border-borderLight flex items-center justify-center text-charcoal hover:text-forest"
+            className="w-9 h-9 rounded-full bg-cream border border-borderLight flex items-center justify-center text-charcoal hover:text-forest transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -236,6 +307,36 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center gap-2.5">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
               <span>{errorMessage}</span>
+            </div>
+          )}
+
+          {/* Fulfillment Mode Switcher (Shown when both pickup and delivery are enabled) */}
+          {allowsBoth && (
+            <div className="p-1 rounded-2xl bg-cream-dark/30 border border-borderLight grid grid-cols-2 gap-1">
+              <button
+                type="button"
+                onClick={() => setSelectedFulfillment('pickup')}
+                className={`py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                  selectedFulfillment === 'pickup'
+                    ? 'bg-forest text-cream shadow-sm'
+                    : 'text-charcoal/70 hover:text-forest'
+                }`}
+              >
+                <ShoppingBag className="w-4 h-4" />
+                <span>Self-Pickup from Kitchen (Free)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedFulfillment('delivery')}
+                className={`py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                  selectedFulfillment === 'delivery'
+                    ? 'bg-forest text-cream shadow-sm'
+                    : 'text-charcoal/70 hover:text-forest'
+                }`}
+              >
+                <Truck className="w-4 h-4" />
+                <span>Home Delivery (₹{deliveryFee})</span>
+              </button>
             </div>
           )}
 
@@ -267,17 +368,17 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             </div>
           </div>
 
-          {/* Section 2: Delivery Date & Slot Selection */}
+          {/* Section 2: Date & Slot Selection */}
           <div className="space-y-4 pt-4 border-t border-borderLight">
             <h3 className="font-serif text-base font-bold text-forest flex items-center gap-2">
               <Calendar className="w-4 h-4 text-terracotta" />
-              <span>2. Delivery Date & Slot</span>
+              <span>2. {selectedFulfillment === 'pickup' ? 'Pickup Date & Slot' : 'Delivery Date & Slot'}</span>
             </h3>
 
             {/* Date Picker Pills */}
             <div>
               <label className="block text-xs font-semibold text-charcoal/70 uppercase tracking-wider mb-2">
-                Available Delivery Dates
+                {selectedFulfillment === 'pickup' ? 'Available Pickup Dates' : 'Available Delivery Dates'}
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                 {eligibleDates.map((item) => {
@@ -300,13 +401,13 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               </div>
             </div>
 
-            {/* Delivery Slot Selector */}
+            {/* Slot Selector */}
             <div>
               <label className="block text-xs font-semibold text-charcoal/70 uppercase tracking-wider mb-2">
-                Preferred Delivery Slot
+                {selectedFulfillment === 'pickup' ? 'Preferred Pickup Time Window' : 'Preferred Delivery Slot'}
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                {deliverySlots.map((slot) => {
+                {activeSlots.map((slot) => {
                   const isSelected = selectedSlotId === slot.id;
                   return (
                     <button
@@ -363,77 +464,134 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   className="w-full px-3.5 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                 />
                 <span className="text-[10px] text-charcoal/50 mt-1 block">
-                  Used for order confirmation & dispatch updates on WhatsApp
+                  Used for order confirmation & pickup/dispatch updates on WhatsApp
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Section 4: Delivery Address */}
+          {/* Section 4: Fulfillment Location Details */}
           <div className="space-y-4 pt-4 border-t border-borderLight">
             <h3 className="font-serif text-base font-bold text-forest flex items-center gap-2">
               <MapPin className="w-4 h-4 text-terracotta" />
-              <span>4. Delivery Address & Instructions</span>
+              <span>4. {selectedFulfillment === 'pickup' ? 'Kitchen Pickup Location' : 'Delivery Address & Instructions'}</span>
             </h3>
 
-            <div>
-              <label className="block text-xs font-semibold text-charcoal/80 mb-1">
-                Full Street Address / Flat / Building No. <span className="text-terracotta">*</span>
-              </label>
-              <textarea
-                required
-                rows={2}
-                value={deliveryAddress}
-                onChange={(e) => setDeliveryAddress(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30 resize-none"
-              />
-            </div>
+            {selectedFulfillment === 'pickup' ? (
+              /* Dedicated Kitchen Pickup Card */
+              <div className="p-4 rounded-2xl bg-cream-light border border-borderLight space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-forest/10 text-forest flex items-center justify-center shrink-0">
+                    <ShoppingBag className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1">
+                    <span className="text-[11px] font-bold text-olive uppercase tracking-wider">Pickup Counter Address</span>
+                    <p className="font-serif text-base font-bold text-forest mt-0.5 leading-snug">
+                      {kitchenAddress}
+                    </p>
+                    <p className="text-xs text-charcoal/70 mt-1 leading-relaxed">
+                      {settings.pickup_instructions ||
+                        'Please show your Order Reference or WhatsApp confirmation at the kitchen counter for instant handoff.'}
+                    </p>
+                  </div>
+                </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div>
-                <label className="block text-xs font-semibold text-charcoal/80 mb-1">Locality / Area</label>
-                <input
-                  type="text"
-                  value={locality}
-                  onChange={(e) => setLocality(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
-                />
+                <div className="pt-2 border-t border-borderLight/80 flex items-center justify-between">
+                  <span className="text-xs font-semibold text-forest">Fulfillment Fee:</span>
+                  <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                    FREE (Self-Pickup)
+                  </span>
+                </div>
+
+                {mapsUrl && (
+                  <a
+                    href={mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2 px-3 rounded-xl bg-cream border border-borderLight text-forest hover:bg-forest/5 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <MapPin className="w-3.5 h-3.5 text-terracotta" />
+                    <span>Open Location in Google Maps</span>
+                    <ExternalLink className="w-3 h-3 text-charcoal/40" />
+                  </a>
+                )}
+
+                {/* Overall Instructions for Kitchen Pickup */}
+                <div className="pt-2">
+                  <label className="block text-xs font-semibold text-charcoal/80 mb-1 flex items-center gap-1.5">
+                    <MessageSquare className="w-3.5 h-3.5 text-olive" />
+                    <span>Special Pickup Instructions (Optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={overallNotes}
+                    onChange={(e) => setOverallNotes(e.target.value)}
+                    className="w-full px-3.5 py-2 rounded-xl bg-cream border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
+                  />
+                </div>
               </div>
+            ) : (
+              /* Delivery Address Fields */
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-semibold text-charcoal/80 mb-1">
+                    Full Street Address / Flat / Building No. <span className="text-terracotta">*</span>
+                  </label>
+                  <textarea
+                    required
+                    rows={2}
+                    value={deliveryAddress}
+                    onChange={(e) => setDeliveryAddress(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-cream-light border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30 resize-none"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-charcoal/80 mb-1">PIN Code</label>
-                <input
-                  type="text"
-                  value={pinCode}
-                  onChange={(e) => setPinCode(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-charcoal/80 mb-1">Locality / Area</label>
+                    <input
+                      type="text"
+                      value={locality}
+                      onChange={(e) => setLocality(e.target.value)}
+                      className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-charcoal/80 mb-1">PIN Code</label>
+                    <input
+                      type="text"
+                      value={pinCode}
+                      onChange={(e) => setPinCode(e.target.value)}
+                      className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-charcoal/80 mb-1">Landmark (Optional)</label>
+                    <input
+                      type="text"
+                      value={landmark}
+                      onChange={(e) => setLandmark(e.target.value)}
+                      className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-charcoal/80 mb-1 flex items-center gap-1.5">
+                    <MessageSquare className="w-3.5 h-3.5 text-olive" />
+                    <span>Overall Delivery Instructions (Optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={overallNotes}
+                    onChange={(e) => setOverallNotes(e.target.value)}
+                    className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
+                  />
+                </div>
               </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-charcoal/80 mb-1">Landmark (Optional)</label>
-                <input
-                  type="text"
-                  value={landmark}
-                  onChange={(e) => setLandmark(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
-                />
-              </div>
-            </div>
-
-            {/* Overall Order Instructions */}
-            <div>
-              <label className="block text-xs font-semibold text-charcoal/80 mb-1 flex items-center gap-1.5">
-                <MessageSquare className="w-3.5 h-3.5 text-olive" />
-                <span>Overall Order Instructions (Optional)</span>
-              </label>
-              <input
-                type="text"
-                value={overallNotes}
-                onChange={(e) => setOverallNotes(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-xl bg-cream-light border border-borderLight text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
-              />
-            </div>
+            )}
           </div>
 
           {/* Section 5: Payment Preference */}
@@ -453,16 +611,20 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     : 'bg-cream-light border-borderLight text-charcoal hover:bg-cream-dark/30'
                 }`}
               >
-                <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                  paymentPreference === 'UPI' ? 'bg-forest text-cream' : 'bg-cream-dark/50 text-charcoal/60'
-                }`}>
+                <div
+                  className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+                    paymentPreference === 'UPI' ? 'bg-forest text-cream' : 'bg-cream-dark/50 text-charcoal/60'
+                  }`}
+                >
                   <QrCode className="w-4 h-4" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-xs">UPI / Online Transfer</span>
                     {paymentPreference === 'UPI' && (
-                      <span className="text-[10px] bg-forest text-cream px-1.5 py-0.2 rounded-full font-bold">Recommended</span>
+                      <span className="text-[10px] bg-forest text-cream px-1.5 py-0.2 rounded-full font-bold">
+                        Recommended
+                      </span>
                     )}
                   </div>
                   <p className="text-[11px] text-charcoal/60 mt-0.5">
@@ -480,34 +642,44 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     : 'bg-cream-light border-borderLight text-charcoal hover:bg-cream-dark/30'
                 }`}
               >
-                <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                  paymentPreference === 'Cash on Delivery' ? 'bg-forest text-cream' : 'bg-cream-dark/50 text-charcoal/60'
-                }`}>
+                <div
+                  className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+                    paymentPreference === 'Cash on Delivery'
+                      ? 'bg-forest text-cream'
+                      : 'bg-cream-dark/50 text-charcoal/60'
+                  }`}
+                >
                   <Banknote className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="font-bold text-xs">Cash on Delivery</span>
+                  <span className="font-bold text-xs">
+                    {selectedFulfillment === 'pickup' ? 'Pay at Kitchen Counter' : 'Cash on Delivery'}
+                  </span>
                   <p className="text-[11px] text-charcoal/60 mt-0.5">
-                    Pay in cash directly to our delivery executive when your meal arrives.
+                    {selectedFulfillment === 'pickup'
+                      ? 'Pay directly in cash or UPI when collecting your meal.'
+                      : 'Pay in cash directly to our delivery executive when your meal arrives.'}
                   </p>
                 </div>
               </button>
             </div>
           </div>
 
-          {/* Section 5: Order Total Calculation */}
+          {/* Section 6: Order Total Calculation */}
           <div className="p-4 rounded-2xl bg-cream-light border border-borderLight space-y-2">
             <div className="flex justify-between text-xs text-charcoal/70">
               <span>Dishes Subtotal ({items.length} items)</span>
               <span>₹{subtotal}</span>
             </div>
             <div className="flex justify-between text-xs text-charcoal/70">
-              <span>Delivery Fee</span>
-              <span>₹{deliveryFee}</span>
+              <span>Fulfillment Fee</span>
+              <span>
+                {selectedFulfillment === 'pickup' ? '₹0 (Self-Pickup)' : `₹${activeDeliveryFee}`}
+              </span>
             </div>
             <div className="border-t border-borderLight/80 pt-2 flex justify-between text-base font-bold text-forest font-serif">
               <span>Grand Total</span>
-              <span>₹{total}</span>
+              <span>₹{activeGrandTotal}</span>
             </div>
           </div>
 

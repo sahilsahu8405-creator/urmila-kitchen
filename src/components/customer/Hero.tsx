@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Leaf, ChefHat, Truck, Sparkles } from 'lucide-react';
+import { ArrowRight, Leaf, ChefHat, Truck, Sparkles, ShoppingBag } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext';
 
 interface HeroProps {
@@ -7,7 +7,8 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenPartyModal }) => {
-  const { galleryImages } = useSettings();
+  const { galleryImages, settings } = useSettings();
+  const isPickupOnly = (settings.fulfillment_mode || 'pickup_only') === 'pickup_only';
 
   // Dynamic image resolution:
   // 1. Locally configured custom hero image (if owner uploaded from dashboard)
@@ -37,7 +38,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPartyModal }) => {
             {/* 1. Status Pill Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#DFE5D4] border border-[#CCD4BF] text-forest text-xs font-bold uppercase tracking-wider mb-6 shadow-2xs">
               <Leaf className="w-3.5 h-3.5 text-forest" />
-              <span>Next-Day Cloud Kitchen</span>
+              <span>{isPickupOnly ? 'Next-Day Kitchen Pickup' : 'Next-Day Cloud Kitchen'}</span>
             </div>
 
             {/* 2. Editorial Headline with Curved Underline */}
@@ -118,11 +119,19 @@ export const Hero: React.FC<HeroProps> = ({ onOpenPartyModal }) => {
               {/* Trust Item 3 */}
               <div className="flex items-center gap-2.5 sm:gap-3">
                 <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-forest/5 flex items-center justify-center shrink-0">
-                  <Truck className="w-4 h-4 sm:w-5 sm:h-5 text-forest stroke-[1.75]" />
+                  {isPickupOnly ? (
+                    <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 text-forest stroke-[1.75]" />
+                  ) : (
+                    <Truck className="w-4 h-4 sm:w-5 sm:h-5 text-forest stroke-[1.75]" />
+                  )}
                 </div>
                 <div className="leading-tight">
-                  <span className="block text-forest font-bold">Next-Day</span>
-                  <span className="block text-charcoal/70 font-medium text-[11px] sm:text-xs">Delivery</span>
+                  <span className="block text-forest font-bold">
+                    {isPickupOnly ? 'Kitchen' : 'Next-Day'}
+                  </span>
+                  <span className="block text-charcoal/70 font-medium text-[11px] sm:text-xs">
+                    {isPickupOnly ? 'Pickup' : 'Delivery'}
+                  </span>
                 </div>
               </div>
             </div>

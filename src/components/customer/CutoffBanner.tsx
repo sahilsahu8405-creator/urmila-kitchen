@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Truck, AlertCircle, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, Truck, AlertCircle, ArrowRight, ShoppingBag } from 'lucide-react';
 import { useSettings } from '../../context/SettingsContext';
 import { calculateCutoffCountdown, CutoffCountdown } from '../../lib/cutoff';
 
 export const CutoffBanner: React.FC = () => {
   const { settings, schedules, closures } = useSettings();
+  const isPickupOnly = (settings.fulfillment_mode || 'pickup_only') === 'pickup_only';
   const [countdown, setCountdown] = useState<CutoffCountdown>(() =>
     calculateCutoffCountdown(settings.default_cutoff_time, schedules, closures)
   );
@@ -74,7 +75,11 @@ export const CutoffBanner: React.FC = () => {
                 {countdown.isPastCutoff ? 'Next Booking Window' : `Daily ${formattedCutoff12h} Cutoff`}
               </p>
               <h3 className="text-base sm:text-lg font-bold text-forest font-serif leading-tight">
-                {countdown.isPastCutoff ? 'Order for Next Available Date' : "Pre-order for Tomorrow's Delivery"}
+                {countdown.isPastCutoff
+                  ? 'Order for Next Available Date'
+                  : isPickupOnly
+                  ? "Pre-order for Tomorrow's Pickup"
+                  : "Pre-order for Tomorrow's Delivery"}
               </h3>
             </div>
           </div>
@@ -113,14 +118,20 @@ export const CutoffBanner: React.FC = () => {
             </div>
           </div>
 
-          {/* Column 3: Next Delivery & Order Now */}
+          {/* Column 3: Next Delivery/Pickup & Order Now */}
           <div className="md:col-span-4 flex items-center justify-between gap-3 pl-0 md:pl-2">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-forest/5 flex items-center justify-center text-forest shrink-0">
-                <Truck className="w-5 h-5 text-forest" />
+                {isPickupOnly ? (
+                  <ShoppingBag className="w-5 h-5 text-forest" />
+                ) : (
+                  <Truck className="w-5 h-5 text-forest" />
+                )}
               </div>
               <div>
-                <p className="text-xs text-charcoal/70">Next Delivery</p>
+                <p className="text-xs text-charcoal/70">
+                  {isPickupOnly ? 'Next Available Pickup' : 'Next Delivery'}
+                </p>
                 <p className="text-sm font-bold text-forest">
                   {countdown.nextEligibleDeliveryFormatted}
                 </p>

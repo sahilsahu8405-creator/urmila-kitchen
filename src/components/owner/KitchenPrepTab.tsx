@@ -170,7 +170,7 @@ export const KitchenPrepTab: React.FC<KitchenPrepTabProps> = ({ orders }) => {
                   <th className="py-4 px-5">Dish Name</th>
                   <th className="py-4 px-5 text-center">Confirmed Qty to Cook</th>
                   <th className="py-4 px-5 text-center">Pending WhatsApp / Unconfirmed</th>
-                  <th className="py-4 px-5">Delivery Slot Breakdown</th>
+                  <th className="py-4 px-5">Time Slot Breakdown</th>
                   <th className="py-4 px-5">Special Cooking Notes</th>
                 </tr>
               </thead>

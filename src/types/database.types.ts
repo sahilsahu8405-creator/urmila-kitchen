@@ -65,6 +65,8 @@ export interface DeliverySlot {
   created_at?: string;
 }
 
+export type FulfillmentMode = 'pickup_only' | 'delivery_only' | 'both';
+
 export interface BusinessSettings {
   id: string;
   business_name: string;
@@ -80,6 +82,13 @@ export interface BusinessSettings {
   pause_banner_message: string | null;
   serving_pin_codes: string[];
   updated_at?: string;
+
+  // Fulfillment Configuration
+  fulfillment_mode?: FulfillmentMode;
+  is_delivery_enabled?: boolean;
+  is_pickup_enabled?: boolean;
+  pickup_instructions?: string;
+  pickup_maps_url?: string;
 }
 
 export interface BusinessSchedule {

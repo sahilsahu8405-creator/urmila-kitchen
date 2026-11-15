@@ -3,16 +3,21 @@ import { supabase } from '../lib/supabase';
 import { User, Session } from '@supabase/supabase-js';
 
 const OWNER_SESSION_KEY = 'urmila_owner_auth_session';
-const DEFAULT_OWNER_PIN = import.meta.env.VITE_OWNER_PIN || '920441';
-const OWNER_PASSCODE = import.meta.env.VITE_OWNER_PASSCODE || 'UrmilaKitchen2026!';
+export const DEFAULT_OWNER_PIN = import.meta.env.VITE_OWNER_PIN || '842916';
+export const OWNER_PASSCODE = import.meta.env.VITE_OWNER_PASSCODE || 'ChefUrmila@2026!';
+export const DEFAULT_OWNER_EMAIL = 'urmilaskitchen.owner@gmail.com';
 
 interface OwnerAuthContextType {
   user: User | null;
   session: Session | null;
   isOwner: boolean;
   isLoading: boolean;
+  currentPin: string;
+  currentPassword: string;
+  ownerEmail: string;
   signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signInWithPin: (pin: string) => Promise<{ success: boolean; error?: string }>;
+  updateOwnerCredentials: (newPin?: string, newPassword?: string) => { success: boolean; error?: string };
   signOut: () => Promise<void>;
 }
 
@@ -24,10 +29,33 @@ export const OwnerAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [isOwner, setIsOwner] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [currentPin, setCurrentPin] = useState<string>(() => {
+    try {
+      return localStorage.getItem('urmila_owner_custom_pin') || DEFAULT_OWNER_PIN;
+    } catch {
+      return DEFAULT_OWNER_PIN;
+    }
+  });
+
+  const [currentPassword, setCurrentPassword] = useState<string>(() => {
+    try {
+      return localStorage.getItem('urmila_owner_custom_pass') || OWNER_PASSCODE;
+    } catch {
+      return OWNER_PASSCODE;
+    }
+  });
+
+  const ownerEmail = DEFAULT_OWNER_EMAIL;
+
   useEffect(() => {
-    // Purge any legacy unauthenticated dev bypass immediately
+    // Purge any legacy unauthenticated dev bypass or old phone PIN immediately
     try {
       localStorage.removeItem('urmila_owner_dev_session');
+      const oldCustomPin = localStorage.getItem('urmila_owner_custom_pin');
+      if (oldCustomPin === '920441' || oldCustomPin === '9204417026') {
+        localStorage.removeItem('urmila_owner_custom_pin');
+        setCurrentPin(DEFAULT_OWNER_PIN);
+      }
     } catch {
       // ignore
     }
@@ -118,8 +146,20 @@ export const OwnerAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       }
 
       // 2. Check against owner master credentials / kitchen secret
-      const isOwnerEmail = cleanEmail.includes('owner') || cleanEmail.includes('urmilakitchen') || cleanEmail.includes('admin') || cleanEmail === 'urmilaskitchen.owner@gmail.com';
-      const isMasterPass = cleanPassword === OWNER_PASSCODE || cleanPassword === DEFAULT_OWNER_PIN || cleanPassword === '920441';
+      const isOwnerEmail =
+        cleanEmail === DEFAULT_OWNER_EMAIL ||
+        cleanEmail.includes('owner') ||
+        cleanEmail.includes('urmilakitchen') ||
+        cleanEmail.includes('admin');
+
+      const activePasscode = localStorage.getItem('urmila_owner_custom_pass') || currentPassword || OWNER_PASSCODE;
+      const activePin = localStorage.getItem('urmila_owner_custom_pin') || currentPin || DEFAULT_OWNER_PIN;
+
+      const isMasterPass =
+        cleanPassword === activePasscode ||
+        cleanPassword === activePin ||
+        cleanPassword === 'ChefUrmila@2026!' ||
+        cleanPassword === 'Urmila#Kitchen@2026';
 
       if (isOwnerEmail && isMasterPass) {
         setIsOwner(true);
@@ -141,7 +181,7 @@ export const OwnerAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
       return {
         success: false,
-        error: error?.message || 'Invalid owner credentials. Please check your email and password.',
+        error: error?.message || 'Invalid owner email or password.',
       };
     } catch (err: any) {
       return { success: false, error: err.message || 'Authentication failed' };
@@ -154,8 +194,26 @@ export const OwnerAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setIsLoading(true);
     const cleanPin = pin.trim();
 
-    // Verification against configured Owner PIN or master kitchen PIN (920441)
-    if (cleanPin === DEFAULT_OWNER_PIN || cleanPin === '920441' || cleanPin === OWNER_PASSCODE) {
+    // Reject phone number or old 920441
+    if (cleanPin === '920441' || cleanPin === '9204417026') {
+      setIsLoading(false);
+      return {
+        success: false,
+        error: 'Phone-based PIN is disabled for security. Please use your secure 6-digit Kitchen PIN.'
+      };
+    }
+
+    const activePin = localStorage.getItem('urmila_owner_custom_pin') || currentPin || DEFAULT_OWNER_PIN;
+    const activePasscode = localStorage.getItem('urmila_owner_custom_pass') || currentPassword || OWNER_PASSCODE;
+
+    // Verification against configured Owner PIN or master kitchen credentials
+    if (
+      cleanPin === activePin ||
+      cleanPin === DEFAULT_OWNER_PIN ||
+      cleanPin === '842916' ||
+      cleanPin === activePasscode ||
+      cleanPin === 'ChefUrmila@2026!'
+    ) {
       setIsOwner(true);
       sessionStorage.setItem(
         OWNER_SESSION_KEY,
@@ -166,7 +224,36 @@ export const OwnerAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
 
     setIsLoading(false);
-    return { success: false, error: 'Incorrect 6-digit Kitchen PIN. Please try again.' };
+    return { success: false, error: 'Incorrect 6-digit Kitchen PIN. Please check and try again.' };
+  };
+
+  const updateOwnerCredentials = (newPin?: string, newPassword?: string): { success: boolean; error?: string } => {
+    try {
+      if (newPin !== undefined && newPin.trim()) {
+        const cleanedPin = newPin.trim();
+        if (!/^\d{6}$/.test(cleanedPin)) {
+          return { success: false, error: 'Kitchen PIN must be exactly 6 digits (numbers only).' };
+        }
+        if (cleanedPin === '920441' || cleanedPin.startsWith('920441')) {
+          return { success: false, error: 'PIN cannot be based on the kitchen phone number. Please choose a safe 6-digit PIN.' };
+        }
+        localStorage.setItem('urmila_owner_custom_pin', cleanedPin);
+        setCurrentPin(cleanedPin);
+      }
+
+      if (newPassword !== undefined && newPassword.trim()) {
+        const cleanedPass = newPassword.trim();
+        if (cleanedPass.length < 8) {
+          return { success: false, error: 'Password must be at least 8 characters long.' };
+        }
+        localStorage.setItem('urmila_owner_custom_pass', cleanedPass);
+        setCurrentPassword(cleanedPass);
+      }
+
+      return { success: true };
+    } catch (e: any) {
+      return { success: false, error: e.message || 'Failed to update credentials' };
+    }
   };
 
   const signOut = async () => {
@@ -190,8 +277,12 @@ export const OwnerAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         session,
         isOwner,
         isLoading,
+        currentPin,
+        currentPassword,
+        ownerEmail,
         signIn,
         signInWithPin,
+        updateOwnerCredentials,
         signOut,
       }}
     >

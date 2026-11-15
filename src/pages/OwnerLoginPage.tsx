@@ -142,8 +142,9 @@ export const OwnerLoginPage: React.FC = () => {
                   />
                   <KeyRound className="w-4 h-4 text-charcoal/50 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 </div>
-                <p className="mt-1.5 text-[11px] text-charcoal/60">
-                  Default kitchen PIN: <span className="font-mono font-bold text-forest">920441</span>
+                <p className="mt-1.5 text-[11px] text-charcoal/60 flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5 text-forest/70 shrink-0" />
+                  <span>Authorized kitchen access only</span>
                 </p>
               </div>
 
@@ -168,7 +169,7 @@ export const OwnerLoginPage: React.FC = () => {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter owner email"
+                    placeholder="Enter registered email"
                     className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-cream border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                   />
                   <Mail className="w-4 h-4 text-charcoal/50 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -185,7 +186,7 @@ export const OwnerLoginPage: React.FC = () => {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••••••"
+                    placeholder="Enter password"
                     className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-cream border border-borderLight text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-forest/30"
                   />
                   <Lock className="w-4 h-4 text-charcoal/50 absolute left-3.5 top-1/2 -translate-y-1/2" />

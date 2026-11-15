@@ -3,7 +3,7 @@ import { Order } from '../../types/database.types';
 import { generateWhatsAppOrderUrl } from '../../lib/whatsapp';
 import { useSettings } from '../../context/SettingsContext';
 import confetti from 'canvas-confetti';
-import { CheckCircle2, MessageSquare, Copy, Check, ExternalLink, RefreshCw, ArrowLeft } from 'lucide-react';
+import { CheckCircle2, MessageSquare, Copy, Check, ExternalLink, RefreshCw, ArrowLeft, MapPin, ShoppingBag } from 'lucide-react';
 
 interface OrderSuccessModalProps {
   order: Order | null;
@@ -101,32 +101,73 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({ order, onC
             </button>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            <div>
-              <span className="text-charcoal/60">Delivery Date</span>
-              <p className="font-bold text-forest">{order.delivery_date}</p>
-            </div>
-            <div>
-              <span className="text-charcoal/60">Delivery Slot</span>
-              <p className="font-bold text-forest">{order.delivery_slot?.name || 'Selected Slot'}</p>
-            </div>
-            <div>
-              <span className="text-charcoal/60">Customer Name</span>
-              <p className="font-semibold text-charcoal truncate">{order.customer_name}</p>
-            </div>
-            <div>
-              <span className="text-charcoal/60">Grand Total</span>
-              <p className="font-serif font-bold text-base text-forest">₹{order.total_amount}</p>
-            </div>
-            {order.payment_preference && (
-              <div className="col-span-2 pt-2 border-t border-borderLight/60 flex items-center justify-between text-xs">
-                <span className="text-charcoal/60">Payment Mode:</span>
-                <span className="font-bold text-forest bg-forest/10 px-2.5 py-0.5 rounded-full">
-                  {order.payment_preference}
-                </span>
+          {(() => {
+            const isPickup =
+              order.delivery_type === 'pickup' ||
+              order.delivery_address?.toLowerCase().startsWith('kitchen pickup');
+            const pickupAddress =
+              order.delivery_address.replace(/^Kitchen Pickup:\s*/i, '').trim() ||
+              settings.address ||
+              'Main Kitchen, Bandra West, Mumbai, Maharashtra';
+
+            return (
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <span className="text-charcoal/60">
+                    {isPickup ? 'Pickup Date' : 'Delivery Date'}
+                  </span>
+                  <p className="font-bold text-forest">{order.delivery_date}</p>
+                </div>
+                <div>
+                  <span className="text-charcoal/60">
+                    {isPickup ? 'Pickup Slot' : 'Delivery Slot'}
+                  </span>
+                  <p className="font-bold text-forest">
+                    {order.delivery_slot?.name || 'Selected Slot'}
+                  </p>
+                </div>
+                <div>
+                  <span className="text-charcoal/60">Customer Name</span>
+                  <p className="font-semibold text-charcoal truncate">{order.customer_name}</p>
+                </div>
+                <div>
+                  <span className="text-charcoal/60">Grand Total</span>
+                  <p className="font-serif font-bold text-base text-forest">₹{order.total_amount}</p>
+                </div>
+
+                {/* Pickup / Delivery Address */}
+                <div className="col-span-2 pt-2 border-t border-borderLight/60">
+                  <span className="text-charcoal/60 text-[11px] block">
+                    {isPickup ? 'Kitchen Pickup Location:' : 'Delivery Address:'}
+                  </span>
+                  <p className="font-semibold text-forest text-xs mt-0.5 leading-snug">
+                    {isPickup ? pickupAddress : order.delivery_address}
+                  </p>
+                  {isPickup && settings.pickup_maps_url && (
+                    <a
+                      href={settings.pickup_maps_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-olive hover:underline mt-1.5"
+                    >
+                      <MapPin className="w-3.5 h-3.5 text-terracotta" />
+                      <span>View Directions on Google Maps</span>
+                      <ExternalLink className="w-3 h-3 text-charcoal/40" />
+                    </a>
+                  )}
+                </div>
+
+                {order.payment_preference && (
+                  <div className="col-span-2 pt-2 border-t border-borderLight/60 flex items-center justify-between text-xs">
+                    <span className="text-charcoal/60">Payment Mode:</span>
+                    <span className="font-bold text-forest bg-forest/10 px-2.5 py-0.5 rounded-full">
+                      {order.payment_preference}
+                    </span>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            );
+          })()}
         </div>
 
         {/* Primary Action: Direct WhatsApp Link */}

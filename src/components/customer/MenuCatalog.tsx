@@ -16,7 +16,8 @@ export const MenuCatalog: React.FC<MenuCatalogProps> = ({
   onSelectCategory,
   onSelectDish,
 }) => {
-  const { categories, menuItems } = useSettings();
+  const { categories, menuItems, settings } = useSettings();
+  const isPickupOnly = (settings.fulfillment_mode || 'pickup_only') === 'pickup_only';
   const { addToCart } = useCart();
   const [searchQuery, setSearchQuery] = useState('');
   const [addedItemId, setAddedItemId] = useState<string | null>(null);
@@ -53,7 +54,8 @@ export const MenuCatalog: React.FC<MenuCatalogProps> = ({
           <span className="text-xs uppercase tracking-widest font-semibold text-olive">Digital Menu</span>
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-forest mt-1">Our Menu</h2>
           <p className="text-sm text-charcoal/70 mt-1">
-            Browse our complete selection of 68 delicious vegetarian dishes, crafted fresh for next-day delivery.
+            Browse our complete selection of 68 delicious vegetarian dishes, crafted fresh for next-day{' '}
+            {isPickupOnly ? 'kitchen pickup' : 'delivery'}.
           </p>
         </div>
 

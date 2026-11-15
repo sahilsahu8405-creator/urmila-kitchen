@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext';
+import { useSettings } from '../../context/SettingsContext';
 import { X, Plus, Minus, Trash2, ArrowRight, ShoppingBag, Edit3, MessageSquare } from 'lucide-react';
 import { DishImage } from '../common/DishImage';
 
@@ -8,6 +9,8 @@ interface CartDrawerProps {
 }
 
 export const CartDrawer: React.FC<CartDrawerProps> = ({ onProceedToCheckout }) => {
+  const { settings } = useSettings();
+  const isPickupOnly = (settings.fulfillment_mode || 'pickup_only') === 'pickup_only';
   const {
     items,
     isCartOpen,
@@ -90,7 +93,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onProceedToCheckout }) =
                 </div>
                 <p className="font-serif text-lg font-bold text-forest">Your cart is empty</p>
                 <p className="text-xs text-charcoal/60 max-w-xs mx-auto">
-                  Explore our vegetarian menu and add your favourite dishes for next-day delivery.
+                  {isPickupOnly
+                    ? 'Explore our vegetarian menu and add your favourite dishes for next-day kitchen pickup.'
+                    : 'Explore our vegetarian menu and add your favourite dishes for next-day delivery.'}
                 </p>
                 <button
                   onClick={() => setIsCartOpen(false)}
@@ -232,8 +237,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onProceedToCheckout }) =
                   <span className="font-medium text-forest">₹{subtotal}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Delivery Charges</span>
-                  <span className="font-medium text-forest">₹{deliveryFee}</span>
+                  <span>{isPickupOnly ? 'Fulfillment' : 'Delivery Charges'}</span>
+                  <span className="font-medium text-forest">
+                    {isPickupOnly ? 'Self-Pickup (Free)' : `₹${deliveryFee}`}
+                  </span>
                 </div>
                 <div className="border-t border-borderLight/80 pt-2 flex justify-between text-base font-bold text-forest font-serif">
                   <span>Grand Total</span>

@@ -14,7 +14,7 @@ export const PartyBanner: React.FC<PartyBannerProps> = ({ onOpenPartyModal }) =>
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-terracotta/10 rounded-full blur-2xl pointer-events-none" />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center p-8 sm:p-12 lg:p-16 relative z-10">
-          
+
           {/* Left Text */}
           <div className="lg:col-span-7 space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cream/10 border border-cream/20 text-cream text-xs font-semibold uppercase tracking-wider">
@@ -43,7 +43,7 @@ export const PartyBanner: React.FC<PartyBannerProps> = ({ onOpenPartyModal }) =>
               </div>
               <div className="flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-sage-light shrink-0" />
-                <span>Scheduled Delivery</span>
+                <span>On-Time Event Order</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Sparkles className="w-4 h-4 text-sage-light shrink-0" />

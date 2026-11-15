@@ -113,15 +113,20 @@ export const INITIAL_SETTINGS: BusinessSettings = {
   business_name: "Urmila's Kitchen",
   whatsapp_number: '9204417026',
   contact_phone: '9204417026',
-  address: 'Mumbai, Maharashtra',
+  address: 'Main Kitchen, Bandra West, Mumbai, Maharashtra',
   default_cutoff_time: '20:00:00', // 8:00 PM IST
   min_advance_days: 1, // Next-day pre-order
   max_advance_days: 7,
   min_order_amount: 0.00,
-  delivery_charge: 50.00,
+  delivery_charge: 0.00,
   is_ordering_paused: false,
   pause_banner_message: null,
   serving_pin_codes: ['400001', '400002', '400003', '400004', '400005', '400050', '400051', '400052', '400053'],
+  fulfillment_mode: 'pickup_only',
+  is_delivery_enabled: false,
+  is_pickup_enabled: true,
+  pickup_instructions: 'Please show your Order Reference or WhatsApp confirmation at the kitchen counter for instant handoff.',
+  pickup_maps_url: 'https://maps.google.com/?q=Bandra+West+Mumbai',
 };
 
 export const INITIAL_SCHEDULES: BusinessSchedule[] = [
@@ -140,53 +145,13 @@ export const INITIAL_REVIEWS: CustomerReview[] = [];
 // Curated Initial Kitchen Gallery Images (Shared between Customer Website & Owner Dashboard)
 export const INITIAL_GALLERY_IMAGES: GalleryImage[] = [
   {
-    id: 'gallery-1',
-    title: 'Artisanal Starters Platter',
-    category: 'Starters',
-    image_url: '/images/menu/starters/corn-bunch.webp',
-    caption: 'Crispy handcrafted vegetarian starters served with signature dips',
-    is_featured: true,
-    display_order: 1,
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 'gallery-2',
-    title: 'Signature Paneer Tikka',
-    category: 'Mains',
-    image_url: '/images/menu/mains/paneer-tikka-roll.webp',
-    caption: 'Sizzling tandoori-spiced cottage cheese cubes charred in cast iron',
-    is_featured: true,
-    display_order: 2,
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 'gallery-3',
-    title: 'Pav Bhaji Delicacy',
-    category: 'Classics',
-    image_url: '/images/menu/mains/pav-bhaji.webp',
-    caption: 'Rich, buttery mashed mixed vegetable bhaji served with golden toasted pav',
-    is_featured: true,
-    display_order: 3,
-    created_at: new Date().toISOString(),
-  },
-  {
     id: 'gallery-4',
     title: 'Oven Baked Specialties',
     category: 'Baked Dishes',
     image_url: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop&q=80',
     caption: 'Slow-baked casseroles and gratins topped with bubbling crusts',
     is_featured: true,
-    display_order: 4,
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 'gallery-5',
-    title: 'Thatte Idli on Banana Leaf',
-    category: 'Classics',
-    image_url: '/images/menu/starters/thatte-idli.webp',
-    caption: 'Steamed traditional large idlis served fresh with coconut chutney',
-    is_featured: true,
-    display_order: 5,
+    display_order: 1,
     created_at: new Date().toISOString(),
   },
   {
@@ -196,7 +161,7 @@ export const INITIAL_GALLERY_IMAGES: GalleryImage[] = [
     image_url: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=800&auto=format&fit=crop&q=80',
     caption: 'Velvety artisanal Spanish crèmes and caramelised confections',
     is_featured: true,
-    display_order: 6,
+    display_order: 2,
     created_at: new Date().toISOString(),
   },
 ];

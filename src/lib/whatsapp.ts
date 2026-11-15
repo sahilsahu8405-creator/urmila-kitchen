@@ -33,25 +33,41 @@ export function generateWhatsAppOrderText(order: Order, paymentPreference?: stri
   customerLines.push(`Phone: ${order.customer_phone}`);
   sections.push(customerLines.join('\n'));
 
-  // Delivery Details
-  const deliveryLines: string[] = ['DELIVERY DETAILS'];
-  deliveryLines.push(`Address: ${order.delivery_address}`);
-  if (order.locality && order.locality.trim()) {
-    deliveryLines.push(`Area: ${order.locality.trim()}`);
+  // Fulfillment / Delivery Details
+  const isPickup = order.delivery_type === 'pickup' || order.delivery_address?.toLowerCase().startsWith('kitchen pickup');
+  if (isPickup) {
+    const pickupLines: string[] = ['FULFILLMENT: SELF-PICKUP FROM KITCHEN'];
+    const cleanLocation = order.delivery_address.replace(/^Kitchen Pickup:\s*/i, '').trim();
+    if (cleanLocation) {
+      pickupLines.push(`Kitchen Address: ${cleanLocation}`);
+    }
+    if (order.delivery_date) {
+      pickupLines.push(`Pickup Date: ${order.delivery_date}`);
+    }
+    if (order.delivery_slot?.name) {
+      pickupLines.push(`Pickup Time Slot: ${order.delivery_slot.name}`);
+    }
+    sections.push(pickupLines.join('\n'));
+  } else {
+    const deliveryLines: string[] = ['FULFILLMENT: HOME DELIVERY'];
+    deliveryLines.push(`Address: ${order.delivery_address}`);
+    if (order.locality && order.locality.trim()) {
+      deliveryLines.push(`Area: ${order.locality.trim()}`);
+    }
+    if (order.pin_code && order.pin_code.trim()) {
+      deliveryLines.push(`PIN Code: ${order.pin_code.trim()}`);
+    }
+    if (order.landmark && order.landmark.trim()) {
+      deliveryLines.push(`Landmark: ${order.landmark.trim()}`);
+    }
+    if (order.delivery_date) {
+      deliveryLines.push(`Delivery Date: ${order.delivery_date}`);
+    }
+    if (order.delivery_slot?.name) {
+      deliveryLines.push(`Delivery Slot: ${order.delivery_slot.name}`);
+    }
+    sections.push(deliveryLines.join('\n'));
   }
-  if (order.pin_code && order.pin_code.trim()) {
-    deliveryLines.push(`PIN Code: ${order.pin_code.trim()}`);
-  }
-  if (order.landmark && order.landmark.trim()) {
-    deliveryLines.push(`Landmark: ${order.landmark.trim()}`);
-  }
-  if (order.delivery_date) {
-    deliveryLines.push(`Delivery Date: ${order.delivery_date}`);
-  }
-  if (order.delivery_slot?.name) {
-    deliveryLines.push(`Delivery Slot: ${order.delivery_slot.name}`);
-  }
-  sections.push(deliveryLines.join('\n'));
 
   // Order Items
   const items = order.items_snapshot || [];
@@ -72,7 +88,11 @@ export function generateWhatsAppOrderText(order: Order, paymentPreference?: stri
   // Payment Summary
   const paymentLines: string[] = ['PAYMENT SUMMARY', ''];
   paymentLines.push(`Subtotal: ₹${order.subtotal}`);
-  paymentLines.push(`Delivery Charges: ₹${order.delivery_fee}`);
+  paymentLines.push(
+    isPickup
+      ? 'Delivery Charges: ₹0 (Self-Pickup)'
+      : `Delivery Charges: ₹${order.delivery_fee}`
+  );
   paymentLines.push(`GRAND TOTAL: ₹${order.total_amount}`);
 
   if (paymentPreference && paymentPreference.trim()) {
@@ -90,7 +110,11 @@ export function generateWhatsAppOrderText(order: Order, paymentPreference?: stri
   sections.push(divider);
 
   // Closing
-  sections.push("Please review and confirm this order.\n\nThank you!\nUrmila's Kitchen");
+  if (isPickup) {
+    sections.push("Please review and confirm order acceptance.\nWe look forward to preparing your fresh meal for pickup!\n\nThank you,\nUrmila's Kitchen");
+  } else {
+    sections.push("Please review and confirm this order.\n\nThank you!\nUrmila's Kitchen");
+  }
 
   return sections.join('\n\n');
 }
